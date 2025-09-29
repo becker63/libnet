@@ -53,9 +53,9 @@ suite "test attr casting is correct":
   test "set/get string attr works":
     var t = Table.create()
     t.setAttr(NFTNL_TABLE_NAME, "mytable")
-    check t.getAttr(NFTNL_TABLE_NAME, string) == "mytable"
+    check t.getAttr(NFTNL_TABLE_NAME) == "mytable" # string
 
   test "set/get family works":
     var t = Table.create()
-    t.setAttr(NFTNL_TABLE_FAMILY, AF_INET.uint32)
-    check t.getAttr(NFTNL_TABLE_FAMILY, uint32) == AF_INET.uint32
+    t.setAttr(NFTNL_TABLE_FAMILY, AF_INET)
+    check t.getAttr(NFTNL_TABLE_FAMILY) == AF_INET

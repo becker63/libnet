@@ -2,15 +2,15 @@
 
 # Generate libnetfilter_queue bindings
 gen-nfq:
-    nim c -d:useFuthark -d:nodeclguards src/nfq/generator.nim
+    nim r -d:useFuthark -d:nodeclguards src/nfq/generator.nim
 
 # Generate libnftnl bindings
 gen-nftnl:
-    nim c -d:useFuthark -d:nodeclguards src/nftnl/generator.nim
+    nim r -d:useFuthark -d:nodeclguards src/nftnl/generator.nim
 
 # Generate libnetfilter_conntrack bindings
 gen-conntrack:
-    nim c -d:useFuthark -d:nodeclguards src/conntrack/generator.nim
+    nim r -d:useFuthark -d:nodeclguards src/conntrack/generator.nim
 
 # Run all generators
 generate:
@@ -20,7 +20,7 @@ generate:
 
 # Run tests
 test-all:
-    nim c -r tests/all_tests.nim
+    nim r tests/all_tests.nim
 
 clean:
     find . -type f -exec sh -c 'file -b "$1" | grep -q ELF && rm "$1"' _ {} \;
