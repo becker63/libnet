@@ -9,6 +9,6 @@ export gen_nftnl, gen_nfq
 # high-level wrappers
 import nftnl/basics
 import nftnl/iterators
-import nftnl/attrs
+import nftnl/attrs/tableAttrs
 
-export basics, iterators, attrs
+export basics, iterators, tableAttrs

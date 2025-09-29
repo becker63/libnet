@@ -49,7 +49,7 @@ suite "nftnl iterators (stubbed)":
       inc count
     check count == 0
 
-suite "test attr casting is correct":
+suite "test table attr casting is correct":
   test "set/get string attr works":
     var t = Table.create()
     t.setAttr(NFTNL_TABLE_NAME, "mytable")
