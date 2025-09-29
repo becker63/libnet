@@ -1,0 +1,341 @@
+{
+  "nft_list_attributes": {
+    "NFTA_LIST_ELEM": "NESTED"
+  },
+  "nft_hook_attributes": {
+    "NFTA_HOOK_HOOKNUM": "U32",
+    "NFTA_HOOK_PRIORITY": "U32",
+    "NFTA_HOOK_DEV": "STRING",
+    "NFTA_HOOK_DEVS": "NESTED"
+  },
+  "nft_table_attributes": {
+    "NFTA_TABLE_NAME": "STRING",
+    "NFTA_TABLE_FLAGS": "U32",
+    "NFTA_TABLE_USE": "U32",
+    "NFTA_TABLE_USERDATA": "BINARY",
+    "NFTA_TABLE_OWNER": "U32"
+  },
+  "nft_chain_attributes": {
+    "NFTA_CHAIN_TABLE": "STRING",
+    "NFTA_CHAIN_HANDLE": "U64",
+    "NFTA_CHAIN_NAME": "STRING",
+    "NFTA_CHAIN_HOOK": "NESTED: nft_hook_attributes",
+    "NFTA_CHAIN_POLICY": "U32",
+    "NFTA_CHAIN_USE": "U32",
+    "NFTA_CHAIN_TYPE": "NUL_STRING",
+    "NFTA_CHAIN_COUNTERS": "NESTED: nft_counter_attributes",
+    "NFTA_CHAIN_ID": "U32",
+    "NFTA_CHAIN_USERDATA": "BINARY"
+  },
+  "nft_rule_attributes": {
+    "NFTA_RULE_TABLE": "STRING",
+    "NFTA_RULE_CHAIN": "STRING",
+    "NFTA_RULE_HANDLE": "U64",
+    "NFTA_RULE_EXPRESSIONS": "NESTED: nft_expr_attributes",
+    "NFTA_RULE_COMPAT": "NESTED: nft_rule_compat_attributes",
+    "NFTA_RULE_POSITION": "U64",
+    "NFTA_RULE_USERDATA": "BINARY, NFT_USERDATA_MAXLEN",
+    "NFTA_RULE_ID": "U32",
+    "NFTA_RULE_POSITION_ID": "U32",
+    "NFTA_RULE_CHAIN (NLA_U32)": "U32"
+  },
+  "nft_rule_compat_attributes": {
+    "NFTA_RULE_COMPAT_PROTO": "U32",
+    "NFTA_RULE_COMPAT_FLAGS": "U32"
+  },
+  "nft_set_desc_attributes": {
+    "NFTA_SET_DESC_SIZE": "U32",
+    "NFTA_SET_DESC_CONCAT": "NESTED"
+  },
+  "nft_set_field_attributes": {
+    "NFTA_SET_FIELD_LEN": "U32"
+  },
+  "nft_set_attributes": {
+    "NFTA_SET_TABLE": "STRING",
+    "NFTA_SET_NAME": "STRING",
+    "NFTA_SET_FLAGS": "U32",
+    "NFTA_SET_KEY_TYPE": "U32",
+    "NFTA_SET_KEY_LEN": "U32",
+    "NFTA_SET_DATA_TYPE": "U32",
+    "NFTA_SET_DATA_LEN": "U32",
+    "NFTA_SET_POLICY": "U32",
+    "NFTA_SET_DESC": "NESTED",
+    "NFTA_SET_ID": "U32",
+    "NFTA_SET_TIMEOUT": "U64",
+    "NFTA_SET_GC_INTERVAL": "U32",
+    "NFTA_SET_USERDATA": "BINARY",
+    "NFTA_SET_OBJ_TYPE": "U32: NFT_OBJECT_*",
+    "NFTA_SET_HANDLE": "U64",
+    "NFTA_SET_EXPR": "NESTED: nft_expr_attributes",
+    "NFTA_SET_EXPRESSIONS": "NESTED: nft_list_attributes"
+  },
+  "nft_set_elem_attributes": {
+    "NFTA_SET_ELEM_KEY": "NESTED: nft_data",
+    "NFTA_SET_ELEM_DATA": "NESTED: nft_data_attributes",
+    "NFTA_SET_ELEM_FLAGS": "U32",
+    "NFTA_SET_ELEM_TIMEOUT": "U64",
+    "NFTA_SET_ELEM_EXPIRATION": "U64",
+    "NFTA_SET_ELEM_USERDATA": "BINARY",
+    "NFTA_SET_ELEM_EXPR": "NESTED: nft_expr_attributes",
+    "NFTA_SET_ELEM_OBJREF": "STRING",
+    "NFTA_SET_ELEM_KEY_END": "NESTED: nft_data",
+    "NFTA_SET_ELEM_EXPRESSIONS": "NESTED: nft_list_attributes"
+  },
+  "nft_set_elem_list_attributes": {
+    "NFTA_SET_ELEM_LIST_TABLE": "STRING",
+    "NFTA_SET_ELEM_LIST_SET": "STRING",
+    "NFTA_SET_ELEM_LIST_ELEMENTS": "NESTED: nft_set_elem_attributes",
+    "NFTA_SET_ELEM_LIST_SET_ID": "U32"
+  },
+  "nft_data_attributes": {
+    "NFTA_DATA_VALUE": "BINARY",
+    "NFTA_DATA_VERDICT": "NESTED: nft_verdict_attributes"
+  },
+  "nft_verdict_attributes": {
+    "NFTA_VERDICT_CODE": "U32: enum nft_verdicts",
+    "NFTA_VERDICT_CHAIN": "STRING",
+    "NFTA_VERDICT_CHAIN_ID": "U32"
+  },
+  "nft_expr_attributes": {
+    "NFTA_EXPR_NAME": "STRING",
+    "NFTA_EXPR_DATA": "NESTED"
+  },
+  "nft_immediate_attributes": {
+    "NFTA_IMMEDIATE_DREG": "U32",
+    "NFTA_IMMEDIATE_DATA": "NESTED: nft_data_attributes"
+  },
+  "nft_bitwise_attributes": {
+    "NFTA_BITWISE_SREG": "U32: nft_registers",
+    "NFTA_BITWISE_DREG": "U32: nft_registers",
+    "NFTA_BITWISE_LEN": "U32",
+    "NFTA_BITWISE_MASK": "NESTED: nft_data_attributes",
+    "NFTA_BITWISE_XOR": "NESTED: nft_data_attributes",
+    "NFTA_BITWISE_OP": "U32: nft_bitwise_ops",
+    "NFTA_BITWISE_DATA": "NESTED: nft_data_attributes"
+  },
+  "nft_byteorder_attributes": {
+    "NFTA_BYTEORDER_SREG": "U32: nft_registers",
+    "NFTA_BYTEORDER_DREG": "U32: nft_registers",
+    "NFTA_BYTEORDER_OP": "U32: enum nft_byteorder_ops",
+    "NFTA_BYTEORDER_LEN": "U32",
+    "NFTA_BYTEORDER_SIZE": "U32: 2 or 4"
+  },
+  "nft_cmp_attributes": {
+    "NFTA_CMP_SREG": "U32: nft_registers",
+    "NFTA_CMP_OP": "U32: nft_cmp_ops",
+    "NFTA_CMP_DATA": "NESTED: nft_data_attributes"
+  },
+  "nft_range_attributes": {
+    "NFTA_RANGE_SREG": "U32: nft_registers",
+    "NFTA_RANGE_OP": "U32: nft_range_ops",
+    "NFTA_RANGE_FROM_DATA": "NESTED: nft_data_attributes",
+    "NFTA_RANGE_TO_DATA": "NESTED: nft_data_attributes"
+  },
+  "nft_lookup_attributes": {
+    "NFTA_LOOKUP_SET": "STRING",
+    "NFTA_LOOKUP_SREG": "U32: nft_registers",
+    "NFTA_LOOKUP_DREG": "U32: nft_registers",
+    "NFTA_LOOKUP_SET_ID": "U32",
+    "NFTA_LOOKUP_FLAGS": "U32: enum nft_lookup_flags"
+  },
+  "nft_dynset_attributes": {
+    "NFTA_DYNSET_SET_NAME": "STRING",
+    "NFTA_DYNSET_SET_ID": "U32",
+    "NFTA_DYNSET_OP": "U32",
+    "NFTA_DYNSET_SREG_KEY": "U32",
+    "NFTA_DYNSET_SREG_DATA": "U32",
+    "NFTA_DYNSET_TIMEOUT": "U64",
+    "NFTA_DYNSET_EXPR": "NESTED: nft_expr_attributes",
+    "NFTA_DYNSET_FLAGS": "U32",
+    "NFTA_DYNSET_EXPRESSIONS": "NESTED: nft_list_attributes"
+  },
+  "nft_payload_attributes": {
+    "NFTA_PAYLOAD_DREG": "U32: nft_registers",
+    "NFTA_PAYLOAD_BASE": "U32: nft_payload_bases",
+    "NFTA_PAYLOAD_OFFSET": "U32",
+    "NFTA_PAYLOAD_LEN": "U32",
+    "NFTA_PAYLOAD_SREG": "U32: nft_registers",
+    "NFTA_PAYLOAD_CSUM_TYPE": "U32",
+    "NFTA_PAYLOAD_CSUM_OFFSET": "U32",
+    "NFTA_PAYLOAD_CSUM_FLAGS": "U32"
+  },
+  "nft_exthdr_attributes": {
+    "NFTA_EXTHDR_DREG": "U32: nft_registers",
+    "NFTA_EXTHDR_TYPE": "U8",
+    "NFTA_EXTHDR_OFFSET": "U32",
+    "NFTA_EXTHDR_LEN": "U32",
+    "NFTA_EXTHDR_FLAGS": "U32",
+    "NFTA_EXTHDR_OP": "U32",
+    "NFTA_EXTHDR_SREG": "U32: nft_registers"
+  },
+  "nft_hash_attributes": {
+    "NFTA_HASH_SREG": "U32",
+    "NFTA_HASH_DREG": "U32",
+    "NFTA_HASH_LEN": "U32",
+    "NFTA_HASH_MODULUS": "U32",
+    "NFTA_HASH_SEED": "U32",
+    "NFTA_HASH_OFFSET": "U32",
+    "NFTA_HASH_TYPE": "U32: nft_hash_types",
+    "NFTA_HASH_SET_NAME": "STRING",
+    "NFTA_HASH_SET_ID": "U32"
+  },
+  "nft_meta_attributes": {
+    "NFTA_META_DREG": "U32",
+    "NFTA_META_KEY": "U32: nft_meta_keys",
+    "NFTA_META_SREG": "U32"
+  },
+  "nft_rt_attributes": {
+    "NFTA_RT_DREG": "U32",
+    "NFTA_RT_KEY": "U32: nft_rt_keys"
+  },
+  "nft_ct_attributes": {
+    "NFTA_CT_DREG": "U32",
+    "NFTA_CT_KEY": "U32: nft_ct_keys",
+    "NFTA_CT_DIRECTION": "U8",
+    "NFTA_CT_SREG": "U32"
+  },
+  "nft_limit_attributes": {
+    "NFTA_LIMIT_RATE": "U64",
+    "NFTA_LIMIT_UNIT": "U64",
+    "NFTA_LIMIT_BURST": "U32",
+    "NFTA_LIMIT_TYPE": "U32: enum nft_limit_type",
+    "NFTA_LIMIT_FLAGS": "U32: enum nft_limit_flags"
+  },
+  "nft_connlimit_attributes": {
+    "NFTA_CONNLIMIT_COUNT": "U32",
+    "NFTA_CONNLIMIT_FLAGS": "U32: enum nft_connlimit_flags"
+  },
+  "nft_counter_attributes": {
+    "NFTA_COUNTER_BYTES": "U64",
+    "NFTA_COUNTER_PACKETS": "U64"
+  },
+  "nft_last_attributes": {
+    "NFTA_LAST_SET": "U32",
+    "NFTA_LAST_MSECS": "U64"
+  },
+  "nft_log_attributes": {
+    "NFTA_LOG_GROUP": "U16",
+    "NFTA_LOG_PREFIX": "STRING",
+    "NFTA_LOG_SNAPLEN": "U32",
+    "NFTA_LOG_QTHRESHOLD": "U16",
+    "NFTA_LOG_LEVEL": "U32",
+    "NFTA_LOG_FLAGS": "U32"
+  },
+  "nft_queue_attributes": {
+    "NFTA_QUEUE_NUM": "U16",
+    "NFTA_QUEUE_TOTAL": "U16",
+    "NFTA_QUEUE_FLAGS": "U16",
+    "NFTA_QUEUE_SREG_QNUM": "U32: nft_registers"
+  },
+  "nft_quota_attributes": {
+    "NFTA_QUOTA_BYTES": "U16",
+    "NFTA_QUOTA_FLAGS": "U32",
+    "NFTA_QUOTA_CONSUMED": "U64"
+  },
+  "nft_secmark_attributes": {
+    "NFTA_SECMARK_CTX": "STRING"
+  },
+  "nft_reject_attributes": {
+    "NFTA_REJECT_TYPE": "U32: nft_reject_types",
+    "NFTA_REJECT_ICMP_CODE": "U8"
+  },
+  "nft_nat_attributes": {
+    "NFTA_NAT_TYPE": "U32: nft_nat_types",
+    "NFTA_NAT_FAMILY": "U32",
+    "NFTA_NAT_REG_ADDR_MIN": "U32: nft_registers",
+    "NFTA_NAT_REG_ADDR_MAX": "U32: nft_registers",
+    "NFTA_NAT_REG_PROTO_MIN": "U32: nft_registers",
+    "NFTA_NAT_REG_PROTO_MAX": "U32: nft_registers"
+  },
+  "nft_tproxy_attributes": {
+    "NFTA_TPROXY_FAMILY": "U32: nft_registers"
+  },
+  "nft_masq_attributes": {
+    "NFTA_MASQ_REG_PROTO_MIN": "U32: nft_registers",
+    "NFTA_MASQ_REG_PROTO_MAX": "U32: nft_registers"
+  },
+  "nft_redir_attributes": {
+    "NFTA_REDIR_REG_PROTO_MIN": "U32: nft_registers",
+    "NFTA_REDIR_REG_PROTO_MAX": "U32: nft_registers"
+  },
+  "nft_dup_attributes": {
+    "NFTA_DUP_SREG_ADDR": "U32: nft_registers",
+    "NFTA_DUP_SREG_DEV": "U32: nft_register"
+  },
+  "nft_fwd_attributes": {
+    "NFTA_FWD_SREG_DEV": "U32: nft_register",
+    "NFTA_FWD_SREG_ADDR": "U32: nft_register",
+    "NFTA_FWD_NFPROTO": "U32: enum nfproto"
+  },
+  "nft_objref_attributes": {
+    "NFTA_OBJREF_IMM_TYPE": "U32: nft_register",
+    "NFTA_OBJREF_IMM_NAME": "STRING",
+    "NFTA_OBJREF_SET_SREG": "U32: nft_registers",
+    "NFTA_OBJREF_SET_NAME": "STRING",
+    "NFTA_OBJREF_SET_ID": "U32"
+  },
+  "nft_gen_attributes": {
+    "NFTA_GEN_ID": "U32"
+  },
+  "nft_object_attributes": {
+    "NFTA_OBJ_TABLE": "STRING",
+    "NFTA_OBJ_NAME": "STRING",
+    "NFTA_OBJ_TYPE": "U32",
+    "NFTA_OBJ_DATA": "NESTED",
+    "NFTA_OBJ_USE": "U32",
+    "NFTA_OBJ_HANDLE": "U64",
+    "NFTA_OBJ_USERDATA": "BINARY"
+  },
+  "nft_flowtable_attributes": {
+    "NFTA_FLOWTABLE_TABLE": "STRING",
+    "NFTA_FLOWTABLE_NAME": "STRING",
+    "NFTA_FLOWTABLE_HOOK": "NESTED",
+    "NFTA_FLOWTABLE_USE": "U32",
+    "NFTA_FLOWTABLE_HANDLE": "U64",
+    "NFTA_FLOWTABLE_FLAGS": "U32"
+  },
+  "nft_flowtable_hook_attributes": {
+    "NFTA_FLOWTABLE_HOOK_NUM": "U32",
+    "NFTA_FLOWTABLE_HOOK_PRIORITY": "U32",
+    "NFTA_FLOWTABLE_HOOK_DEVS": "NESTED"
+  },
+  "nft_osf_attributes": {
+    "NFTA_OSF_DREG": "U32: nft_registers",
+    "NFTA_OSF_TTL": "U8",
+    "NFTA_OSF_FLAGS": "U32"
+  },
+  "nft_synproxy_attributes": {
+    "NFTA_SYNPROXY_MSS": "U16",
+    "NFTA_SYNPROXY_WSCALE": "U8",
+    "NFTA_SYNPROXY_FLAGS": "U32"
+  },
+  "nft_devices_attributes": {
+    "NFTA_DEVICE_NAME": "STRING"
+  },
+  "nft_trace_attributes": {
+    "NFTA_TRACE_TABLE": "STRING",
+    "NFTA_TRACE_CHAIN": "STRING",
+    "NFTA_TRACE_RULE_HANDLE": "U64",
+    "NFTA_TRACE_TYPE": "U32: nft_trace_types",
+    "NFTA_TRACE_VERDICT": "NESTED: nft_verdicts",
+    "NFTA_TRACE_ID": "U32",
+    "NFTA_TRACE_LL_HEADER": "BINARY",
+    "NFTA_TRACE_NETWORK_HEADER": "BINARY",
+    "NFTA_TRACE_TRANSPORT_HEADER": "BINARY",
+    "NFTA_TRACE_IIF": "U32",
+    "NFTA_TRACE_IIFTYPE": "U16",
+    "NFTA_TRACE_OIF": "U32",
+    "NFTA_TRACE_OIFTYPE": "U16",
+    "NFTA_TRACE_MARK": "U32",
+    "NFTA_TRACE_NFPROTO": "U32",
+    "NFTA_TRACE_POLICY": "U32"
+  },
+  "nft_ng_attributes": {
+    "NFTA_NG_DREG": "U32",
+    "NFTA_NG_MODULUS": "U32",
+    "NFTA_NG_TYPE": "U32",
+    "NFTA_NG_OFFSET": "U32",
+    "NFTA_NG_SET_NAME": "STRING",
+    "NFTA_NG_SET_ID": "U32"
+  }
+}
