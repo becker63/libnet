@@ -63,7 +63,7 @@ suite "nftnl attr typing compile time":
     static:
       var t: Table
       # use plain Nim literals, not AF_INET (C consts can't be folded at CT)
-      doAssert compiles(t.setAttr(NFTNL_TABLE_FAMILY, 1'u32))
+      doAssert compiles(t.setAttr(NFTNL_TABLE_FAMILY, 1))
       doAssert compiles(t.getAttr(NFTNL_TABLE_FAMILY))
       doAssert not compiles(t.setAttr(NFTNL_TABLE_FAMILY, "nope"))
 
@@ -71,7 +71,7 @@ suite "nftnl attr typing compile time":
     static:
       var t: Table
       # literal must be explicitly suffixed
-      doAssert compiles(t.setAttr(NFTNL_TABLE_HANDLE, 42'u64))
+      doAssert compiles(t.setAttr(NFTNL_TABLE_HANDLE, 42))
       doAssert compiles(t.getAttr(NFTNL_TABLE_HANDLE))
       doAssert not compiles(t.setAttr(NFTNL_TABLE_HANDLE, "wrong"))
 
@@ -89,7 +89,7 @@ suite "nftnl attr typing":
   test "uint64 attrs roundtrip":
     var t = Table.create()
     t.setAttr(NFTNL_TABLE_HANDLE, 12345) # ergonomic
-    check t.getAttr(NFTNL_TABLE_HANDLE) == 12345'u64
+    check t.getAttr(NFTNL_TABLE_HANDLE) == 12345
 
 suite "nftnl props sugar":
   test "table.name roundtrip":
@@ -105,12 +105,13 @@ suite "nftnl props sugar":
   test "table.flags roundtrip":
     var t = Table.create()
     t.flags = 7
-    check t.flags == 7'u32
+    check t.flags == 7
 
   test "table.handle roundtrip":
     var t = Table.create()
-    t.handle = 99999'u64
-    check t.handle == 99999'u64
+
+    t.handle = 99999
+    check t.handle == 99999
 
   test "table.userdata roundtrip":
     var t = Table.create()
