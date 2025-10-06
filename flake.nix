@@ -26,6 +26,7 @@
           shellHook = ''
             export PATH=$HOME/.nimble/bin:$PATH
             export NIM_LSP=${pkgs.nimlsp}/bin/nimlsp
+            just gen
             xonsh
           '';
         };
