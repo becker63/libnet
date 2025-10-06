@@ -34,6 +34,20 @@ makeWrapper(Chain, struct_nftnl_chain, nftnl_chain_alloc, nftnl_chain_free)
 # `struct_nftnl_rule`.
 makeWrapper(Rule, struct_nftnl_rule, nftnl_rule_alloc, nftnl_rule_free)
 
+# A **Expression** lives inside a rule. Expressions are the fundamental building
+# blocks of matching and action logic (cmp, payload, meta, bitwise, etc.).
+# This wrapper allocates/frees `struct_nftnl_expr`.
+type Expression* = object
+  raw*: ptr struct_nftnl_expr
+
+proc create*(_: type Expression, kind: string): Expression =
+  Expression(raw: nftnl_expr_alloc(cast[ptr uint8](kind.cstring)))
+
+proc `=destroy`*(x: var Expression) =
+  if not x.raw.isNil:
+    nftnl_expr_free(x.raw)
+    x.raw = nil
+
 # A **Set** is a reusable collection of values (IPs, ports, etc.) referenced
 # by rules. Sets make rules cleaner and faster. This wrapper allocates/frees
 # `struct_nftnl_set`.

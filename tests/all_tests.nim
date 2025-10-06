@@ -1,9 +1,7 @@
 import unittest
 
-# import each test module
 import test_table
 import test_chain
-#import test_conntrack
-#import test_nfq
+import test_expr
 
 # unittest will automatically register suites

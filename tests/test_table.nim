@@ -47,12 +47,12 @@ suite "nftnl table attr typing":
 
   test "uint32 attrs roundtrip":
     var t = Table.create()
-    t.setAttr(NFTNL_TABLE_FAMILY, AF_INET) # ergonomic with C constant
+    t.setAttr(NFTNL_TABLE_FAMILY, AF_INET)
     check t.getAttr(NFTNL_TABLE_FAMILY) == AF_INET
 
   test "uint64 attrs roundtrip":
     var t = Table.create()
-    t.setAttr(NFTNL_TABLE_HANDLE, 12345) # ergonomic
+    t.setAttr(NFTNL_TABLE_HANDLE, 12345)
     check t.getAttr(NFTNL_TABLE_HANDLE) == 12345
 
 suite "nftnl table props sugar":
