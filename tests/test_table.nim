@@ -1,24 +1,12 @@
 import unittest
 import libnet
 
-suite "nftnl basics":
+suite "nftnl table basics":
   test "table alloc/free":
     var t = Table.create()
     check not t.raw.isNil
 
-  test "chain alloc/free":
-    var c = Chain.create()
-    check not c.raw.isNil
-
-  test "rule alloc/free":
-    var r = Rule.create()
-    check not r.raw.isNil
-
-  test "rset alloc/free":
-    var s = Set.create()
-    check not s.raw.isNil
-
-suite "nftnl iterators (stubbed)":
+suite "nftnl table iterators (stubbed)":
   test "empty table list iterates safely":
     var list = TableList.create()
     var count = 0
@@ -27,31 +15,7 @@ suite "nftnl iterators (stubbed)":
       inc count
     check count == 0
 
-  test "empty chain list iterates safely":
-    var list = ChainList.create()
-    var count = 0
-    for c in chainIter(list):
-      discard c
-      inc count
-    check count == 0
-
-  test "empty rule list iterates safely":
-    var list = RuleList.create()
-    var count = 0
-    for r in ruleIter(list):
-      discard r
-      inc count
-    check count == 0
-
-  test "empty set list iterates safely":
-    var list = SetList.create()
-    var count = 0
-    for s in setIter(list):
-      discard s
-      inc count
-    check count == 0
-
-suite "nftnl attr typing compile time":
+suite "nftnl table attr typing compile time":
   test "string attrs accept only string":
     static:
       var t: Table
@@ -75,7 +39,7 @@ suite "nftnl attr typing compile time":
       doAssert compiles(t.getAttr(NFTNL_TABLE_HANDLE))
       doAssert not compiles(t.setAttr(NFTNL_TABLE_HANDLE, "wrong"))
 
-suite "nftnl attr typing":
+suite "nftnl table attr typing":
   test "string attrs roundtrip":
     var t = Table.create()
     t.setAttr(NFTNL_TABLE_NAME, "roundtrip")
@@ -91,7 +55,7 @@ suite "nftnl attr typing":
     t.setAttr(NFTNL_TABLE_HANDLE, 12345) # ergonomic
     check t.getAttr(NFTNL_TABLE_HANDLE) == 12345
 
-suite "nftnl props sugar":
+suite "nftnl table props sugar":
   test "table.name roundtrip":
     var t = Table.create()
     t.name = "viaProps"
@@ -109,7 +73,6 @@ suite "nftnl props sugar":
 
   test "table.handle roundtrip":
     var t = Table.create()
-
     t.handle = 99999
     check t.handle == 99999
 

@@ -11,10 +11,18 @@ import nftnl/raii/basics
 import nftnl/raii/iterators
 export basics, iterators
 
-# attrs sugar
+# table attrs sugar
 import nftnl/attrs/tableAttrsCoersion
 export tableAttrsCoersion
 
-# dot props
+# chain attrs sugar
+import nftnl/attrs/chainAttrsCoersion
+export chainAttrsCoersion
+
+# dot props for tables
 import nftnl/props/tableProps
 export tableProps
+
+# dot props for chains
+import nftnl/props/chainProps
+export chainProps
