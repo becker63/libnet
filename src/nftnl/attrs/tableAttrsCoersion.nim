@@ -53,7 +53,7 @@ macro attrOp*(t: typed, attr: enum_nftnl_table_attr, args: varargs[untyped]): un
   elif args.len == 1:
     let arg0 = args[0]
     result = quote:
-      rawSetAttr[expectedType(`attr`)](`t`.raw, `attr`.uint16, `arg0`)
+      rawSetAttr(`t`.raw, `attr`.uint16, `arg0`)
   else:
     error("attrOp takes 0 or 1 extra arguments")
 

@@ -24,8 +24,6 @@ template makeWrapper(typeName, structName, allocFn, freeFn: untyped) =
       return
     `=destroy`(dst)
     dst.raw = src.raw
-    var tmp = src
-    `=wasMoved`(tmp)
 
   proc raw*(x: `typeName`): ptr `structName` {.inline.} =
     x.raw
@@ -69,8 +67,6 @@ proc `=sink`*(dst: var Expression, src: Expression) =
     return
   `=destroy`(dst)
   dst.raw = src.raw
-  var tmp = src
-  `=wasMoved`(tmp)
 
 proc raw*(e: Expression): ptr struct_nftnl_expr {.inline.} =
   e.raw
@@ -79,6 +75,3 @@ proc kind*(e: Expression): string =
   if e.raw == nil:
     return ""
   $cast[cstring](nftnl_expr_get_str(e.raw, NFTNL_EXPR_NAME.uint16))
-
-proc addExpr*(r: Rule, e: sink Expression) =
-  nftnl_rule_add_expr(r.raw, e.raw)

@@ -5,5 +5,4 @@ import test_chain
 import test_expr
 import test_raii
 import test_rule
-
 # unittest will automatically register suites

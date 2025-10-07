@@ -36,6 +36,11 @@ proc rawSetAttr*[T](c: ptr struct_nftnl_chain, attr: uint16, v: T) =
       rawSetAttr(c, attr, v.uint32)
     else:
       rawSetAttr(c, attr, v.uint64)
+  elif T is enum: # <-- NEW
+    when sizeof(ord(v)) <= 4:
+      rawSetAttr(c, attr, ord(v).uint32)
+    else:
+      rawSetAttr(c, attr, ord(v).uint64)
   elif T is uint32:
     rawSetAttr(c, attr, v)
   elif T is uint64:
@@ -53,7 +58,7 @@ macro attrOp*(c: typed, attr: enum_nftnl_chain_attr, args: varargs[untyped]): un
   elif args.len == 1:
     let arg0 = args[0]
     result = quote:
-      rawSetAttr[expectedType(`attr`)](`c`.raw, `attr`.uint16, `arg0`)
+      rawSetAttr(`c`.raw, `attr`.uint16, `arg0`)
   else:
     error("attrOp takes 0 or 1 extra arguments")
 

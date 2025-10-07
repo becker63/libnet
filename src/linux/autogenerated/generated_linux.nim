@@ -53,6 +53,84 @@ const
   NETLINK_UNCONNECTED* = cuint(0)
 const
   NETLINK_CONNECTED* = cuint(1)
+const
+  IPPROTO_IP* = cuint(0)
+const
+  IPPROTO_ICMP* = cuint(1)
+const
+  IPPROTO_IGMP* = cuint(2)
+const
+  IPPROTO_IPIP* = cuint(4)
+const
+  IPPROTO_TCP* = cuint(6)
+const
+  IPPROTO_EGP* = cuint(8)
+const
+  IPPROTO_PUP* = cuint(12)
+const
+  IPPROTO_UDP* = cuint(17)
+const
+  IPPROTO_IDP* = cuint(22)
+const
+  IPPROTO_TP* = cuint(29)
+const
+  IPPROTO_DCCP* = cuint(33)
+const
+  IPPROTO_IPV6* = cuint(41)
+const
+  IPPROTO_RSVP* = cuint(46)
+const
+  IPPROTO_GRE* = cuint(47)
+const
+  IPPROTO_ESP* = cuint(50)
+const
+  IPPROTO_AH* = cuint(51)
+const
+  IPPROTO_MTP* = cuint(92)
+const
+  IPPROTO_BEETPH* = cuint(94)
+const
+  IPPROTO_ENCAP* = cuint(98)
+const
+  IPPROTO_PIM* = cuint(103)
+const
+  IPPROTO_COMP* = cuint(108)
+const
+  IPPROTO_L2TP* = cuint(115)
+const
+  IPPROTO_SCTP* = cuint(132)
+const
+  IPPROTO_UDPLITE* = cuint(136)
+const
+  IPPROTO_MPLS* = cuint(137)
+const
+  IPPROTO_ETHERNET* = cuint(143)
+const
+  IPPROTO_RAW* = cuint(255)
+const
+  IPPROTO_SMC* = cuint(256)
+const
+  IPPROTO_MPTCP* = cuint(262)
+const
+  IPPROTO_MAX* = cuint(263)
+const
+  NFPROTO_UNSPEC* = cuint(0)
+const
+  NFPROTO_INET* = cuint(1)
+const
+  NFPROTO_IPV4* = cuint(2)
+const
+  NFPROTO_ARP* = cuint(3)
+const
+  NFPROTO_NETDEV* = cuint(5)
+const
+  NFPROTO_BRIDGE* = cuint(7)
+const
+  NFPROTO_IPV6* = cuint(10)
+const
+  NFPROTO_DECNET* = cuint(12)
+const
+  NFPROTO_NUMPROTO* = cuint(13)
 type
   enum_socket_type* {.size: sizeof(cuint).} = enum
     SOCK_STREAM = 1, SOCK_DGRAM = 2, SOCK_RAW = 3, SOCK_RDM = 4,
@@ -90,6 +168,15 @@ type
     NL_POLICY_TYPE_ATTR_MASK = 12, compiler_NL_POLICY_TYPE_ATTR_MAX = 13
 const
   NL_POLICY_TYPE_ATTR_MAX* = enum_netlink_policy_type_attr.NL_POLICY_TYPE_ATTR_MASK
+type
+  enum_nf_inet_hooks* {.size: sizeof(cuint).} = enum
+    NF_INET_PRE_ROUTING = 0, NF_INET_LOCAL_IN = 1, NF_INET_FORWARD = 2,
+    NF_INET_LOCAL_OUT = 3, NF_INET_POST_ROUTING = 4, NF_INET_NUMHOOKS = 5
+const
+  NF_INET_INGRESS* = enum_nf_inet_hooks.NF_INET_NUMHOOKS
+type
+  enum_nf_dev_hooks* {.size: sizeof(cuint).} = enum
+    NF_NETDEV_INGRESS = 0, NF_NETDEV_EGRESS = 1, NF_NETDEV_NUMHOOKS = 2
 type
   enum_nft_registers* {.size: sizeof(cuint).} = enum
     NFT_REG_VERDICT = 0, NFT_REG_1 = 1, NFT_REG_2 = 2, NFT_REG_3 = 3,
@@ -634,7 +721,31 @@ type
   enum_nfnl_batch_attributes* {.size: sizeof(cuint).} = enum
     NFNL_BATCH_UNSPEC = 0, NFNL_BATCH_GENID = 1, compiler_NFNL_BATCH_MAX = 2
 type
+  enum_nf_ip_hook_priorities* {.size: sizeof(cint).} = enum
+    NF_IP_PRI_FIRST = -2147483648, NF_IP_PRI_RAW_BEFORE_DEFRAG = -450,
+    NF_IP_PRI_CONNTRACK_DEFRAG = -400, NF_IP_PRI_RAW = -300,
+    NF_IP_PRI_SELINUX_FIRST = -225, NF_IP_PRI_CONNTRACK = -200,
+    NF_IP_PRI_MANGLE = -150, NF_IP_PRI_NAT_DST = -100, NF_IP_PRI_FILTER = 0,
+    NF_IP_PRI_SECURITY = 50, NF_IP_PRI_NAT_SRC = 100,
+    NF_IP_PRI_SELINUX_LAST = 225, NF_IP_PRI_CONNTRACK_HELPER = 300,
+    NF_IP_PRI_CONNTRACK_CONFIRM = 2147483647
+const
+  NF_IP_PRI_LAST* = enum_nf_ip_hook_priorities.NF_IP_PRI_CONNTRACK_CONFIRM
+type
+  enum_nf_ip6_hook_priorities* {.size: sizeof(cint).} = enum
+    NF_IP6_PRI_FIRST = -2147483648, NF_IP6_PRI_RAW_BEFORE_DEFRAG = -450,
+    NF_IP6_PRI_CONNTRACK_DEFRAG = -400, NF_IP6_PRI_RAW = -300,
+    NF_IP6_PRI_SELINUX_FIRST = -225, NF_IP6_PRI_CONNTRACK = -200,
+    NF_IP6_PRI_MANGLE = -150, NF_IP6_PRI_NAT_DST = -100, NF_IP6_PRI_FILTER = 0,
+    NF_IP6_PRI_SECURITY = 50, NF_IP6_PRI_NAT_SRC = 100,
+    NF_IP6_PRI_SELINUX_LAST = 225, NF_IP6_PRI_CONNTRACK_HELPER = 300,
+    NF_IP6_PRI_LAST = 2147483647
+type
+  compiler_bitwise* = object
+type
   compiler_U32_TYPE* = object
+type
+  compiler_LONG_MAX_private* = object
 type
   compiler_REDIRECT* = object
 type
@@ -650,13 +761,20 @@ type
 type
   compiler_ULONGWORD_TYPE* = object
 type
+  struct_6604* = object
+type
+  compiler_pad* = object
+type
+  ipv6mr_multiaddr* = object
+type
   compiler_SQUAD_TYPE* = object
 type
   compiler_REDIRECT_NTH* = object
 type
   compiler_UQUAD_TYPE* = object
 type
-  compiler_kernel_sa_family_t* = cushort ## Generated based on /nix/store/sh3sjmgq543lfpjsq3dc0ksb6ckvhpdi-glibc-2.40-66-dev/include/linux/socket.h:10:24
+  compiler_kernel_old_uid_t* = cushort ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/asm/posix_types.h:5:24
+  compiler_kernel_sa_family_t* = cushort ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/socket.h:10:24
   struct_kernel_sockaddr_storage_anon0_t_anon0_t* {.pure, inheritable, bycopy.} = object
     ss_family*: compiler_kernel_sa_family_t
     compiler_data*: array[126'i64, uint8]
@@ -664,7 +782,7 @@ type
     anon0*: struct_kernel_sockaddr_storage_anon0_t_anon0_t
     compiler_align*: pointer
   struct_kernel_sockaddr_storage* {.pure, inheritable, bycopy.} = object
-    anon0*: struct_kernel_sockaddr_storage_anon0_t ## Generated based on /nix/store/sh3sjmgq543lfpjsq3dc0ksb6ckvhpdi-glibc-2.40-66-dev/include/linux/socket.h:16:8
+    anon0*: struct_kernel_sockaddr_storage_anon0_t ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/socket.h:16:8
   struct_iovec* {.pure, inheritable, bycopy.} = object
     iov_base*: pointer       ## Generated based on /nix/store/sh3sjmgq543lfpjsq3dc0ksb6ckvhpdi-glibc-2.40-66-dev/include/bits/types/struct_iovec.h:26:8
     iov_len*: csize_t
@@ -903,84 +1021,227 @@ type
     cmsg_level*: cint
     cmsg_type*: cint
     compiler_cmsg_data*: ptr UncheckedArray[uint8]
+  struct_kernel_fd_set* {.pure, inheritable, bycopy.} = object
+    fds_bits*: array[16'i64, culong] ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/posix_types.h:25:9
+  compiler_kernel_fd_set* = struct_kernel_fd_set ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/posix_types.h:27:3
+  compiler_kernel_sighandler_t* = proc (a0: cint): void {.cdecl.} ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/posix_types.h:30:16
+  compiler_kernel_key_t* = cint ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/posix_types.h:33:13
+  compiler_kernel_mqd_t* = cint ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/posix_types.h:34:13
+  compiler_kernel_old_gid_t* = cushort ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/asm/posix_types.h:6:24
+  compiler_kernel_long_t* = clong ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/asm-generic/posix_types.h:15:15
+  compiler_kernel_ulong_t* = culong ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/asm-generic/posix_types.h:16:23
+  compiler_kernel_ino_t* = compiler_kernel_ulong_t ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/asm-generic/posix_types.h:20:26
+  compiler_kernel_mode_t* = cuint ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/asm-generic/posix_types.h:24:22
+  compiler_kernel_pid_t* = cint ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/asm-generic/posix_types.h:28:14
+  compiler_kernel_ipc_pid_t* = cint ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/asm-generic/posix_types.h:32:14
+  compiler_kernel_uid_t* = cuint ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/asm-generic/posix_types.h:36:22
+  compiler_kernel_gid_t* = cuint ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/asm-generic/posix_types.h:37:22
+  compiler_kernel_suseconds_t* = compiler_kernel_long_t ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/asm-generic/posix_types.h:41:26
+  compiler_kernel_daddr_t* = cint ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/asm-generic/posix_types.h:45:14
+  compiler_kernel_uid32_t* = cuint ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/asm-generic/posix_types.h:49:22
+  compiler_kernel_gid32_t* = cuint ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/asm-generic/posix_types.h:50:22
+  compiler_kernel_old_dev_t* = cuint ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/asm-generic/posix_types.h:59:22
+  compiler_kernel_size_t* = compiler_kernel_ulong_t ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/asm-generic/posix_types.h:72:26
+  compiler_kernel_ssize_t* = compiler_kernel_long_t ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/asm-generic/posix_types.h:73:25
+  compiler_kernel_ptrdiff_t* = compiler_kernel_long_t ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/asm-generic/posix_types.h:74:25
+  struct_kernel_fsid_t* {.pure, inheritable, bycopy.} = object
+    val*: array[2'i64, cint] ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/asm-generic/posix_types.h:79:9
+  compiler_kernel_fsid_t* = struct_kernel_fsid_t ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/asm-generic/posix_types.h:81:3
+  compiler_kernel_off_t* = compiler_kernel_long_t ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/asm-generic/posix_types.h:87:25
+  compiler_kernel_loff_t* = clonglong ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/asm-generic/posix_types.h:88:19
+  compiler_kernel_old_time_t* = compiler_kernel_long_t ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/asm-generic/posix_types.h:89:25
+  compiler_kernel_time_t* = compiler_kernel_long_t ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/asm-generic/posix_types.h:90:25
+  compiler_kernel_time64_t* = clonglong ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/asm-generic/posix_types.h:91:19
+  compiler_kernel_clock_t* = compiler_kernel_long_t ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/asm-generic/posix_types.h:92:25
+  compiler_kernel_timer_t* = cint ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/asm-generic/posix_types.h:93:14
+  compiler_kernel_clockid_t* = cint ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/asm-generic/posix_types.h:94:14
+  compiler_kernel_caddr_t* = ptr uint8 ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/asm-generic/posix_types.h:95:17
+  compiler_kernel_uid16_t* = cushort ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/asm-generic/posix_types.h:96:24
+  compiler_kernel_gid16_t* = cushort ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/asm-generic/posix_types.h:97:24
   struct_linger* {.pure, inheritable, bycopy.} = object
     l_onoff*: cint           ## Generated based on /nix/store/sh3sjmgq543lfpjsq3dc0ksb6ckvhpdi-glibc-2.40-66-dev/include/bits/socket.h:397:8
     l_linger*: cint
   struct_osockaddr* {.pure, inheritable, bycopy.} = object
     sa_family*: cushort      ## Generated based on /nix/store/sh3sjmgq543lfpjsq3dc0ksb6ckvhpdi-glibc-2.40-66-dev/include/bits/types/struct_osockaddr.h:6:8
     sa_data*: array[14'i64, uint8]
+  compiler_s8* = cschar      ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/asm-generic/int-ll64.h:20:25
+  compiler_u8* = uint8       ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/asm-generic/int-ll64.h:21:23
+  compiler_s16* = cshort     ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/asm-generic/int-ll64.h:23:26
+  compiler_u16* = cushort    ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/asm-generic/int-ll64.h:24:24
+  compiler_s32* = cint       ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/asm-generic/int-ll64.h:26:24
+  compiler_u32* = cuint      ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/asm-generic/int-ll64.h:27:22
+  compiler_s64* = clonglong  ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/asm-generic/int-ll64.h:30:44
+  compiler_u64* = culonglong ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/asm-generic/int-ll64.h:31:42
+  compiler_s128* = tuple[low: uint64, high: int64] ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/types.h:12:29
+  compiler_u128* = tuple[low: uint64, high: uint64] ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/types.h:13:27
+  compiler_le16* = compiler_u16 ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/types.h:31:25
+  compiler_be16* = compiler_u16 ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/types.h:32:25
+  compiler_le32* = compiler_u32 ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/types.h:33:25
+  compiler_be32* = compiler_u32 ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/types.h:34:25
+  compiler_le64* = compiler_u64 ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/types.h:35:25
+  compiler_be64* = compiler_u64 ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/types.h:36:25
+  compiler_sum16* = compiler_u16 ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/types.h:38:25
+  compiler_wsum* = compiler_u32 ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/types.h:39:25
+  compiler_poll_t* = cuint   ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/types.h:54:28
   struct_sockaddr_nl* {.pure, inheritable, bycopy.} = object
-    nl_family*: compiler_kernel_sa_family_t ## Generated based on /nix/store/sh3sjmgq543lfpjsq3dc0ksb6ckvhpdi-glibc-2.40-66-dev/include/linux/netlink.h:37:8
+    nl_family*: compiler_kernel_sa_family_t ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/netlink.h:37:8
     nl_pad*: cushort
     nl_pid*: compiler_u32
     nl_groups*: compiler_u32
-  compiler_u32* = cuint      ## Generated based on /nix/store/sh3sjmgq543lfpjsq3dc0ksb6ckvhpdi-glibc-2.40-66-dev/include/asm-generic/int-ll64.h:27:22
   struct_nlmsghdr* {.pure, inheritable, bycopy.} = object
-    nlmsg_len*: compiler_u32 ## Generated based on /nix/store/sh3sjmgq543lfpjsq3dc0ksb6ckvhpdi-glibc-2.40-66-dev/include/linux/netlink.h:52:8
+    nlmsg_len*: compiler_u32 ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/netlink.h:52:8
     nlmsg_type*: compiler_u16
     nlmsg_flags*: compiler_u16
     nlmsg_seq*: compiler_u32
     nlmsg_pid*: compiler_u32
-  compiler_u16* = cushort    ## Generated based on /nix/store/sh3sjmgq543lfpjsq3dc0ksb6ckvhpdi-glibc-2.40-66-dev/include/asm-generic/int-ll64.h:24:24
   struct_nlmsgerr* {.pure, inheritable, bycopy.} = object
-    error*: cint             ## Generated based on /nix/store/sh3sjmgq543lfpjsq3dc0ksb6ckvhpdi-glibc-2.40-66-dev/include/linux/netlink.h:119:8
+    error*: cint             ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/netlink.h:119:8
     msg*: struct_nlmsghdr
   struct_nl_pktinfo* {.pure, inheritable, bycopy.} = object
-    group*: compiler_u32     ## Generated based on /nix/store/sh3sjmgq543lfpjsq3dc0ksb6ckvhpdi-glibc-2.40-66-dev/include/linux/netlink.h:176:8
+    group*: compiler_u32     ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/netlink.h:176:8
   struct_nl_mmap_req* {.pure, inheritable, bycopy.} = object
-    nm_block_size*: cuint    ## Generated based on /nix/store/sh3sjmgq543lfpjsq3dc0ksb6ckvhpdi-glibc-2.40-66-dev/include/linux/netlink.h:180:8
+    nm_block_size*: cuint    ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/netlink.h:180:8
     nm_block_nr*: cuint
     nm_frame_size*: cuint
     nm_frame_nr*: cuint
   struct_nl_mmap_hdr* {.pure, inheritable, bycopy.} = object
-    nm_status*: cuint        ## Generated based on /nix/store/sh3sjmgq543lfpjsq3dc0ksb6ckvhpdi-glibc-2.40-66-dev/include/linux/netlink.h:187:8
+    nm_status*: cuint        ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/netlink.h:187:8
     nm_len*: cuint
     nm_group*: compiler_u32
     nm_pid*: compiler_u32
     nm_uid*: compiler_u32
     nm_gid*: compiler_u32
   struct_nlattr* {.pure, inheritable, bycopy.} = object
-    nla_len*: compiler_u16   ## Generated based on /nix/store/sh3sjmgq543lfpjsq3dc0ksb6ckvhpdi-glibc-2.40-66-dev/include/linux/netlink.h:225:8
+    nla_len*: compiler_u16   ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/netlink.h:225:8
     nla_type*: compiler_u16
   struct_nla_bitfield32* {.pure, inheritable, bycopy.} = object
-    value*: compiler_u32     ## Generated based on /nix/store/sh3sjmgq543lfpjsq3dc0ksb6ckvhpdi-glibc-2.40-66-dev/include/linux/netlink.h:261:8
+    value*: compiler_u32     ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/netlink.h:261:8
     selector*: compiler_u32
+  struct_in_addr* {.pure, inheritable, bycopy.} = object
+    s_addr*: compiler_be32   ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/in.h:94:8
+  struct_ip_mreq* {.pure, inheritable, bycopy.} = object
+    imr_multiaddr*: struct_in_addr ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/in.h:180:8
+    imr_interface*: struct_in_addr
+  struct_ip_mreqn* {.pure, inheritable, bycopy.} = object
+    imr_multiaddr*: struct_in_addr ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/in.h:185:8
+    imr_address*: struct_in_addr
+    imr_ifindex*: cint
+  struct_ip_mreq_source* {.pure, inheritable, bycopy.} = object
+    imr_multiaddr*: compiler_be32 ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/in.h:191:8
+    imr_interface*: compiler_be32
+    imr_sourceaddr*: compiler_be32
+  struct_ip_msfilter_anon0_t_anon0_t* {.pure, inheritable, bycopy.} = object
+    compiler_empty_imsf_slist_flex*: struct_6604
+    imsf_slist_flex*: ptr UncheckedArray[compiler_be32]
+  struct_ip_msfilter_anon0_t* {.union, bycopy.} = object
+    imsf_slist*: array[1'i64, compiler_be32]
+    anon0*: struct_ip_msfilter_anon0_t_anon0_t
+  struct_ip_msfilter* {.pure, inheritable, bycopy.} = object
+    imsf_multiaddr*: compiler_be32 ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/in.h:197:8
+    imsf_interface*: compiler_be32
+    imsf_fmode*: compiler_u32
+    imsf_numsrc*: compiler_u32
+    anon0*: struct_ip_msfilter_anon0_t
+  struct_group_req* {.pure, inheritable, bycopy.} = object
+    gr_interface*: compiler_u32 ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/in.h:212:8
+    gr_group*: struct_kernel_sockaddr_storage
+  struct_group_source_req* {.pure, inheritable, bycopy.} = object
+    gsr_interface*: compiler_u32 ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/in.h:217:8
+    gsr_group*: struct_kernel_sockaddr_storage
+    gsr_source*: struct_kernel_sockaddr_storage
+  struct_group_filter_anon0_t_anon0_t* {.pure, inheritable, bycopy.} = object
+    gf_interface_aux*: compiler_u32
+    gf_group_aux*: struct_kernel_sockaddr_storage
+    gf_fmode_aux*: compiler_u32
+    gf_numsrc_aux*: compiler_u32
+    gf_slist*: array[1'i64, struct_kernel_sockaddr_storage]
+  struct_group_filter_anon0_t_anon1_t* {.pure, inheritable, bycopy.} = object
+    gf_interface*: compiler_u32
+    gf_group*: struct_kernel_sockaddr_storage
+    gf_fmode*: compiler_u32
+    gf_numsrc*: compiler_u32
+    gf_slist_flex*: ptr UncheckedArray[struct_kernel_sockaddr_storage]
+  struct_group_filter_anon0_t* {.union, bycopy.} = object
+    anon0*: struct_group_filter_anon0_t_anon0_t
+    anon1*: struct_group_filter_anon0_t_anon1_t
+  struct_group_filter* {.pure, inheritable, bycopy.} = object
+    anon0*: struct_group_filter_anon0_t ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/in.h:223:8
+  struct_in_pktinfo* {.pure, inheritable, bycopy.} = object
+    ipi_ifindex*: cint       ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/in.h:248:8
+    ipi_spec_dst*: struct_in_addr
+    ipi_addr*: struct_in_addr
+  struct_sockaddr_in* {.pure, inheritable, bycopy.} = object
+    sin_family*: compiler_kernel_sa_family_t ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/in.h:258:8
+    sin_port*: compiler_be16
+    sin_addr*: struct_in_addr
+    compiler_pad*: array[8'i64, uint8]
+  struct_in6_addr_in6_u_t* {.union, bycopy.} = object
+    u6_addr8*: array[16'i64, compiler_u8]
+    u6_addr16*: array[8'i64, compiler_be16]
+    u6_addr32*: array[4'i64, compiler_be32]
+  struct_in6_addr* {.pure, inheritable, bycopy.} = object
+    in6_u*: struct_in6_addr_in6_u_t ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/in6.h:33:8
+  struct_sockaddr_in6* {.pure, inheritable, bycopy.} = object
+    sin6_family*: cushort    ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/in6.h:50:8
+    sin6_port*: compiler_be16
+    sin6_flowinfo*: compiler_be32
+    sin6_addr*: struct_in6_addr
+    sin6_scope_id*: compiler_u32
+  struct_ipv6_mreq* {.pure, inheritable, bycopy.} = object
+    ipv6mr_multiaddr*: struct_in6_addr ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/in6.h:60:8
+    ipv6mr_ifindex*: cint
+  struct_in6_flowlabel_req* {.pure, inheritable, bycopy.} = object
+    flr_dst*: struct_in6_addr ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/in6.h:71:8
+    flr_label*: compiler_be32
+    flr_action*: compiler_u8
+    flr_share*: compiler_u8
+    flr_flags*: compiler_u16
+    flr_expires*: compiler_u16
+    flr_linger*: compiler_u16
+    compiler_flr_pad*: compiler_u32
+  union_nf_inet_addr* {.union, bycopy.} = object
+    all*: array[4'i64, compiler_u32] ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/netfilter.h:68:7
+    ip*: compiler_be32
+    ip6*: array[4'i64, compiler_be32]
+    in_field*: struct_in_addr
+    in6*: struct_in6_addr
+  struct_nfattr* {.pure, inheritable, bycopy.} = object
+    nfa_len*: compiler_u16   ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/netfilter/nfnetlink_compat.h:24:8
+    nfa_type*: compiler_u16
   struct_nfgenmsg* {.pure, inheritable, bycopy.} = object
-    nfgen_family*: compiler_u8 ## Generated based on /nix/store/sh3sjmgq543lfpjsq3dc0ksb6ckvhpdi-glibc-2.40-66-dev/include/linux/netfilter/nfnetlink.h:34:8
+    nfgen_family*: compiler_u8 ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/netfilter/nfnetlink.h:34:8
     version*: compiler_u8
     res_id*: compiler_be16
-  compiler_u8* = uint8       ## Generated based on /nix/store/sh3sjmgq543lfpjsq3dc0ksb6ckvhpdi-glibc-2.40-66-dev/include/asm-generic/int-ll64.h:21:23
-  compiler_be16* = compiler_u16 ## Generated based on /nix/store/sh3sjmgq543lfpjsq3dc0ksb6ckvhpdi-glibc-2.40-66-dev/include/linux/types.h:32:25
 when 128 is static:
   const
-    internal_K_SS_MAXSIZE* = 128 ## Generated based on /nix/store/sh3sjmgq543lfpjsq3dc0ksb6ckvhpdi-glibc-2.40-66-dev/include/linux/socket.h:8:9
+    internal_K_SS_MAXSIZE* = 128 ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/socket.h:8:9
 else:
-  let internal_K_SS_MAXSIZE* = 128 ## Generated based on /nix/store/sh3sjmgq543lfpjsq3dc0ksb6ckvhpdi-glibc-2.40-66-dev/include/linux/socket.h:8:9
+  let internal_K_SS_MAXSIZE* = 128 ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/socket.h:8:9
 when 1 is static:
   const
-    SOCK_SNDBUF_LOCK* = 1    ## Generated based on /nix/store/sh3sjmgq543lfpjsq3dc0ksb6ckvhpdi-glibc-2.40-66-dev/include/linux/socket.h:29:9
+    SOCK_SNDBUF_LOCK* = 1    ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/socket.h:29:9
 else:
-  let SOCK_SNDBUF_LOCK* = 1  ## Generated based on /nix/store/sh3sjmgq543lfpjsq3dc0ksb6ckvhpdi-glibc-2.40-66-dev/include/linux/socket.h:29:9
+  let SOCK_SNDBUF_LOCK* = 1  ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/socket.h:29:9
 when 2 is static:
   const
-    SOCK_RCVBUF_LOCK* = 2    ## Generated based on /nix/store/sh3sjmgq543lfpjsq3dc0ksb6ckvhpdi-glibc-2.40-66-dev/include/linux/socket.h:30:9
+    SOCK_RCVBUF_LOCK* = 2    ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/socket.h:30:9
 else:
-  let SOCK_RCVBUF_LOCK* = 2  ## Generated based on /nix/store/sh3sjmgq543lfpjsq3dc0ksb6ckvhpdi-glibc-2.40-66-dev/include/linux/socket.h:30:9
+  let SOCK_RCVBUF_LOCK* = 2  ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/socket.h:30:9
 when 255 is static:
   const
-    SOCK_TXREHASH_DEFAULT* = 255 ## Generated based on /nix/store/sh3sjmgq543lfpjsq3dc0ksb6ckvhpdi-glibc-2.40-66-dev/include/linux/socket.h:34:9
+    SOCK_TXREHASH_DEFAULT* = 255 ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/socket.h:34:9
 else:
-  let SOCK_TXREHASH_DEFAULT* = 255 ## Generated based on /nix/store/sh3sjmgq543lfpjsq3dc0ksb6ckvhpdi-glibc-2.40-66-dev/include/linux/socket.h:34:9
+  let SOCK_TXREHASH_DEFAULT* = 255 ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/socket.h:34:9
 when 0 is static:
   const
-    SOCK_TXREHASH_DISABLED* = 0 ## Generated based on /nix/store/sh3sjmgq543lfpjsq3dc0ksb6ckvhpdi-glibc-2.40-66-dev/include/linux/socket.h:35:9
+    SOCK_TXREHASH_DISABLED* = 0 ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/socket.h:35:9
 else:
-  let SOCK_TXREHASH_DISABLED* = 0 ## Generated based on /nix/store/sh3sjmgq543lfpjsq3dc0ksb6ckvhpdi-glibc-2.40-66-dev/include/linux/socket.h:35:9
+  let SOCK_TXREHASH_DISABLED* = 0 ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/socket.h:35:9
 when 1 is static:
   const
-    SOCK_TXREHASH_ENABLED* = 1 ## Generated based on /nix/store/sh3sjmgq543lfpjsq3dc0ksb6ckvhpdi-glibc-2.40-66-dev/include/linux/socket.h:36:9
+    SOCK_TXREHASH_ENABLED* = 1 ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/socket.h:36:9
 else:
-  let SOCK_TXREHASH_ENABLED* = 1 ## Generated based on /nix/store/sh3sjmgq543lfpjsq3dc0ksb6ckvhpdi-glibc-2.40-66-dev/include/linux/socket.h:36:9
+  let SOCK_TXREHASH_ENABLED* = 1 ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/socket.h:36:9
 when 1 is static:
   const
     internal_SYS_SOCKET_H* = 1 ## Generated based on /nix/store/sh3sjmgq543lfpjsq3dc0ksb6ckvhpdi-glibc-2.40-66-dev/include/sys/socket.h:20:9
@@ -1250,9 +1511,9 @@ else:
   let compiler_STATFS_MATCHES_STATFS64* = 1 ## Generated based on /nix/store/sh3sjmgq543lfpjsq3dc0ksb6ckvhpdi-glibc-2.40-66-dev/include/bits/typesizes.h:91:10
 when 1024 is static:
   const
-    compiler_FD_SETSIZE* = 1024 ## Generated based on /nix/store/sh3sjmgq543lfpjsq3dc0ksb6ckvhpdi-glibc-2.40-66-dev/include/linux/posix_types.h:23:9
+    compiler_FD_SETSIZE* = 1024 ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/posix_types.h:23:9
 else:
-  let compiler_FD_SETSIZE* = 1024 ## Generated based on /nix/store/sh3sjmgq543lfpjsq3dc0ksb6ckvhpdi-glibc-2.40-66-dev/include/linux/posix_types.h:23:9
+  let compiler_FD_SETSIZE* = 1024 ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/posix_types.h:23:9
 when 1 is static:
   const
     internal_BITS_TIME64_H* = 1 ## Generated based on /nix/store/sh3sjmgq543lfpjsq3dc0ksb6ckvhpdi-glibc-2.40-66-dev/include/bits/time64.h:24:9
@@ -2308,6 +2569,555 @@ when 128 is static:
     internal_SS_SIZE* = 128  ## Generated based on /nix/store/sh3sjmgq543lfpjsq3dc0ksb6ckvhpdi-glibc-2.40-66-dev/include/bits/sockaddr.h:40:9
 else:
   let internal_SS_SIZE* = 128 ## Generated based on /nix/store/sh3sjmgq543lfpjsq3dc0ksb6ckvhpdi-glibc-2.40-66-dev/include/bits/sockaddr.h:40:9
+when 64 is static:
+  const
+    compiler_BITS_PER_LONG* = 64 ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/asm/bitsperlong.h:20:9
+else:
+  let compiler_BITS_PER_LONG* = 64 ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/asm/bitsperlong.h:20:9
+when 64 is static:
+  const
+    compiler_BITS_PER_LONG_LONG* = 64 ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/asm-generic/bitsperlong.h:28:9
+else:
+  let compiler_BITS_PER_LONG_LONG* = 64 ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/asm-generic/bitsperlong.h:28:9
+when 35073 is static:
+  const
+    FIOSETOWN* = 35073       ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/asm-generic/sockios.h:6:9
+else:
+  let FIOSETOWN* = 35073     ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/asm-generic/sockios.h:6:9
+when 35074 is static:
+  const
+    SIOCSPGRP* = 35074       ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/asm-generic/sockios.h:7:9
+else:
+  let SIOCSPGRP* = 35074     ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/asm-generic/sockios.h:7:9
+when 35075 is static:
+  const
+    FIOGETOWN* = 35075       ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/asm-generic/sockios.h:8:9
+else:
+  let FIOGETOWN* = 35075     ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/asm-generic/sockios.h:8:9
+when 35076 is static:
+  const
+    SIOCGPGRP* = 35076       ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/asm-generic/sockios.h:9:9
+else:
+  let SIOCGPGRP* = 35076     ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/asm-generic/sockios.h:9:9
+when 35077 is static:
+  const
+    SIOCATMARK* = 35077      ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/asm-generic/sockios.h:10:9
+else:
+  let SIOCATMARK* = 35077    ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/asm-generic/sockios.h:10:9
+when 35078 is static:
+  const
+    SIOCGSTAMP_OLD* = 35078  ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/asm-generic/sockios.h:11:9
+else:
+  let SIOCGSTAMP_OLD* = 35078 ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/asm-generic/sockios.h:11:9
+when 35079 is static:
+  const
+    SIOCGSTAMPNS_OLD* = 35079 ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/asm-generic/sockios.h:12:9
+else:
+  let SIOCGSTAMPNS_OLD* = 35079 ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/asm-generic/sockios.h:12:9
+when 1 is static:
+  const
+    SOL_SOCKET* = 1          ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/asm-generic/socket.h:9:9
+else:
+  let SOL_SOCKET* = 1        ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/asm-generic/socket.h:9:9
+when 1 is static:
+  const
+    SO_DEBUG* = 1            ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/asm-generic/socket.h:11:9
+else:
+  let SO_DEBUG* = 1          ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/asm-generic/socket.h:11:9
+when 2 is static:
+  const
+    SO_REUSEADDR* = 2        ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/asm-generic/socket.h:12:9
+else:
+  let SO_REUSEADDR* = 2      ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/asm-generic/socket.h:12:9
+when 3 is static:
+  const
+    SO_TYPE* = 3             ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/asm-generic/socket.h:13:9
+else:
+  let SO_TYPE* = 3           ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/asm-generic/socket.h:13:9
+when 4 is static:
+  const
+    SO_ERROR* = 4            ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/asm-generic/socket.h:14:9
+else:
+  let SO_ERROR* = 4          ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/asm-generic/socket.h:14:9
+when 5 is static:
+  const
+    SO_DONTROUTE* = 5        ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/asm-generic/socket.h:15:9
+else:
+  let SO_DONTROUTE* = 5      ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/asm-generic/socket.h:15:9
+when 6 is static:
+  const
+    SO_BROADCAST* = 6        ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/asm-generic/socket.h:16:9
+else:
+  let SO_BROADCAST* = 6      ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/asm-generic/socket.h:16:9
+when 7 is static:
+  const
+    SO_SNDBUF* = 7           ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/asm-generic/socket.h:17:9
+else:
+  let SO_SNDBUF* = 7         ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/asm-generic/socket.h:17:9
+when 8 is static:
+  const
+    SO_RCVBUF* = 8           ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/asm-generic/socket.h:18:9
+else:
+  let SO_RCVBUF* = 8         ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/asm-generic/socket.h:18:9
+when 32 is static:
+  const
+    SO_SNDBUFFORCE* = 32     ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/asm-generic/socket.h:19:9
+else:
+  let SO_SNDBUFFORCE* = 32   ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/asm-generic/socket.h:19:9
+when 33 is static:
+  const
+    SO_RCVBUFFORCE* = 33     ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/asm-generic/socket.h:20:9
+else:
+  let SO_RCVBUFFORCE* = 33   ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/asm-generic/socket.h:20:9
+when 9 is static:
+  const
+    SO_KEEPALIVE* = 9        ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/asm-generic/socket.h:21:9
+else:
+  let SO_KEEPALIVE* = 9      ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/asm-generic/socket.h:21:9
+when 10 is static:
+  const
+    SO_OOBINLINE* = 10       ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/asm-generic/socket.h:22:9
+else:
+  let SO_OOBINLINE* = 10     ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/asm-generic/socket.h:22:9
+when 11 is static:
+  const
+    SO_NO_CHECK* = 11        ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/asm-generic/socket.h:23:9
+else:
+  let SO_NO_CHECK* = 11      ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/asm-generic/socket.h:23:9
+when 12 is static:
+  const
+    SO_PRIORITY* = 12        ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/asm-generic/socket.h:24:9
+else:
+  let SO_PRIORITY* = 12      ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/asm-generic/socket.h:24:9
+when 13 is static:
+  const
+    SO_LINGER* = 13          ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/asm-generic/socket.h:25:9
+else:
+  let SO_LINGER* = 13        ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/asm-generic/socket.h:25:9
+when 14 is static:
+  const
+    SO_BSDCOMPAT* = 14       ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/asm-generic/socket.h:26:9
+else:
+  let SO_BSDCOMPAT* = 14     ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/asm-generic/socket.h:26:9
+when 15 is static:
+  const
+    SO_REUSEPORT* = 15       ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/asm-generic/socket.h:27:9
+else:
+  let SO_REUSEPORT* = 15     ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/asm-generic/socket.h:27:9
+when 16 is static:
+  const
+    SO_PASSCRED* = 16        ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/asm-generic/socket.h:29:9
+else:
+  let SO_PASSCRED* = 16      ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/asm-generic/socket.h:29:9
+when 17 is static:
+  const
+    SO_PEERCRED* = 17        ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/asm-generic/socket.h:30:9
+else:
+  let SO_PEERCRED* = 17      ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/asm-generic/socket.h:30:9
+when 18 is static:
+  const
+    SO_RCVLOWAT* = 18        ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/asm-generic/socket.h:31:9
+else:
+  let SO_RCVLOWAT* = 18      ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/asm-generic/socket.h:31:9
+when 19 is static:
+  const
+    SO_SNDLOWAT* = 19        ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/asm-generic/socket.h:32:9
+else:
+  let SO_SNDLOWAT* = 19      ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/asm-generic/socket.h:32:9
+when 20 is static:
+  const
+    SO_RCVTIMEO_OLD* = 20    ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/asm-generic/socket.h:33:9
+else:
+  let SO_RCVTIMEO_OLD* = 20  ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/asm-generic/socket.h:33:9
+when 21 is static:
+  const
+    SO_SNDTIMEO_OLD* = 21    ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/asm-generic/socket.h:34:9
+else:
+  let SO_SNDTIMEO_OLD* = 21  ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/asm-generic/socket.h:34:9
+when 22 is static:
+  const
+    SO_SECURITY_AUTHENTICATION* = 22 ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/asm-generic/socket.h:38:9
+else:
+  let SO_SECURITY_AUTHENTICATION* = 22 ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/asm-generic/socket.h:38:9
+when 23 is static:
+  const
+    SO_SECURITY_ENCRYPTION_TRANSPORT* = 23 ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/asm-generic/socket.h:39:9
+else:
+  let SO_SECURITY_ENCRYPTION_TRANSPORT* = 23 ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/asm-generic/socket.h:39:9
+when 24 is static:
+  const
+    SO_SECURITY_ENCRYPTION_NETWORK* = 24 ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/asm-generic/socket.h:40:9
+else:
+  let SO_SECURITY_ENCRYPTION_NETWORK* = 24 ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/asm-generic/socket.h:40:9
+when 25 is static:
+  const
+    SO_BINDTODEVICE* = 25    ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/asm-generic/socket.h:42:9
+else:
+  let SO_BINDTODEVICE* = 25  ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/asm-generic/socket.h:42:9
+when 26 is static:
+  const
+    SO_ATTACH_FILTER* = 26   ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/asm-generic/socket.h:45:9
+else:
+  let SO_ATTACH_FILTER* = 26 ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/asm-generic/socket.h:45:9
+when 27 is static:
+  const
+    SO_DETACH_FILTER* = 27   ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/asm-generic/socket.h:46:9
+else:
+  let SO_DETACH_FILTER* = 27 ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/asm-generic/socket.h:46:9
+when SO_ATTACH_FILTER is typedesc:
+  type
+    SO_GET_FILTER* = SO_ATTACH_FILTER ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/asm-generic/socket.h:47:9
+else:
+  when SO_ATTACH_FILTER is static:
+    const
+      SO_GET_FILTER* = SO_ATTACH_FILTER ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/asm-generic/socket.h:47:9
+  else:
+    let SO_GET_FILTER* = SO_ATTACH_FILTER ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/asm-generic/socket.h:47:9
+when 28 is static:
+  const
+    SO_PEERNAME* = 28        ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/asm-generic/socket.h:49:9
+else:
+  let SO_PEERNAME* = 28      ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/asm-generic/socket.h:49:9
+when 30 is static:
+  const
+    SO_ACCEPTCONN* = 30      ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/asm-generic/socket.h:51:9
+else:
+  let SO_ACCEPTCONN* = 30    ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/asm-generic/socket.h:51:9
+when 31 is static:
+  const
+    SO_PEERSEC* = 31         ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/asm-generic/socket.h:53:9
+else:
+  let SO_PEERSEC* = 31       ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/asm-generic/socket.h:53:9
+when 34 is static:
+  const
+    SO_PASSSEC* = 34         ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/asm-generic/socket.h:54:9
+else:
+  let SO_PASSSEC* = 34       ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/asm-generic/socket.h:54:9
+when 36 is static:
+  const
+    SO_MARK* = 36            ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/asm-generic/socket.h:56:9
+else:
+  let SO_MARK* = 36          ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/asm-generic/socket.h:56:9
+when 38 is static:
+  const
+    SO_PROTOCOL* = 38        ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/asm-generic/socket.h:58:9
+else:
+  let SO_PROTOCOL* = 38      ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/asm-generic/socket.h:58:9
+when 39 is static:
+  const
+    SO_DOMAIN* = 39          ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/asm-generic/socket.h:59:9
+else:
+  let SO_DOMAIN* = 39        ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/asm-generic/socket.h:59:9
+when 40 is static:
+  const
+    SO_RXQ_OVFL* = 40        ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/asm-generic/socket.h:61:9
+else:
+  let SO_RXQ_OVFL* = 40      ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/asm-generic/socket.h:61:9
+when 41 is static:
+  const
+    SO_WIFI_STATUS* = 41     ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/asm-generic/socket.h:63:9
+else:
+  let SO_WIFI_STATUS* = 41   ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/asm-generic/socket.h:63:9
+when SO_WIFI_STATUS is typedesc:
+  type
+    SCM_WIFI_STATUS* = SO_WIFI_STATUS ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/asm-generic/socket.h:64:9
+else:
+  when SO_WIFI_STATUS is static:
+    const
+      SCM_WIFI_STATUS* = SO_WIFI_STATUS ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/asm-generic/socket.h:64:9
+  else:
+    let SCM_WIFI_STATUS* = SO_WIFI_STATUS ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/asm-generic/socket.h:64:9
+when 42 is static:
+  const
+    SO_PEEK_OFF* = 42        ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/asm-generic/socket.h:65:9
+else:
+  let SO_PEEK_OFF* = 42      ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/asm-generic/socket.h:65:9
+when 43 is static:
+  const
+    SO_NOFCS* = 43           ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/asm-generic/socket.h:68:9
+else:
+  let SO_NOFCS* = 43         ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/asm-generic/socket.h:68:9
+when 44 is static:
+  const
+    SO_LOCK_FILTER* = 44     ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/asm-generic/socket.h:70:9
+else:
+  let SO_LOCK_FILTER* = 44   ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/asm-generic/socket.h:70:9
+when 45 is static:
+  const
+    SO_SELECT_ERR_QUEUE* = 45 ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/asm-generic/socket.h:72:9
+else:
+  let SO_SELECT_ERR_QUEUE* = 45 ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/asm-generic/socket.h:72:9
+when 46 is static:
+  const
+    SO_BUSY_POLL* = 46       ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/asm-generic/socket.h:74:9
+else:
+  let SO_BUSY_POLL* = 46     ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/asm-generic/socket.h:74:9
+when 47 is static:
+  const
+    SO_MAX_PACING_RATE* = 47 ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/asm-generic/socket.h:76:9
+else:
+  let SO_MAX_PACING_RATE* = 47 ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/asm-generic/socket.h:76:9
+when 48 is static:
+  const
+    SO_BPF_EXTENSIONS* = 48  ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/asm-generic/socket.h:78:9
+else:
+  let SO_BPF_EXTENSIONS* = 48 ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/asm-generic/socket.h:78:9
+when 49 is static:
+  const
+    SO_INCOMING_CPU* = 49    ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/asm-generic/socket.h:80:9
+else:
+  let SO_INCOMING_CPU* = 49  ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/asm-generic/socket.h:80:9
+when 50 is static:
+  const
+    SO_ATTACH_BPF* = 50      ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/asm-generic/socket.h:82:9
+else:
+  let SO_ATTACH_BPF* = 50    ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/asm-generic/socket.h:82:9
+when SO_DETACH_FILTER is typedesc:
+  type
+    SO_DETACH_BPF* = SO_DETACH_FILTER ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/asm-generic/socket.h:83:9
+else:
+  when SO_DETACH_FILTER is static:
+    const
+      SO_DETACH_BPF* = SO_DETACH_FILTER ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/asm-generic/socket.h:83:9
+  else:
+    let SO_DETACH_BPF* = SO_DETACH_FILTER ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/asm-generic/socket.h:83:9
+when 51 is static:
+  const
+    SO_ATTACH_REUSEPORT_CBPF* = 51 ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/asm-generic/socket.h:85:9
+else:
+  let SO_ATTACH_REUSEPORT_CBPF* = 51 ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/asm-generic/socket.h:85:9
+when 52 is static:
+  const
+    SO_ATTACH_REUSEPORT_EBPF* = 52 ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/asm-generic/socket.h:86:9
+else:
+  let SO_ATTACH_REUSEPORT_EBPF* = 52 ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/asm-generic/socket.h:86:9
+when 53 is static:
+  const
+    SO_CNX_ADVICE* = 53      ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/asm-generic/socket.h:88:9
+else:
+  let SO_CNX_ADVICE* = 53    ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/asm-generic/socket.h:88:9
+when 54 is static:
+  const
+    SCM_TIMESTAMPING_OPT_STATS* = 54 ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/asm-generic/socket.h:90:9
+else:
+  let SCM_TIMESTAMPING_OPT_STATS* = 54 ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/asm-generic/socket.h:90:9
+when 55 is static:
+  const
+    SO_MEMINFO* = 55         ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/asm-generic/socket.h:92:9
+else:
+  let SO_MEMINFO* = 55       ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/asm-generic/socket.h:92:9
+when 56 is static:
+  const
+    SO_INCOMING_NAPI_ID* = 56 ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/asm-generic/socket.h:94:9
+else:
+  let SO_INCOMING_NAPI_ID* = 56 ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/asm-generic/socket.h:94:9
+when 57 is static:
+  const
+    SO_COOKIE* = 57          ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/asm-generic/socket.h:96:9
+else:
+  let SO_COOKIE* = 57        ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/asm-generic/socket.h:96:9
+when 58 is static:
+  const
+    SCM_TIMESTAMPING_PKTINFO* = 58 ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/asm-generic/socket.h:98:9
+else:
+  let SCM_TIMESTAMPING_PKTINFO* = 58 ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/asm-generic/socket.h:98:9
+when 59 is static:
+  const
+    SO_PEERGROUPS* = 59      ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/asm-generic/socket.h:100:9
+else:
+  let SO_PEERGROUPS* = 59    ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/asm-generic/socket.h:100:9
+when 60 is static:
+  const
+    SO_ZEROCOPY* = 60        ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/asm-generic/socket.h:102:9
+else:
+  let SO_ZEROCOPY* = 60      ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/asm-generic/socket.h:102:9
+when 61 is static:
+  const
+    SO_TXTIME* = 61          ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/asm-generic/socket.h:104:9
+else:
+  let SO_TXTIME* = 61        ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/asm-generic/socket.h:104:9
+when SO_TXTIME is typedesc:
+  type
+    SCM_TXTIME* = SO_TXTIME  ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/asm-generic/socket.h:105:9
+else:
+  when SO_TXTIME is static:
+    const
+      SCM_TXTIME* = SO_TXTIME ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/asm-generic/socket.h:105:9
+  else:
+    let SCM_TXTIME* = SO_TXTIME ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/asm-generic/socket.h:105:9
+when 62 is static:
+  const
+    SO_BINDTOIFINDEX* = 62   ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/asm-generic/socket.h:107:9
+else:
+  let SO_BINDTOIFINDEX* = 62 ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/asm-generic/socket.h:107:9
+when 29 is static:
+  const
+    SO_TIMESTAMP_OLD* = 29   ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/asm-generic/socket.h:109:9
+else:
+  let SO_TIMESTAMP_OLD* = 29 ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/asm-generic/socket.h:109:9
+when 35 is static:
+  const
+    SO_TIMESTAMPNS_OLD* = 35 ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/asm-generic/socket.h:110:9
+else:
+  let SO_TIMESTAMPNS_OLD* = 35 ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/asm-generic/socket.h:110:9
+when 37 is static:
+  const
+    SO_TIMESTAMPING_OLD* = 37 ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/asm-generic/socket.h:111:9
+else:
+  let SO_TIMESTAMPING_OLD* = 37 ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/asm-generic/socket.h:111:9
+when 63 is static:
+  const
+    SO_TIMESTAMP_NEW* = 63   ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/asm-generic/socket.h:113:9
+else:
+  let SO_TIMESTAMP_NEW* = 63 ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/asm-generic/socket.h:113:9
+when 64 is static:
+  const
+    SO_TIMESTAMPNS_NEW* = 64 ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/asm-generic/socket.h:114:9
+else:
+  let SO_TIMESTAMPNS_NEW* = 64 ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/asm-generic/socket.h:114:9
+when 65 is static:
+  const
+    SO_TIMESTAMPING_NEW* = 65 ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/asm-generic/socket.h:115:9
+else:
+  let SO_TIMESTAMPING_NEW* = 65 ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/asm-generic/socket.h:115:9
+when 66 is static:
+  const
+    SO_RCVTIMEO_NEW* = 66    ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/asm-generic/socket.h:117:9
+else:
+  let SO_RCVTIMEO_NEW* = 66  ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/asm-generic/socket.h:117:9
+when 67 is static:
+  const
+    SO_SNDTIMEO_NEW* = 67    ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/asm-generic/socket.h:118:9
+else:
+  let SO_SNDTIMEO_NEW* = 67  ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/asm-generic/socket.h:118:9
+when 68 is static:
+  const
+    SO_DETACH_REUSEPORT_BPF* = 68 ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/asm-generic/socket.h:120:9
+else:
+  let SO_DETACH_REUSEPORT_BPF* = 68 ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/asm-generic/socket.h:120:9
+when 69 is static:
+  const
+    SO_PREFER_BUSY_POLL* = 69 ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/asm-generic/socket.h:122:9
+else:
+  let SO_PREFER_BUSY_POLL* = 69 ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/asm-generic/socket.h:122:9
+when 70 is static:
+  const
+    SO_BUSY_POLL_BUDGET* = 70 ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/asm-generic/socket.h:123:9
+else:
+  let SO_BUSY_POLL_BUDGET* = 70 ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/asm-generic/socket.h:123:9
+when 71 is static:
+  const
+    SO_NETNS_COOKIE* = 71    ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/asm-generic/socket.h:125:9
+else:
+  let SO_NETNS_COOKIE* = 71  ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/asm-generic/socket.h:125:9
+when 72 is static:
+  const
+    SO_BUF_LOCK* = 72        ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/asm-generic/socket.h:127:9
+else:
+  let SO_BUF_LOCK* = 72      ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/asm-generic/socket.h:127:9
+when 73 is static:
+  const
+    SO_RESERVE_MEM* = 73     ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/asm-generic/socket.h:129:9
+else:
+  let SO_RESERVE_MEM* = 73   ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/asm-generic/socket.h:129:9
+when 74 is static:
+  const
+    SO_TXREHASH* = 74        ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/asm-generic/socket.h:131:9
+else:
+  let SO_TXREHASH* = 74      ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/asm-generic/socket.h:131:9
+when 75 is static:
+  const
+    SO_RCVMARK* = 75         ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/asm-generic/socket.h:133:9
+else:
+  let SO_RCVMARK* = 75       ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/asm-generic/socket.h:133:9
+when 76 is static:
+  const
+    SO_PASSPIDFD* = 76       ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/asm-generic/socket.h:135:9
+else:
+  let SO_PASSPIDFD* = 76     ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/asm-generic/socket.h:135:9
+when 77 is static:
+  const
+    SO_PEERPIDFD* = 77       ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/asm-generic/socket.h:136:9
+else:
+  let SO_PEERPIDFD* = 77     ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/asm-generic/socket.h:136:9
+when 78 is static:
+  const
+    SO_DEVMEM_LINEAR* = 78   ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/asm-generic/socket.h:138:9
+else:
+  let SO_DEVMEM_LINEAR* = 78 ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/asm-generic/socket.h:138:9
+when SO_DEVMEM_LINEAR is typedesc:
+  type
+    SCM_DEVMEM_LINEAR* = SO_DEVMEM_LINEAR ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/asm-generic/socket.h:139:9
+else:
+  when SO_DEVMEM_LINEAR is static:
+    const
+      SCM_DEVMEM_LINEAR* = SO_DEVMEM_LINEAR ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/asm-generic/socket.h:139:9
+  else:
+    let SCM_DEVMEM_LINEAR* = SO_DEVMEM_LINEAR ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/asm-generic/socket.h:139:9
+when 79 is static:
+  const
+    SO_DEVMEM_DMABUF* = 79   ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/asm-generic/socket.h:140:9
+else:
+  let SO_DEVMEM_DMABUF* = 79 ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/asm-generic/socket.h:140:9
+when SO_DEVMEM_DMABUF is typedesc:
+  type
+    SCM_DEVMEM_DMABUF* = SO_DEVMEM_DMABUF ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/asm-generic/socket.h:141:9
+else:
+  when SO_DEVMEM_DMABUF is static:
+    const
+      SCM_DEVMEM_DMABUF* = SO_DEVMEM_DMABUF ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/asm-generic/socket.h:141:9
+  else:
+    let SCM_DEVMEM_DMABUF* = SO_DEVMEM_DMABUF ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/asm-generic/socket.h:141:9
+when 80 is static:
+  const
+    SO_DEVMEM_DONTNEED* = 80 ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/asm-generic/socket.h:142:9
+else:
+  let SO_DEVMEM_DONTNEED* = 80 ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/asm-generic/socket.h:142:9
+when SO_TIMESTAMP_OLD is typedesc:
+  type
+    SO_TIMESTAMP* = SO_TIMESTAMP_OLD ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/asm-generic/socket.h:147:9
+else:
+  when SO_TIMESTAMP_OLD is static:
+    const
+      SO_TIMESTAMP* = SO_TIMESTAMP_OLD ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/asm-generic/socket.h:147:9
+  else:
+    let SO_TIMESTAMP* = SO_TIMESTAMP_OLD ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/asm-generic/socket.h:147:9
+when SO_TIMESTAMPNS_OLD is typedesc:
+  type
+    SO_TIMESTAMPNS* = SO_TIMESTAMPNS_OLD ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/asm-generic/socket.h:148:9
+else:
+  when SO_TIMESTAMPNS_OLD is static:
+    const
+      SO_TIMESTAMPNS* = SO_TIMESTAMPNS_OLD ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/asm-generic/socket.h:148:9
+  else:
+    let SO_TIMESTAMPNS* = SO_TIMESTAMPNS_OLD ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/asm-generic/socket.h:148:9
+when SO_TIMESTAMPING_OLD is typedesc:
+  type
+    SO_TIMESTAMPING* = SO_TIMESTAMPING_OLD ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/asm-generic/socket.h:149:9
+else:
+  when SO_TIMESTAMPING_OLD is static:
+    const
+      SO_TIMESTAMPING* = SO_TIMESTAMPING_OLD ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/asm-generic/socket.h:149:9
+  else:
+    let SO_TIMESTAMPING* = SO_TIMESTAMPING_OLD ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/asm-generic/socket.h:149:9
+when SO_RCVTIMEO_OLD is typedesc:
+  type
+    SO_RCVTIMEO* = SO_RCVTIMEO_OLD ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/asm-generic/socket.h:151:9
+else:
+  when SO_RCVTIMEO_OLD is static:
+    const
+      SO_RCVTIMEO* = SO_RCVTIMEO_OLD ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/asm-generic/socket.h:151:9
+  else:
+    let SO_RCVTIMEO* = SO_RCVTIMEO_OLD ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/asm-generic/socket.h:151:9
+when SO_SNDTIMEO_OLD is typedesc:
+  type
+    SO_SNDTIMEO* = SO_SNDTIMEO_OLD ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/asm-generic/socket.h:152:9
+else:
+  when SO_SNDTIMEO_OLD is static:
+    const
+      SO_SNDTIMEO* = SO_SNDTIMEO_OLD ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/asm-generic/socket.h:152:9
+  else:
+    let SO_SNDTIMEO* = SO_SNDTIMEO_OLD ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/asm-generic/socket.h:152:9
 when 1 is static:
   const
     compiler_osockaddr_defined* = 1 ## Generated based on /nix/store/sh3sjmgq543lfpjsq3dc0ksb6ckvhpdi-glibc-2.40-66-dev/include/bits/types/struct_osockaddr.h:2:9
@@ -2315,566 +3125,2274 @@ else:
   let compiler_osockaddr_defined* = 1 ## Generated based on /nix/store/sh3sjmgq543lfpjsq3dc0ksb6ckvhpdi-glibc-2.40-66-dev/include/bits/types/struct_osockaddr.h:2:9
 when 0 is static:
   const
-    NETLINK_ROUTE* = 0       ## Generated based on /nix/store/sh3sjmgq543lfpjsq3dc0ksb6ckvhpdi-glibc-2.40-66-dev/include/linux/netlink.h:9:9
+    NETLINK_ROUTE* = 0       ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/netlink.h:9:9
 else:
-  let NETLINK_ROUTE* = 0     ## Generated based on /nix/store/sh3sjmgq543lfpjsq3dc0ksb6ckvhpdi-glibc-2.40-66-dev/include/linux/netlink.h:9:9
+  let NETLINK_ROUTE* = 0     ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/netlink.h:9:9
 when 1 is static:
   const
-    NETLINK_UNUSED* = 1      ## Generated based on /nix/store/sh3sjmgq543lfpjsq3dc0ksb6ckvhpdi-glibc-2.40-66-dev/include/linux/netlink.h:10:9
+    NETLINK_UNUSED* = 1      ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/netlink.h:10:9
 else:
-  let NETLINK_UNUSED* = 1    ## Generated based on /nix/store/sh3sjmgq543lfpjsq3dc0ksb6ckvhpdi-glibc-2.40-66-dev/include/linux/netlink.h:10:9
+  let NETLINK_UNUSED* = 1    ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/netlink.h:10:9
 when 2 is static:
   const
-    NETLINK_USERSOCK* = 2    ## Generated based on /nix/store/sh3sjmgq543lfpjsq3dc0ksb6ckvhpdi-glibc-2.40-66-dev/include/linux/netlink.h:11:9
+    NETLINK_USERSOCK* = 2    ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/netlink.h:11:9
 else:
-  let NETLINK_USERSOCK* = 2  ## Generated based on /nix/store/sh3sjmgq543lfpjsq3dc0ksb6ckvhpdi-glibc-2.40-66-dev/include/linux/netlink.h:11:9
+  let NETLINK_USERSOCK* = 2  ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/netlink.h:11:9
 when 3 is static:
   const
-    NETLINK_FIREWALL* = 3    ## Generated based on /nix/store/sh3sjmgq543lfpjsq3dc0ksb6ckvhpdi-glibc-2.40-66-dev/include/linux/netlink.h:12:9
+    NETLINK_FIREWALL* = 3    ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/netlink.h:12:9
 else:
-  let NETLINK_FIREWALL* = 3  ## Generated based on /nix/store/sh3sjmgq543lfpjsq3dc0ksb6ckvhpdi-glibc-2.40-66-dev/include/linux/netlink.h:12:9
+  let NETLINK_FIREWALL* = 3  ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/netlink.h:12:9
 when 4 is static:
   const
-    NETLINK_SOCK_DIAG* = 4   ## Generated based on /nix/store/sh3sjmgq543lfpjsq3dc0ksb6ckvhpdi-glibc-2.40-66-dev/include/linux/netlink.h:13:9
+    NETLINK_SOCK_DIAG* = 4   ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/netlink.h:13:9
 else:
-  let NETLINK_SOCK_DIAG* = 4 ## Generated based on /nix/store/sh3sjmgq543lfpjsq3dc0ksb6ckvhpdi-glibc-2.40-66-dev/include/linux/netlink.h:13:9
+  let NETLINK_SOCK_DIAG* = 4 ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/netlink.h:13:9
 when 5 is static:
   const
-    NETLINK_NFLOG* = 5       ## Generated based on /nix/store/sh3sjmgq543lfpjsq3dc0ksb6ckvhpdi-glibc-2.40-66-dev/include/linux/netlink.h:14:9
+    NETLINK_NFLOG* = 5       ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/netlink.h:14:9
 else:
-  let NETLINK_NFLOG* = 5     ## Generated based on /nix/store/sh3sjmgq543lfpjsq3dc0ksb6ckvhpdi-glibc-2.40-66-dev/include/linux/netlink.h:14:9
+  let NETLINK_NFLOG* = 5     ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/netlink.h:14:9
 when 6 is static:
   const
-    NETLINK_XFRM* = 6        ## Generated based on /nix/store/sh3sjmgq543lfpjsq3dc0ksb6ckvhpdi-glibc-2.40-66-dev/include/linux/netlink.h:15:9
+    NETLINK_XFRM* = 6        ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/netlink.h:15:9
 else:
-  let NETLINK_XFRM* = 6      ## Generated based on /nix/store/sh3sjmgq543lfpjsq3dc0ksb6ckvhpdi-glibc-2.40-66-dev/include/linux/netlink.h:15:9
+  let NETLINK_XFRM* = 6      ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/netlink.h:15:9
 when 7 is static:
   const
-    NETLINK_SELINUX* = 7     ## Generated based on /nix/store/sh3sjmgq543lfpjsq3dc0ksb6ckvhpdi-glibc-2.40-66-dev/include/linux/netlink.h:16:9
+    NETLINK_SELINUX* = 7     ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/netlink.h:16:9
 else:
-  let NETLINK_SELINUX* = 7   ## Generated based on /nix/store/sh3sjmgq543lfpjsq3dc0ksb6ckvhpdi-glibc-2.40-66-dev/include/linux/netlink.h:16:9
+  let NETLINK_SELINUX* = 7   ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/netlink.h:16:9
 when 8 is static:
   const
-    NETLINK_ISCSI* = 8       ## Generated based on /nix/store/sh3sjmgq543lfpjsq3dc0ksb6ckvhpdi-glibc-2.40-66-dev/include/linux/netlink.h:17:9
+    NETLINK_ISCSI* = 8       ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/netlink.h:17:9
 else:
-  let NETLINK_ISCSI* = 8     ## Generated based on /nix/store/sh3sjmgq543lfpjsq3dc0ksb6ckvhpdi-glibc-2.40-66-dev/include/linux/netlink.h:17:9
+  let NETLINK_ISCSI* = 8     ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/netlink.h:17:9
 when 9 is static:
   const
-    NETLINK_AUDIT* = 9       ## Generated based on /nix/store/sh3sjmgq543lfpjsq3dc0ksb6ckvhpdi-glibc-2.40-66-dev/include/linux/netlink.h:18:9
+    NETLINK_AUDIT* = 9       ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/netlink.h:18:9
 else:
-  let NETLINK_AUDIT* = 9     ## Generated based on /nix/store/sh3sjmgq543lfpjsq3dc0ksb6ckvhpdi-glibc-2.40-66-dev/include/linux/netlink.h:18:9
+  let NETLINK_AUDIT* = 9     ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/netlink.h:18:9
 when 10 is static:
   const
-    NETLINK_FIB_LOOKUP* = 10 ## Generated based on /nix/store/sh3sjmgq543lfpjsq3dc0ksb6ckvhpdi-glibc-2.40-66-dev/include/linux/netlink.h:19:9
+    NETLINK_FIB_LOOKUP* = 10 ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/netlink.h:19:9
 else:
-  let NETLINK_FIB_LOOKUP* = 10 ## Generated based on /nix/store/sh3sjmgq543lfpjsq3dc0ksb6ckvhpdi-glibc-2.40-66-dev/include/linux/netlink.h:19:9
+  let NETLINK_FIB_LOOKUP* = 10 ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/netlink.h:19:9
 when 11 is static:
   const
-    NETLINK_CONNECTOR* = 11  ## Generated based on /nix/store/sh3sjmgq543lfpjsq3dc0ksb6ckvhpdi-glibc-2.40-66-dev/include/linux/netlink.h:20:9
+    NETLINK_CONNECTOR* = 11  ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/netlink.h:20:9
 else:
-  let NETLINK_CONNECTOR* = 11 ## Generated based on /nix/store/sh3sjmgq543lfpjsq3dc0ksb6ckvhpdi-glibc-2.40-66-dev/include/linux/netlink.h:20:9
+  let NETLINK_CONNECTOR* = 11 ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/netlink.h:20:9
 when 12 is static:
   const
-    NETLINK_NETFILTER* = 12  ## Generated based on /nix/store/sh3sjmgq543lfpjsq3dc0ksb6ckvhpdi-glibc-2.40-66-dev/include/linux/netlink.h:21:9
+    NETLINK_NETFILTER* = 12  ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/netlink.h:21:9
 else:
-  let NETLINK_NETFILTER* = 12 ## Generated based on /nix/store/sh3sjmgq543lfpjsq3dc0ksb6ckvhpdi-glibc-2.40-66-dev/include/linux/netlink.h:21:9
+  let NETLINK_NETFILTER* = 12 ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/netlink.h:21:9
 when 13 is static:
   const
-    NETLINK_IP6_FW* = 13     ## Generated based on /nix/store/sh3sjmgq543lfpjsq3dc0ksb6ckvhpdi-glibc-2.40-66-dev/include/linux/netlink.h:22:9
+    NETLINK_IP6_FW* = 13     ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/netlink.h:22:9
 else:
-  let NETLINK_IP6_FW* = 13   ## Generated based on /nix/store/sh3sjmgq543lfpjsq3dc0ksb6ckvhpdi-glibc-2.40-66-dev/include/linux/netlink.h:22:9
+  let NETLINK_IP6_FW* = 13   ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/netlink.h:22:9
 when 14 is static:
   const
-    NETLINK_DNRTMSG* = 14    ## Generated based on /nix/store/sh3sjmgq543lfpjsq3dc0ksb6ckvhpdi-glibc-2.40-66-dev/include/linux/netlink.h:23:9
+    NETLINK_DNRTMSG* = 14    ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/netlink.h:23:9
 else:
-  let NETLINK_DNRTMSG* = 14  ## Generated based on /nix/store/sh3sjmgq543lfpjsq3dc0ksb6ckvhpdi-glibc-2.40-66-dev/include/linux/netlink.h:23:9
+  let NETLINK_DNRTMSG* = 14  ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/netlink.h:23:9
 when 15 is static:
   const
-    NETLINK_KOBJECT_UEVENT* = 15 ## Generated based on /nix/store/sh3sjmgq543lfpjsq3dc0ksb6ckvhpdi-glibc-2.40-66-dev/include/linux/netlink.h:24:9
+    NETLINK_KOBJECT_UEVENT* = 15 ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/netlink.h:24:9
 else:
-  let NETLINK_KOBJECT_UEVENT* = 15 ## Generated based on /nix/store/sh3sjmgq543lfpjsq3dc0ksb6ckvhpdi-glibc-2.40-66-dev/include/linux/netlink.h:24:9
+  let NETLINK_KOBJECT_UEVENT* = 15 ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/netlink.h:24:9
 when 16 is static:
   const
-    NETLINK_GENERIC* = 16    ## Generated based on /nix/store/sh3sjmgq543lfpjsq3dc0ksb6ckvhpdi-glibc-2.40-66-dev/include/linux/netlink.h:25:9
+    NETLINK_GENERIC* = 16    ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/netlink.h:25:9
 else:
-  let NETLINK_GENERIC* = 16  ## Generated based on /nix/store/sh3sjmgq543lfpjsq3dc0ksb6ckvhpdi-glibc-2.40-66-dev/include/linux/netlink.h:25:9
+  let NETLINK_GENERIC* = 16  ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/netlink.h:25:9
 when 18 is static:
   const
-    NETLINK_SCSITRANSPORT* = 18 ## Generated based on /nix/store/sh3sjmgq543lfpjsq3dc0ksb6ckvhpdi-glibc-2.40-66-dev/include/linux/netlink.h:27:9
+    NETLINK_SCSITRANSPORT* = 18 ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/netlink.h:27:9
 else:
-  let NETLINK_SCSITRANSPORT* = 18 ## Generated based on /nix/store/sh3sjmgq543lfpjsq3dc0ksb6ckvhpdi-glibc-2.40-66-dev/include/linux/netlink.h:27:9
+  let NETLINK_SCSITRANSPORT* = 18 ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/netlink.h:27:9
 when 19 is static:
   const
-    NETLINK_ECRYPTFS* = 19   ## Generated based on /nix/store/sh3sjmgq543lfpjsq3dc0ksb6ckvhpdi-glibc-2.40-66-dev/include/linux/netlink.h:28:9
+    NETLINK_ECRYPTFS* = 19   ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/netlink.h:28:9
 else:
-  let NETLINK_ECRYPTFS* = 19 ## Generated based on /nix/store/sh3sjmgq543lfpjsq3dc0ksb6ckvhpdi-glibc-2.40-66-dev/include/linux/netlink.h:28:9
+  let NETLINK_ECRYPTFS* = 19 ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/netlink.h:28:9
 when 20 is static:
   const
-    NETLINK_RDMA* = 20       ## Generated based on /nix/store/sh3sjmgq543lfpjsq3dc0ksb6ckvhpdi-glibc-2.40-66-dev/include/linux/netlink.h:29:9
+    NETLINK_RDMA* = 20       ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/netlink.h:29:9
 else:
-  let NETLINK_RDMA* = 20     ## Generated based on /nix/store/sh3sjmgq543lfpjsq3dc0ksb6ckvhpdi-glibc-2.40-66-dev/include/linux/netlink.h:29:9
+  let NETLINK_RDMA* = 20     ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/netlink.h:29:9
 when 21 is static:
   const
-    NETLINK_CRYPTO* = 21     ## Generated based on /nix/store/sh3sjmgq543lfpjsq3dc0ksb6ckvhpdi-glibc-2.40-66-dev/include/linux/netlink.h:30:9
+    NETLINK_CRYPTO* = 21     ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/netlink.h:30:9
 else:
-  let NETLINK_CRYPTO* = 21   ## Generated based on /nix/store/sh3sjmgq543lfpjsq3dc0ksb6ckvhpdi-glibc-2.40-66-dev/include/linux/netlink.h:30:9
+  let NETLINK_CRYPTO* = 21   ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/netlink.h:30:9
 when 22 is static:
   const
-    NETLINK_SMC* = 22        ## Generated based on /nix/store/sh3sjmgq543lfpjsq3dc0ksb6ckvhpdi-glibc-2.40-66-dev/include/linux/netlink.h:31:9
+    NETLINK_SMC* = 22        ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/netlink.h:31:9
 else:
-  let NETLINK_SMC* = 22      ## Generated based on /nix/store/sh3sjmgq543lfpjsq3dc0ksb6ckvhpdi-glibc-2.40-66-dev/include/linux/netlink.h:31:9
+  let NETLINK_SMC* = 22      ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/netlink.h:31:9
 when NETLINK_SOCK_DIAG is typedesc:
   type
-    NETLINK_INET_DIAG* = NETLINK_SOCK_DIAG ## Generated based on /nix/store/sh3sjmgq543lfpjsq3dc0ksb6ckvhpdi-glibc-2.40-66-dev/include/linux/netlink.h:33:9
+    NETLINK_INET_DIAG* = NETLINK_SOCK_DIAG ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/netlink.h:33:9
 else:
   when NETLINK_SOCK_DIAG is static:
     const
-      NETLINK_INET_DIAG* = NETLINK_SOCK_DIAG ## Generated based on /nix/store/sh3sjmgq543lfpjsq3dc0ksb6ckvhpdi-glibc-2.40-66-dev/include/linux/netlink.h:33:9
+      NETLINK_INET_DIAG* = NETLINK_SOCK_DIAG ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/netlink.h:33:9
   else:
-    let NETLINK_INET_DIAG* = NETLINK_SOCK_DIAG ## Generated based on /nix/store/sh3sjmgq543lfpjsq3dc0ksb6ckvhpdi-glibc-2.40-66-dev/include/linux/netlink.h:33:9
+    let NETLINK_INET_DIAG* = NETLINK_SOCK_DIAG ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/netlink.h:33:9
 when 32 is static:
   const
-    MAX_LINKS* = 32          ## Generated based on /nix/store/sh3sjmgq543lfpjsq3dc0ksb6ckvhpdi-glibc-2.40-66-dev/include/linux/netlink.h:35:9
+    MAX_LINKS* = 32          ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/netlink.h:35:9
 else:
-  let MAX_LINKS* = 32        ## Generated based on /nix/store/sh3sjmgq543lfpjsq3dc0ksb6ckvhpdi-glibc-2.40-66-dev/include/linux/netlink.h:35:9
+  let MAX_LINKS* = 32        ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/netlink.h:35:9
 when 1 is static:
   const
-    NLM_F_REQUEST* = 1       ## Generated based on /nix/store/sh3sjmgq543lfpjsq3dc0ksb6ckvhpdi-glibc-2.40-66-dev/include/linux/netlink.h:62:9
+    NLM_F_REQUEST* = 1       ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/netlink.h:62:9
 else:
-  let NLM_F_REQUEST* = 1     ## Generated based on /nix/store/sh3sjmgq543lfpjsq3dc0ksb6ckvhpdi-glibc-2.40-66-dev/include/linux/netlink.h:62:9
+  let NLM_F_REQUEST* = 1     ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/netlink.h:62:9
 when 2 is static:
   const
-    NLM_F_MULTI* = 2         ## Generated based on /nix/store/sh3sjmgq543lfpjsq3dc0ksb6ckvhpdi-glibc-2.40-66-dev/include/linux/netlink.h:63:9
+    NLM_F_MULTI* = 2         ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/netlink.h:63:9
 else:
-  let NLM_F_MULTI* = 2       ## Generated based on /nix/store/sh3sjmgq543lfpjsq3dc0ksb6ckvhpdi-glibc-2.40-66-dev/include/linux/netlink.h:63:9
+  let NLM_F_MULTI* = 2       ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/netlink.h:63:9
 when 4 is static:
   const
-    NLM_F_ACK* = 4           ## Generated based on /nix/store/sh3sjmgq543lfpjsq3dc0ksb6ckvhpdi-glibc-2.40-66-dev/include/linux/netlink.h:64:9
+    NLM_F_ACK* = 4           ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/netlink.h:64:9
 else:
-  let NLM_F_ACK* = 4         ## Generated based on /nix/store/sh3sjmgq543lfpjsq3dc0ksb6ckvhpdi-glibc-2.40-66-dev/include/linux/netlink.h:64:9
+  let NLM_F_ACK* = 4         ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/netlink.h:64:9
 when 8 is static:
   const
-    NLM_F_ECHO* = 8          ## Generated based on /nix/store/sh3sjmgq543lfpjsq3dc0ksb6ckvhpdi-glibc-2.40-66-dev/include/linux/netlink.h:65:9
+    NLM_F_ECHO* = 8          ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/netlink.h:65:9
 else:
-  let NLM_F_ECHO* = 8        ## Generated based on /nix/store/sh3sjmgq543lfpjsq3dc0ksb6ckvhpdi-glibc-2.40-66-dev/include/linux/netlink.h:65:9
+  let NLM_F_ECHO* = 8        ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/netlink.h:65:9
 when 16 is static:
   const
-    NLM_F_DUMP_INTR* = 16    ## Generated based on /nix/store/sh3sjmgq543lfpjsq3dc0ksb6ckvhpdi-glibc-2.40-66-dev/include/linux/netlink.h:66:9
+    NLM_F_DUMP_INTR* = 16    ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/netlink.h:66:9
 else:
-  let NLM_F_DUMP_INTR* = 16  ## Generated based on /nix/store/sh3sjmgq543lfpjsq3dc0ksb6ckvhpdi-glibc-2.40-66-dev/include/linux/netlink.h:66:9
+  let NLM_F_DUMP_INTR* = 16  ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/netlink.h:66:9
 when 32 is static:
   const
-    NLM_F_DUMP_FILTERED* = 32 ## Generated based on /nix/store/sh3sjmgq543lfpjsq3dc0ksb6ckvhpdi-glibc-2.40-66-dev/include/linux/netlink.h:67:9
+    NLM_F_DUMP_FILTERED* = 32 ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/netlink.h:67:9
 else:
-  let NLM_F_DUMP_FILTERED* = 32 ## Generated based on /nix/store/sh3sjmgq543lfpjsq3dc0ksb6ckvhpdi-glibc-2.40-66-dev/include/linux/netlink.h:67:9
+  let NLM_F_DUMP_FILTERED* = 32 ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/netlink.h:67:9
 when 256 is static:
   const
-    NLM_F_ROOT* = 256        ## Generated based on /nix/store/sh3sjmgq543lfpjsq3dc0ksb6ckvhpdi-glibc-2.40-66-dev/include/linux/netlink.h:70:9
+    NLM_F_ROOT* = 256        ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/netlink.h:70:9
 else:
-  let NLM_F_ROOT* = 256      ## Generated based on /nix/store/sh3sjmgq543lfpjsq3dc0ksb6ckvhpdi-glibc-2.40-66-dev/include/linux/netlink.h:70:9
+  let NLM_F_ROOT* = 256      ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/netlink.h:70:9
 when 512 is static:
   const
-    NLM_F_MATCH* = 512       ## Generated based on /nix/store/sh3sjmgq543lfpjsq3dc0ksb6ckvhpdi-glibc-2.40-66-dev/include/linux/netlink.h:71:9
+    NLM_F_MATCH* = 512       ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/netlink.h:71:9
 else:
-  let NLM_F_MATCH* = 512     ## Generated based on /nix/store/sh3sjmgq543lfpjsq3dc0ksb6ckvhpdi-glibc-2.40-66-dev/include/linux/netlink.h:71:9
+  let NLM_F_MATCH* = 512     ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/netlink.h:71:9
 when 1024 is static:
   const
-    NLM_F_ATOMIC* = 1024     ## Generated based on /nix/store/sh3sjmgq543lfpjsq3dc0ksb6ckvhpdi-glibc-2.40-66-dev/include/linux/netlink.h:72:9
+    NLM_F_ATOMIC* = 1024     ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/netlink.h:72:9
 else:
-  let NLM_F_ATOMIC* = 1024   ## Generated based on /nix/store/sh3sjmgq543lfpjsq3dc0ksb6ckvhpdi-glibc-2.40-66-dev/include/linux/netlink.h:72:9
+  let NLM_F_ATOMIC* = 1024   ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/netlink.h:72:9
 when 256 is static:
   const
-    NLM_F_REPLACE* = 256     ## Generated based on /nix/store/sh3sjmgq543lfpjsq3dc0ksb6ckvhpdi-glibc-2.40-66-dev/include/linux/netlink.h:76:9
+    NLM_F_REPLACE* = 256     ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/netlink.h:76:9
 else:
-  let NLM_F_REPLACE* = 256   ## Generated based on /nix/store/sh3sjmgq543lfpjsq3dc0ksb6ckvhpdi-glibc-2.40-66-dev/include/linux/netlink.h:76:9
+  let NLM_F_REPLACE* = 256   ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/netlink.h:76:9
 when 512 is static:
   const
-    NLM_F_EXCL* = 512        ## Generated based on /nix/store/sh3sjmgq543lfpjsq3dc0ksb6ckvhpdi-glibc-2.40-66-dev/include/linux/netlink.h:77:9
+    NLM_F_EXCL* = 512        ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/netlink.h:77:9
 else:
-  let NLM_F_EXCL* = 512      ## Generated based on /nix/store/sh3sjmgq543lfpjsq3dc0ksb6ckvhpdi-glibc-2.40-66-dev/include/linux/netlink.h:77:9
+  let NLM_F_EXCL* = 512      ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/netlink.h:77:9
 when 1024 is static:
   const
-    NLM_F_CREATE* = 1024     ## Generated based on /nix/store/sh3sjmgq543lfpjsq3dc0ksb6ckvhpdi-glibc-2.40-66-dev/include/linux/netlink.h:78:9
+    NLM_F_CREATE* = 1024     ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/netlink.h:78:9
 else:
-  let NLM_F_CREATE* = 1024   ## Generated based on /nix/store/sh3sjmgq543lfpjsq3dc0ksb6ckvhpdi-glibc-2.40-66-dev/include/linux/netlink.h:78:9
+  let NLM_F_CREATE* = 1024   ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/netlink.h:78:9
 when 2048 is static:
   const
-    NLM_F_APPEND* = 2048     ## Generated based on /nix/store/sh3sjmgq543lfpjsq3dc0ksb6ckvhpdi-glibc-2.40-66-dev/include/linux/netlink.h:79:9
+    NLM_F_APPEND* = 2048     ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/netlink.h:79:9
 else:
-  let NLM_F_APPEND* = 2048   ## Generated based on /nix/store/sh3sjmgq543lfpjsq3dc0ksb6ckvhpdi-glibc-2.40-66-dev/include/linux/netlink.h:79:9
+  let NLM_F_APPEND* = 2048   ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/netlink.h:79:9
 when 256 is static:
   const
-    NLM_F_NONREC* = 256      ## Generated based on /nix/store/sh3sjmgq543lfpjsq3dc0ksb6ckvhpdi-glibc-2.40-66-dev/include/linux/netlink.h:82:9
+    NLM_F_NONREC* = 256      ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/netlink.h:82:9
 else:
-  let NLM_F_NONREC* = 256    ## Generated based on /nix/store/sh3sjmgq543lfpjsq3dc0ksb6ckvhpdi-glibc-2.40-66-dev/include/linux/netlink.h:82:9
+  let NLM_F_NONREC* = 256    ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/netlink.h:82:9
 when 512 is static:
   const
-    NLM_F_BULK* = 512        ## Generated based on /nix/store/sh3sjmgq543lfpjsq3dc0ksb6ckvhpdi-glibc-2.40-66-dev/include/linux/netlink.h:83:9
+    NLM_F_BULK* = 512        ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/netlink.h:83:9
 else:
-  let NLM_F_BULK* = 512      ## Generated based on /nix/store/sh3sjmgq543lfpjsq3dc0ksb6ckvhpdi-glibc-2.40-66-dev/include/linux/netlink.h:83:9
+  let NLM_F_BULK* = 512      ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/netlink.h:83:9
 when 256 is static:
   const
-    NLM_F_CAPPED* = 256      ## Generated based on /nix/store/sh3sjmgq543lfpjsq3dc0ksb6ckvhpdi-glibc-2.40-66-dev/include/linux/netlink.h:86:9
+    NLM_F_CAPPED* = 256      ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/netlink.h:86:9
 else:
-  let NLM_F_CAPPED* = 256    ## Generated based on /nix/store/sh3sjmgq543lfpjsq3dc0ksb6ckvhpdi-glibc-2.40-66-dev/include/linux/netlink.h:86:9
+  let NLM_F_CAPPED* = 256    ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/netlink.h:86:9
 when 512 is static:
   const
-    NLM_F_ACK_TLVS* = 512    ## Generated based on /nix/store/sh3sjmgq543lfpjsq3dc0ksb6ckvhpdi-glibc-2.40-66-dev/include/linux/netlink.h:87:9
+    NLM_F_ACK_TLVS* = 512    ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/netlink.h:87:9
 else:
-  let NLM_F_ACK_TLVS* = 512  ## Generated based on /nix/store/sh3sjmgq543lfpjsq3dc0ksb6ckvhpdi-glibc-2.40-66-dev/include/linux/netlink.h:87:9
+  let NLM_F_ACK_TLVS* = 512  ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/netlink.h:87:9
 when cast[cuint](4'i64) is static:
   const
-    NLMSG_ALIGNTO* = cast[cuint](4'i64) ## Generated based on /nix/store/sh3sjmgq543lfpjsq3dc0ksb6ckvhpdi-glibc-2.40-66-dev/include/linux/netlink.h:98:9
+    NLMSG_ALIGNTO* = cast[cuint](4'i64) ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/netlink.h:98:9
 else:
-  let NLMSG_ALIGNTO* = cast[cuint](4'i64) ## Generated based on /nix/store/sh3sjmgq543lfpjsq3dc0ksb6ckvhpdi-glibc-2.40-66-dev/include/linux/netlink.h:98:9
+  let NLMSG_ALIGNTO* = cast[cuint](4'i64) ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/netlink.h:98:9
 when 1 is static:
   const
-    NLMSG_NOOP* = 1          ## Generated based on /nix/store/sh3sjmgq543lfpjsq3dc0ksb6ckvhpdi-glibc-2.40-66-dev/include/linux/netlink.h:112:9
+    NLMSG_NOOP* = 1          ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/netlink.h:112:9
 else:
-  let NLMSG_NOOP* = 1        ## Generated based on /nix/store/sh3sjmgq543lfpjsq3dc0ksb6ckvhpdi-glibc-2.40-66-dev/include/linux/netlink.h:112:9
+  let NLMSG_NOOP* = 1        ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/netlink.h:112:9
 when 2 is static:
   const
-    NLMSG_ERROR* = 2         ## Generated based on /nix/store/sh3sjmgq543lfpjsq3dc0ksb6ckvhpdi-glibc-2.40-66-dev/include/linux/netlink.h:113:9
+    NLMSG_ERROR* = 2         ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/netlink.h:113:9
 else:
-  let NLMSG_ERROR* = 2       ## Generated based on /nix/store/sh3sjmgq543lfpjsq3dc0ksb6ckvhpdi-glibc-2.40-66-dev/include/linux/netlink.h:113:9
+  let NLMSG_ERROR* = 2       ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/netlink.h:113:9
 when 3 is static:
   const
-    NLMSG_DONE* = 3          ## Generated based on /nix/store/sh3sjmgq543lfpjsq3dc0ksb6ckvhpdi-glibc-2.40-66-dev/include/linux/netlink.h:114:9
+    NLMSG_DONE* = 3          ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/netlink.h:114:9
 else:
-  let NLMSG_DONE* = 3        ## Generated based on /nix/store/sh3sjmgq543lfpjsq3dc0ksb6ckvhpdi-glibc-2.40-66-dev/include/linux/netlink.h:114:9
+  let NLMSG_DONE* = 3        ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/netlink.h:114:9
 when 4 is static:
   const
-    NLMSG_OVERRUN* = 4       ## Generated based on /nix/store/sh3sjmgq543lfpjsq3dc0ksb6ckvhpdi-glibc-2.40-66-dev/include/linux/netlink.h:115:9
+    NLMSG_OVERRUN* = 4       ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/netlink.h:115:9
 else:
-  let NLMSG_OVERRUN* = 4     ## Generated based on /nix/store/sh3sjmgq543lfpjsq3dc0ksb6ckvhpdi-glibc-2.40-66-dev/include/linux/netlink.h:115:9
+  let NLMSG_OVERRUN* = 4     ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/netlink.h:115:9
 when 16 is static:
   const
-    NLMSG_MIN_TYPE* = 16     ## Generated based on /nix/store/sh3sjmgq543lfpjsq3dc0ksb6ckvhpdi-glibc-2.40-66-dev/include/linux/netlink.h:117:9
+    NLMSG_MIN_TYPE* = 16     ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/netlink.h:117:9
 else:
-  let NLMSG_MIN_TYPE* = 16   ## Generated based on /nix/store/sh3sjmgq543lfpjsq3dc0ksb6ckvhpdi-glibc-2.40-66-dev/include/linux/netlink.h:117:9
+  let NLMSG_MIN_TYPE* = 16   ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/netlink.h:117:9
 when 1 is static:
   const
-    NETLINK_ADD_MEMBERSHIP* = 1 ## Generated based on /nix/store/sh3sjmgq543lfpjsq3dc0ksb6ckvhpdi-glibc-2.40-66-dev/include/linux/netlink.h:163:9
+    NETLINK_ADD_MEMBERSHIP* = 1 ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/netlink.h:163:9
 else:
-  let NETLINK_ADD_MEMBERSHIP* = 1 ## Generated based on /nix/store/sh3sjmgq543lfpjsq3dc0ksb6ckvhpdi-glibc-2.40-66-dev/include/linux/netlink.h:163:9
+  let NETLINK_ADD_MEMBERSHIP* = 1 ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/netlink.h:163:9
 when 2 is static:
   const
-    NETLINK_DROP_MEMBERSHIP* = 2 ## Generated based on /nix/store/sh3sjmgq543lfpjsq3dc0ksb6ckvhpdi-glibc-2.40-66-dev/include/linux/netlink.h:164:9
+    NETLINK_DROP_MEMBERSHIP* = 2 ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/netlink.h:164:9
 else:
-  let NETLINK_DROP_MEMBERSHIP* = 2 ## Generated based on /nix/store/sh3sjmgq543lfpjsq3dc0ksb6ckvhpdi-glibc-2.40-66-dev/include/linux/netlink.h:164:9
+  let NETLINK_DROP_MEMBERSHIP* = 2 ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/netlink.h:164:9
 when 3 is static:
   const
-    NETLINK_PKTINFO* = 3     ## Generated based on /nix/store/sh3sjmgq543lfpjsq3dc0ksb6ckvhpdi-glibc-2.40-66-dev/include/linux/netlink.h:165:9
+    NETLINK_PKTINFO* = 3     ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/netlink.h:165:9
 else:
-  let NETLINK_PKTINFO* = 3   ## Generated based on /nix/store/sh3sjmgq543lfpjsq3dc0ksb6ckvhpdi-glibc-2.40-66-dev/include/linux/netlink.h:165:9
+  let NETLINK_PKTINFO* = 3   ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/netlink.h:165:9
 when 4 is static:
   const
-    NETLINK_BROADCAST_ERROR* = 4 ## Generated based on /nix/store/sh3sjmgq543lfpjsq3dc0ksb6ckvhpdi-glibc-2.40-66-dev/include/linux/netlink.h:166:9
+    NETLINK_BROADCAST_ERROR* = 4 ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/netlink.h:166:9
 else:
-  let NETLINK_BROADCAST_ERROR* = 4 ## Generated based on /nix/store/sh3sjmgq543lfpjsq3dc0ksb6ckvhpdi-glibc-2.40-66-dev/include/linux/netlink.h:166:9
+  let NETLINK_BROADCAST_ERROR* = 4 ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/netlink.h:166:9
 when 5 is static:
   const
-    NETLINK_NO_ENOBUFS* = 5  ## Generated based on /nix/store/sh3sjmgq543lfpjsq3dc0ksb6ckvhpdi-glibc-2.40-66-dev/include/linux/netlink.h:167:9
+    NETLINK_NO_ENOBUFS* = 5  ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/netlink.h:167:9
 else:
-  let NETLINK_NO_ENOBUFS* = 5 ## Generated based on /nix/store/sh3sjmgq543lfpjsq3dc0ksb6ckvhpdi-glibc-2.40-66-dev/include/linux/netlink.h:167:9
+  let NETLINK_NO_ENOBUFS* = 5 ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/netlink.h:167:9
 when 6 is static:
   const
-    NETLINK_RX_RING* = 6     ## Generated based on /nix/store/sh3sjmgq543lfpjsq3dc0ksb6ckvhpdi-glibc-2.40-66-dev/include/linux/netlink.h:168:9
+    NETLINK_RX_RING* = 6     ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/netlink.h:168:9
 else:
-  let NETLINK_RX_RING* = 6   ## Generated based on /nix/store/sh3sjmgq543lfpjsq3dc0ksb6ckvhpdi-glibc-2.40-66-dev/include/linux/netlink.h:168:9
+  let NETLINK_RX_RING* = 6   ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/netlink.h:168:9
 when 7 is static:
   const
-    NETLINK_TX_RING* = 7     ## Generated based on /nix/store/sh3sjmgq543lfpjsq3dc0ksb6ckvhpdi-glibc-2.40-66-dev/include/linux/netlink.h:169:9
+    NETLINK_TX_RING* = 7     ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/netlink.h:169:9
 else:
-  let NETLINK_TX_RING* = 7   ## Generated based on /nix/store/sh3sjmgq543lfpjsq3dc0ksb6ckvhpdi-glibc-2.40-66-dev/include/linux/netlink.h:169:9
+  let NETLINK_TX_RING* = 7   ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/netlink.h:169:9
 when 8 is static:
   const
-    NETLINK_LISTEN_ALL_NSID* = 8 ## Generated based on /nix/store/sh3sjmgq543lfpjsq3dc0ksb6ckvhpdi-glibc-2.40-66-dev/include/linux/netlink.h:170:9
+    NETLINK_LISTEN_ALL_NSID* = 8 ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/netlink.h:170:9
 else:
-  let NETLINK_LISTEN_ALL_NSID* = 8 ## Generated based on /nix/store/sh3sjmgq543lfpjsq3dc0ksb6ckvhpdi-glibc-2.40-66-dev/include/linux/netlink.h:170:9
+  let NETLINK_LISTEN_ALL_NSID* = 8 ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/netlink.h:170:9
 when 9 is static:
   const
-    NETLINK_LIST_MEMBERSHIPS* = 9 ## Generated based on /nix/store/sh3sjmgq543lfpjsq3dc0ksb6ckvhpdi-glibc-2.40-66-dev/include/linux/netlink.h:171:9
+    NETLINK_LIST_MEMBERSHIPS* = 9 ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/netlink.h:171:9
 else:
-  let NETLINK_LIST_MEMBERSHIPS* = 9 ## Generated based on /nix/store/sh3sjmgq543lfpjsq3dc0ksb6ckvhpdi-glibc-2.40-66-dev/include/linux/netlink.h:171:9
+  let NETLINK_LIST_MEMBERSHIPS* = 9 ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/netlink.h:171:9
 when 10 is static:
   const
-    NETLINK_CAP_ACK* = 10    ## Generated based on /nix/store/sh3sjmgq543lfpjsq3dc0ksb6ckvhpdi-glibc-2.40-66-dev/include/linux/netlink.h:172:9
+    NETLINK_CAP_ACK* = 10    ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/netlink.h:172:9
 else:
-  let NETLINK_CAP_ACK* = 10  ## Generated based on /nix/store/sh3sjmgq543lfpjsq3dc0ksb6ckvhpdi-glibc-2.40-66-dev/include/linux/netlink.h:172:9
+  let NETLINK_CAP_ACK* = 10  ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/netlink.h:172:9
 when 11 is static:
   const
-    NETLINK_EXT_ACK* = 11    ## Generated based on /nix/store/sh3sjmgq543lfpjsq3dc0ksb6ckvhpdi-glibc-2.40-66-dev/include/linux/netlink.h:173:9
+    NETLINK_EXT_ACK* = 11    ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/netlink.h:173:9
 else:
-  let NETLINK_EXT_ACK* = 11  ## Generated based on /nix/store/sh3sjmgq543lfpjsq3dc0ksb6ckvhpdi-glibc-2.40-66-dev/include/linux/netlink.h:173:9
+  let NETLINK_EXT_ACK* = 11  ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/netlink.h:173:9
 when 12 is static:
   const
-    NETLINK_GET_STRICT_CHK* = 12 ## Generated based on /nix/store/sh3sjmgq543lfpjsq3dc0ksb6ckvhpdi-glibc-2.40-66-dev/include/linux/netlink.h:174:9
+    NETLINK_GET_STRICT_CHK* = 12 ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/netlink.h:174:9
 else:
-  let NETLINK_GET_STRICT_CHK* = 12 ## Generated based on /nix/store/sh3sjmgq543lfpjsq3dc0ksb6ckvhpdi-glibc-2.40-66-dev/include/linux/netlink.h:174:9
+  let NETLINK_GET_STRICT_CHK* = 12 ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/netlink.h:174:9
 when NLMSG_ALIGNTO is typedesc:
   type
-    NL_MMAP_MSG_ALIGNMENT* = NLMSG_ALIGNTO ## Generated based on /nix/store/sh3sjmgq543lfpjsq3dc0ksb6ckvhpdi-glibc-2.40-66-dev/include/linux/netlink.h:205:9
+    NL_MMAP_MSG_ALIGNMENT* = NLMSG_ALIGNTO ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/netlink.h:205:9
 else:
   when NLMSG_ALIGNTO is static:
     const
-      NL_MMAP_MSG_ALIGNMENT* = NLMSG_ALIGNTO ## Generated based on /nix/store/sh3sjmgq543lfpjsq3dc0ksb6ckvhpdi-glibc-2.40-66-dev/include/linux/netlink.h:205:9
+      NL_MMAP_MSG_ALIGNMENT* = NLMSG_ALIGNTO ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/netlink.h:205:9
   else:
-    let NL_MMAP_MSG_ALIGNMENT* = NLMSG_ALIGNTO ## Generated based on /nix/store/sh3sjmgq543lfpjsq3dc0ksb6ckvhpdi-glibc-2.40-66-dev/include/linux/netlink.h:205:9
+    let NL_MMAP_MSG_ALIGNMENT* = NLMSG_ALIGNTO ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/netlink.h:205:9
 when 36 is static:
   const
-    NET_MAJOR* = 36          ## Generated based on /nix/store/sh3sjmgq543lfpjsq3dc0ksb6ckvhpdi-glibc-2.40-66-dev/include/linux/netlink.h:209:9
+    NET_MAJOR* = 36          ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/netlink.h:209:9
 else:
-  let NET_MAJOR* = 36        ## Generated based on /nix/store/sh3sjmgq543lfpjsq3dc0ksb6ckvhpdi-glibc-2.40-66-dev/include/linux/netlink.h:209:9
+  let NET_MAJOR* = 36        ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/netlink.h:209:9
 when 4 is static:
   const
-    NLA_ALIGNTO* = 4         ## Generated based on /nix/store/sh3sjmgq543lfpjsq3dc0ksb6ckvhpdi-glibc-2.40-66-dev/include/linux/netlink.h:244:9
+    NLA_ALIGNTO* = 4         ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/netlink.h:244:9
 else:
-  let NLA_ALIGNTO* = 4       ## Generated based on /nix/store/sh3sjmgq543lfpjsq3dc0ksb6ckvhpdi-glibc-2.40-66-dev/include/linux/netlink.h:244:9
-when 256 is static:
+  let NLA_ALIGNTO* = 4       ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/netlink.h:244:9
+when 1 is static:
   const
-    NFT_NAME_MAXLEN* = 256   ## Generated based on /nix/store/sh3sjmgq543lfpjsq3dc0ksb6ckvhpdi-glibc-2.40-66-dev/include/linux/netfilter/nf_tables.h:5:9
+    compiler_UAPI_DEF_IF_IFCONF* = 1 ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/libc-compat.h:78:9
 else:
-  let NFT_NAME_MAXLEN* = 256 ## Generated based on /nix/store/sh3sjmgq543lfpjsq3dc0ksb6ckvhpdi-glibc-2.40-66-dev/include/linux/netfilter/nf_tables.h:5:9
-when NFT_NAME_MAXLEN is typedesc:
-  type
-    NFT_TABLE_MAXNAMELEN* = NFT_NAME_MAXLEN ## Generated based on /nix/store/sh3sjmgq543lfpjsq3dc0ksb6ckvhpdi-glibc-2.40-66-dev/include/linux/netfilter/nf_tables.h:6:9
-else:
-  when NFT_NAME_MAXLEN is static:
-    const
-      NFT_TABLE_MAXNAMELEN* = NFT_NAME_MAXLEN ## Generated based on /nix/store/sh3sjmgq543lfpjsq3dc0ksb6ckvhpdi-glibc-2.40-66-dev/include/linux/netfilter/nf_tables.h:6:9
-  else:
-    let NFT_TABLE_MAXNAMELEN* = NFT_NAME_MAXLEN ## Generated based on /nix/store/sh3sjmgq543lfpjsq3dc0ksb6ckvhpdi-glibc-2.40-66-dev/include/linux/netfilter/nf_tables.h:6:9
-when NFT_NAME_MAXLEN is typedesc:
-  type
-    NFT_CHAIN_MAXNAMELEN* = NFT_NAME_MAXLEN ## Generated based on /nix/store/sh3sjmgq543lfpjsq3dc0ksb6ckvhpdi-glibc-2.40-66-dev/include/linux/netfilter/nf_tables.h:7:9
-else:
-  when NFT_NAME_MAXLEN is static:
-    const
-      NFT_CHAIN_MAXNAMELEN* = NFT_NAME_MAXLEN ## Generated based on /nix/store/sh3sjmgq543lfpjsq3dc0ksb6ckvhpdi-glibc-2.40-66-dev/include/linux/netfilter/nf_tables.h:7:9
-  else:
-    let NFT_CHAIN_MAXNAMELEN* = NFT_NAME_MAXLEN ## Generated based on /nix/store/sh3sjmgq543lfpjsq3dc0ksb6ckvhpdi-glibc-2.40-66-dev/include/linux/netfilter/nf_tables.h:7:9
-when NFT_NAME_MAXLEN is typedesc:
-  type
-    NFT_SET_MAXNAMELEN* = NFT_NAME_MAXLEN ## Generated based on /nix/store/sh3sjmgq543lfpjsq3dc0ksb6ckvhpdi-glibc-2.40-66-dev/include/linux/netfilter/nf_tables.h:8:9
-else:
-  when NFT_NAME_MAXLEN is static:
-    const
-      NFT_SET_MAXNAMELEN* = NFT_NAME_MAXLEN ## Generated based on /nix/store/sh3sjmgq543lfpjsq3dc0ksb6ckvhpdi-glibc-2.40-66-dev/include/linux/netfilter/nf_tables.h:8:9
-  else:
-    let NFT_SET_MAXNAMELEN* = NFT_NAME_MAXLEN ## Generated based on /nix/store/sh3sjmgq543lfpjsq3dc0ksb6ckvhpdi-glibc-2.40-66-dev/include/linux/netfilter/nf_tables.h:8:9
-when NFT_NAME_MAXLEN is typedesc:
-  type
-    NFT_OBJ_MAXNAMELEN* = NFT_NAME_MAXLEN ## Generated based on /nix/store/sh3sjmgq543lfpjsq3dc0ksb6ckvhpdi-glibc-2.40-66-dev/include/linux/netfilter/nf_tables.h:9:9
-else:
-  when NFT_NAME_MAXLEN is static:
-    const
-      NFT_OBJ_MAXNAMELEN* = NFT_NAME_MAXLEN ## Generated based on /nix/store/sh3sjmgq543lfpjsq3dc0ksb6ckvhpdi-glibc-2.40-66-dev/include/linux/netfilter/nf_tables.h:9:9
-  else:
-    let NFT_OBJ_MAXNAMELEN* = NFT_NAME_MAXLEN ## Generated based on /nix/store/sh3sjmgq543lfpjsq3dc0ksb6ckvhpdi-glibc-2.40-66-dev/include/linux/netfilter/nf_tables.h:9:9
-when 256 is static:
+  let compiler_UAPI_DEF_IF_IFCONF* = 1 ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/libc-compat.h:78:9
+when 1 is static:
   const
-    NFT_USERDATA_MAXLEN* = 256 ## Generated based on /nix/store/sh3sjmgq543lfpjsq3dc0ksb6ckvhpdi-glibc-2.40-66-dev/include/linux/netfilter/nf_tables.h:10:9
+    compiler_UAPI_DEF_IF_IFMAP* = 1 ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/libc-compat.h:79:9
 else:
-  let NFT_USERDATA_MAXLEN* = 256 ## Generated based on /nix/store/sh3sjmgq543lfpjsq3dc0ksb6ckvhpdi-glibc-2.40-66-dev/include/linux/netfilter/nf_tables.h:10:9
-when 16 is static:
+  let compiler_UAPI_DEF_IF_IFMAP* = 1 ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/libc-compat.h:79:9
+when 1 is static:
   const
-    NFT_OSF_MAXGENRELEN* = 16 ## Generated based on /nix/store/sh3sjmgq543lfpjsq3dc0ksb6ckvhpdi-glibc-2.40-66-dev/include/linux/netfilter/nf_tables.h:11:9
+    compiler_UAPI_DEF_IF_IFNAMSIZ* = 1 ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/libc-compat.h:80:9
 else:
-  let NFT_OSF_MAXGENRELEN* = 16 ## Generated based on /nix/store/sh3sjmgq543lfpjsq3dc0ksb6ckvhpdi-glibc-2.40-66-dev/include/linux/netfilter/nf_tables.h:11:9
-when 16 is static:
+  let compiler_UAPI_DEF_IF_IFNAMSIZ* = 1 ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/libc-compat.h:80:9
+when 1 is static:
   const
-    NFT_REG_SIZE* = 16       ## Generated based on /nix/store/sh3sjmgq543lfpjsq3dc0ksb6ckvhpdi-glibc-2.40-66-dev/include/linux/netfilter/nf_tables.h:49:9
+    compiler_UAPI_DEF_IF_IFREQ* = 1 ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/libc-compat.h:81:9
 else:
-  let NFT_REG_SIZE* = 16     ## Generated based on /nix/store/sh3sjmgq543lfpjsq3dc0ksb6ckvhpdi-glibc-2.40-66-dev/include/linux/netfilter/nf_tables.h:49:9
+  let compiler_UAPI_DEF_IF_IFREQ* = 1 ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/libc-compat.h:81:9
+when 1 is static:
+  const
+    compiler_UAPI_DEF_IF_NET_DEVICE_FLAGS* = 1 ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/libc-compat.h:83:9
+else:
+  let compiler_UAPI_DEF_IF_NET_DEVICE_FLAGS* = 1 ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/libc-compat.h:83:9
+when 1 is static:
+  const
+    compiler_UAPI_DEF_IF_NET_DEVICE_FLAGS_LOWER_UP_DORMANT_ECHO* = 1 ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/libc-compat.h:85:9
+else:
+  let compiler_UAPI_DEF_IF_NET_DEVICE_FLAGS_LOWER_UP_DORMANT_ECHO* = 1 ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/libc-compat.h:85:9
+when 1 is static:
+  const
+    compiler_UAPI_DEF_IN_ADDR* = 1 ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/libc-compat.h:123:9
+else:
+  let compiler_UAPI_DEF_IN_ADDR* = 1 ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/libc-compat.h:123:9
+when 1 is static:
+  const
+    compiler_UAPI_DEF_IN_IPPROTO* = 1 ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/libc-compat.h:124:9
+else:
+  let compiler_UAPI_DEF_IN_IPPROTO* = 1 ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/libc-compat.h:124:9
+when 1 is static:
+  const
+    compiler_UAPI_DEF_IN_PKTINFO* = 1 ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/libc-compat.h:125:9
+else:
+  let compiler_UAPI_DEF_IN_PKTINFO* = 1 ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/libc-compat.h:125:9
+when 1 is static:
+  const
+    compiler_UAPI_DEF_IP_MREQ* = 1 ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/libc-compat.h:126:9
+else:
+  let compiler_UAPI_DEF_IP_MREQ* = 1 ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/libc-compat.h:126:9
+when 1 is static:
+  const
+    compiler_UAPI_DEF_SOCKADDR_IN* = 1 ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/libc-compat.h:127:9
+else:
+  let compiler_UAPI_DEF_SOCKADDR_IN* = 1 ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/libc-compat.h:127:9
+when 1 is static:
+  const
+    compiler_UAPI_DEF_IN_CLASS* = 1 ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/libc-compat.h:128:9
+else:
+  let compiler_UAPI_DEF_IN_CLASS* = 1 ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/libc-compat.h:128:9
+when 1 is static:
+  const
+    compiler_UAPI_DEF_IN6_ADDR* = 1 ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/libc-compat.h:130:9
+else:
+  let compiler_UAPI_DEF_IN6_ADDR* = 1 ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/libc-compat.h:130:9
+when 1 is static:
+  const
+    compiler_UAPI_DEF_IN6_ADDR_ALT* = 1 ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/libc-compat.h:133:9
+else:
+  let compiler_UAPI_DEF_IN6_ADDR_ALT* = 1 ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/libc-compat.h:133:9
+when 1 is static:
+  const
+    compiler_UAPI_DEF_SOCKADDR_IN6* = 1 ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/libc-compat.h:134:9
+else:
+  let compiler_UAPI_DEF_SOCKADDR_IN6* = 1 ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/libc-compat.h:134:9
+when 1 is static:
+  const
+    compiler_UAPI_DEF_IPV6_MREQ* = 1 ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/libc-compat.h:135:9
+else:
+  let compiler_UAPI_DEF_IPV6_MREQ* = 1 ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/libc-compat.h:135:9
+when 1 is static:
+  const
+    compiler_UAPI_DEF_IPPROTO_V6* = 1 ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/libc-compat.h:136:9
+else:
+  let compiler_UAPI_DEF_IPPROTO_V6* = 1 ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/libc-compat.h:136:9
+when 1 is static:
+  const
+    compiler_UAPI_DEF_IPV6_OPTIONS* = 1 ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/libc-compat.h:137:9
+else:
+  let compiler_UAPI_DEF_IPV6_OPTIONS* = 1 ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/libc-compat.h:137:9
+when 1 is static:
+  const
+    compiler_UAPI_DEF_IN6_PKTINFO* = 1 ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/libc-compat.h:138:9
+else:
+  let compiler_UAPI_DEF_IN6_PKTINFO* = 1 ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/libc-compat.h:138:9
+when 1 is static:
+  const
+    compiler_UAPI_DEF_IP6_MTUINFO* = 1 ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/libc-compat.h:139:9
+else:
+  let compiler_UAPI_DEF_IP6_MTUINFO* = 1 ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/libc-compat.h:139:9
+when 1 is static:
+  const
+    compiler_UAPI_DEF_XATTR* = 1 ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/libc-compat.h:147:9
+else:
+  let compiler_UAPI_DEF_XATTR* = 1 ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/libc-compat.h:147:9
+when 1 is static:
+  const
+    IP_TOS* = 1              ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/in.h:99:9
+else:
+  let IP_TOS* = 1            ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/in.h:99:9
+when 2 is static:
+  const
+    IP_TTL* = 2              ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/in.h:100:9
+else:
+  let IP_TTL* = 2            ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/in.h:100:9
+when 3 is static:
+  const
+    IP_HDRINCL* = 3          ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/in.h:101:9
+else:
+  let IP_HDRINCL* = 3        ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/in.h:101:9
 when 4 is static:
   const
-    NFT_REG32_SIZE* = 4      ## Generated based on /nix/store/sh3sjmgq543lfpjsq3dc0ksb6ckvhpdi-glibc-2.40-66-dev/include/linux/netfilter/nf_tables.h:50:9
+    IP_OPTIONS* = 4          ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/in.h:102:9
 else:
-  let NFT_REG32_SIZE* = 4    ## Generated based on /nix/store/sh3sjmgq543lfpjsq3dc0ksb6ckvhpdi-glibc-2.40-66-dev/include/linux/netfilter/nf_tables.h:50:9
+  let IP_OPTIONS* = 4        ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/in.h:102:9
+when 5 is static:
+  const
+    IP_ROUTER_ALERT* = 5     ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/in.h:103:9
+else:
+  let IP_ROUTER_ALERT* = 5   ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/in.h:103:9
+when 6 is static:
+  const
+    IP_RECVOPTS* = 6         ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/in.h:104:9
+else:
+  let IP_RECVOPTS* = 6       ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/in.h:104:9
+when 7 is static:
+  const
+    IP_RETOPTS* = 7          ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/in.h:105:9
+else:
+  let IP_RETOPTS* = 7        ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/in.h:105:9
+when 8 is static:
+  const
+    IP_PKTINFO* = 8          ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/in.h:106:9
+else:
+  let IP_PKTINFO* = 8        ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/in.h:106:9
+when 9 is static:
+  const
+    IP_PKTOPTIONS* = 9       ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/in.h:107:9
+else:
+  let IP_PKTOPTIONS* = 9     ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/in.h:107:9
+when 10 is static:
+  const
+    IP_MTU_DISCOVER* = 10    ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/in.h:108:9
+else:
+  let IP_MTU_DISCOVER* = 10  ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/in.h:108:9
+when 11 is static:
+  const
+    IP_RECVERR* = 11         ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/in.h:109:9
+else:
+  let IP_RECVERR* = 11       ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/in.h:109:9
+when 12 is static:
+  const
+    IP_RECVTTL* = 12         ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/in.h:110:9
+else:
+  let IP_RECVTTL* = 12       ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/in.h:110:9
+when 13 is static:
+  const
+    IP_RECVTOS* = 13         ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/in.h:111:9
+else:
+  let IP_RECVTOS* = 13       ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/in.h:111:9
+when 14 is static:
+  const
+    IP_MTU* = 14             ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/in.h:112:9
+else:
+  let IP_MTU* = 14           ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/in.h:112:9
+when 15 is static:
+  const
+    IP_FREEBIND* = 15        ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/in.h:113:9
+else:
+  let IP_FREEBIND* = 15      ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/in.h:113:9
+when 16 is static:
+  const
+    IP_IPSEC_POLICY* = 16    ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/in.h:114:9
+else:
+  let IP_IPSEC_POLICY* = 16  ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/in.h:114:9
+when 17 is static:
+  const
+    IP_XFRM_POLICY* = 17     ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/in.h:115:9
+else:
+  let IP_XFRM_POLICY* = 17   ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/in.h:115:9
+when 18 is static:
+  const
+    IP_PASSSEC* = 18         ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/in.h:116:9
+else:
+  let IP_PASSSEC* = 18       ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/in.h:116:9
+when 19 is static:
+  const
+    IP_TRANSPARENT* = 19     ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/in.h:117:9
+else:
+  let IP_TRANSPARENT* = 19   ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/in.h:117:9
+when IP_RETOPTS is typedesc:
+  type
+    IP_RECVRETOPTS* = IP_RETOPTS ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/in.h:120:9
+else:
+  when IP_RETOPTS is static:
+    const
+      IP_RECVRETOPTS* = IP_RETOPTS ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/in.h:120:9
+  else:
+    let IP_RECVRETOPTS* = IP_RETOPTS ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/in.h:120:9
+when 20 is static:
+  const
+    IP_ORIGDSTADDR* = 20     ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/in.h:123:9
+else:
+  let IP_ORIGDSTADDR* = 20   ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/in.h:123:9
+when IP_ORIGDSTADDR is typedesc:
+  type
+    IP_RECVORIGDSTADDR* = IP_ORIGDSTADDR ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/in.h:124:9
+else:
+  when IP_ORIGDSTADDR is static:
+    const
+      IP_RECVORIGDSTADDR* = IP_ORIGDSTADDR ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/in.h:124:9
+  else:
+    let IP_RECVORIGDSTADDR* = IP_ORIGDSTADDR ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/in.h:124:9
+when 21 is static:
+  const
+    IP_MINTTL* = 21          ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/in.h:126:9
+else:
+  let IP_MINTTL* = 21        ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/in.h:126:9
+when 22 is static:
+  const
+    IP_NODEFRAG* = 22        ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/in.h:127:9
+else:
+  let IP_NODEFRAG* = 22      ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/in.h:127:9
+when 23 is static:
+  const
+    IP_CHECKSUM* = 23        ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/in.h:128:9
+else:
+  let IP_CHECKSUM* = 23      ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/in.h:128:9
+when 24 is static:
+  const
+    IP_BIND_ADDRESS_NO_PORT* = 24 ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/in.h:129:9
+else:
+  let IP_BIND_ADDRESS_NO_PORT* = 24 ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/in.h:129:9
+when 25 is static:
+  const
+    IP_RECVFRAGSIZE* = 25    ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/in.h:130:9
+else:
+  let IP_RECVFRAGSIZE* = 25  ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/in.h:130:9
+when 26 is static:
+  const
+    IP_RECVERR_RFC4884* = 26 ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/in.h:131:9
+else:
+  let IP_RECVERR_RFC4884* = 26 ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/in.h:131:9
+when 0 is static:
+  const
+    IP_PMTUDISC_DONT* = 0    ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/in.h:134:9
+else:
+  let IP_PMTUDISC_DONT* = 0  ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/in.h:134:9
+when 1 is static:
+  const
+    IP_PMTUDISC_WANT* = 1    ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/in.h:135:9
+else:
+  let IP_PMTUDISC_WANT* = 1  ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/in.h:135:9
+when 2 is static:
+  const
+    IP_PMTUDISC_DO* = 2      ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/in.h:136:9
+else:
+  let IP_PMTUDISC_DO* = 2    ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/in.h:136:9
+when 3 is static:
+  const
+    IP_PMTUDISC_PROBE* = 3   ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/in.h:137:9
+else:
+  let IP_PMTUDISC_PROBE* = 3 ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/in.h:137:9
+when 4 is static:
+  const
+    IP_PMTUDISC_INTERFACE* = 4 ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/in.h:142:9
+else:
+  let IP_PMTUDISC_INTERFACE* = 4 ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/in.h:142:9
+when 5 is static:
+  const
+    IP_PMTUDISC_OMIT* = 5    ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/in.h:146:9
+else:
+  let IP_PMTUDISC_OMIT* = 5  ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/in.h:146:9
+when 32 is static:
+  const
+    IP_MULTICAST_IF* = 32    ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/in.h:148:9
+else:
+  let IP_MULTICAST_IF* = 32  ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/in.h:148:9
+when 33 is static:
+  const
+    IP_MULTICAST_TTL* = 33   ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/in.h:149:9
+else:
+  let IP_MULTICAST_TTL* = 33 ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/in.h:149:9
+when 34 is static:
+  const
+    IP_MULTICAST_LOOP* = 34  ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/in.h:150:9
+else:
+  let IP_MULTICAST_LOOP* = 34 ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/in.h:150:9
+when 35 is static:
+  const
+    IP_ADD_MEMBERSHIP* = 35  ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/in.h:151:9
+else:
+  let IP_ADD_MEMBERSHIP* = 35 ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/in.h:151:9
+when 36 is static:
+  const
+    IP_DROP_MEMBERSHIP* = 36 ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/in.h:152:9
+else:
+  let IP_DROP_MEMBERSHIP* = 36 ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/in.h:152:9
+when 37 is static:
+  const
+    IP_UNBLOCK_SOURCE* = 37  ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/in.h:153:9
+else:
+  let IP_UNBLOCK_SOURCE* = 37 ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/in.h:153:9
+when 38 is static:
+  const
+    IP_BLOCK_SOURCE* = 38    ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/in.h:154:9
+else:
+  let IP_BLOCK_SOURCE* = 38  ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/in.h:154:9
+when 39 is static:
+  const
+    IP_ADD_SOURCE_MEMBERSHIP* = 39 ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/in.h:155:9
+else:
+  let IP_ADD_SOURCE_MEMBERSHIP* = 39 ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/in.h:155:9
+when 40 is static:
+  const
+    IP_DROP_SOURCE_MEMBERSHIP* = 40 ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/in.h:156:9
+else:
+  let IP_DROP_SOURCE_MEMBERSHIP* = 40 ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/in.h:156:9
+when 41 is static:
+  const
+    IP_MSFILTER* = 41        ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/in.h:157:9
+else:
+  let IP_MSFILTER* = 41      ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/in.h:157:9
+when 42 is static:
+  const
+    MCAST_JOIN_GROUP* = 42   ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/in.h:158:9
+else:
+  let MCAST_JOIN_GROUP* = 42 ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/in.h:158:9
+when 43 is static:
+  const
+    MCAST_BLOCK_SOURCE* = 43 ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/in.h:159:9
+else:
+  let MCAST_BLOCK_SOURCE* = 43 ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/in.h:159:9
+when 44 is static:
+  const
+    MCAST_UNBLOCK_SOURCE* = 44 ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/in.h:160:9
+else:
+  let MCAST_UNBLOCK_SOURCE* = 44 ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/in.h:160:9
+when 45 is static:
+  const
+    MCAST_LEAVE_GROUP* = 45  ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/in.h:161:9
+else:
+  let MCAST_LEAVE_GROUP* = 45 ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/in.h:161:9
+when 46 is static:
+  const
+    MCAST_JOIN_SOURCE_GROUP* = 46 ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/in.h:162:9
+else:
+  let MCAST_JOIN_SOURCE_GROUP* = 46 ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/in.h:162:9
+when 47 is static:
+  const
+    MCAST_LEAVE_SOURCE_GROUP* = 47 ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/in.h:163:9
+else:
+  let MCAST_LEAVE_SOURCE_GROUP* = 47 ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/in.h:163:9
+when 48 is static:
+  const
+    MCAST_MSFILTER* = 48     ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/in.h:164:9
+else:
+  let MCAST_MSFILTER* = 48   ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/in.h:164:9
+when 49 is static:
+  const
+    IP_MULTICAST_ALL* = 49   ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/in.h:165:9
+else:
+  let IP_MULTICAST_ALL* = 49 ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/in.h:165:9
+when 50 is static:
+  const
+    IP_UNICAST_IF* = 50      ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/in.h:166:9
+else:
+  let IP_UNICAST_IF* = 50    ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/in.h:166:9
+when 51 is static:
+  const
+    IP_LOCAL_PORT_RANGE* = 51 ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/in.h:167:9
+else:
+  let IP_LOCAL_PORT_RANGE* = 51 ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/in.h:167:9
+when 52 is static:
+  const
+    IP_PROTOCOL* = 52        ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/in.h:168:9
+else:
+  let IP_PROTOCOL* = 52      ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/in.h:168:9
+when 0 is static:
+  const
+    MCAST_EXCLUDE* = 0       ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/in.h:170:9
+else:
+  let MCAST_EXCLUDE* = 0     ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/in.h:170:9
+when 1 is static:
+  const
+    MCAST_INCLUDE* = 1       ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/in.h:171:9
+else:
+  let MCAST_INCLUDE* = 1     ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/in.h:171:9
+when 1 is static:
+  const
+    IP_DEFAULT_MULTICAST_TTL* = 1 ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/in.h:174:9
+else:
+  let IP_DEFAULT_MULTICAST_TTL* = 1 ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/in.h:174:9
+when 1 is static:
+  const
+    IP_DEFAULT_MULTICAST_LOOP* = 1 ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/in.h:175:9
+else:
+  let IP_DEFAULT_MULTICAST_LOOP* = 1 ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/in.h:175:9
+when 16 is static:
+  const
+    compiler_SOCK_SIZE_private* = 16 ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/in.h:257:9
+else:
+  let compiler_SOCK_SIZE_private* = 16 ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/in.h:257:9
+when 4278190080 is static:
+  const
+    IN_CLASSA_NET* = 4278190080'i64 ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/in.h:277:9
+else:
+  let IN_CLASSA_NET* = 4278190080'i64 ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/in.h:277:9
+when 24 is static:
+  const
+    IN_CLASSA_NSHIFT* = 24   ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/in.h:278:9
+else:
+  let IN_CLASSA_NSHIFT* = 24 ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/in.h:278:9
+when 128 is static:
+  const
+    IN_CLASSA_MAX* = 128     ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/in.h:280:9
+else:
+  let IN_CLASSA_MAX* = 128   ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/in.h:280:9
+when 4294901760 is static:
+  const
+    IN_CLASSB_NET* = 4294901760'i64 ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/in.h:283:9
+else:
+  let IN_CLASSB_NET* = 4294901760'i64 ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/in.h:283:9
+when 16 is static:
+  const
+    IN_CLASSB_NSHIFT* = 16   ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/in.h:284:9
+else:
+  let IN_CLASSB_NSHIFT* = 16 ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/in.h:284:9
+when 65536 is static:
+  const
+    IN_CLASSB_MAX* = 65536   ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/in.h:286:9
+else:
+  let IN_CLASSB_MAX* = 65536 ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/in.h:286:9
+when 4294967040 is static:
+  const
+    IN_CLASSC_NET* = 4294967040'i64 ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/in.h:289:9
+else:
+  let IN_CLASSC_NET* = 4294967040'i64 ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/in.h:289:9
+when 8 is static:
+  const
+    IN_CLASSC_NSHIFT* = 8    ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/in.h:290:9
+else:
+  let IN_CLASSC_NSHIFT* = 8  ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/in.h:290:9
+when 3758096384 is static:
+  const
+    IN_MULTICAST_NET* = 3758096384'i64 ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/in.h:295:9
+else:
+  let IN_MULTICAST_NET* = 3758096384'i64 ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/in.h:295:9
+when 4294967295 is static:
+  const
+    IN_CLASSE_NET* = 4294967295'i64 ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/in.h:301:9
+else:
+  let IN_CLASSE_NET* = 4294967295'i64 ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/in.h:301:9
+when 0 is static:
+  const
+    IN_CLASSE_NSHIFT* = 0    ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/in.h:302:9
+else:
+  let IN_CLASSE_NSHIFT* = 0  ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/in.h:302:9
+when 127 is static:
+  const
+    IN_LOOPBACKNET* = 127    ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/in.h:317:9
+else:
+  let IN_LOOPBACKNET* = 127  ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/in.h:317:9
+when 2130706433 is static:
+  const
+    INADDR_LOOPBACK* = 2130706433 ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/in.h:320:9
+else:
+  let INADDR_LOOPBACK* = 2130706433 ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/in.h:320:9
+when cast[cuint](3758096384'i64) is static:
+  const
+    INADDR_UNSPEC_GROUP* = cast[cuint](3758096384'i64) ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/in.h:324:9
+else:
+  let INADDR_UNSPEC_GROUP* = cast[cuint](3758096384'i64) ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/in.h:324:9
+when cast[cuint](3758096385'i64) is static:
+  const
+    INADDR_ALLHOSTS_GROUP* = cast[cuint](3758096385'i64) ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/in.h:325:9
+else:
+  let INADDR_ALLHOSTS_GROUP* = cast[cuint](3758096385'i64) ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/in.h:325:9
+when cast[cuint](3758096386'i64) is static:
+  const
+    INADDR_ALLRTRS_GROUP* = cast[cuint](3758096386'i64) ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/in.h:326:9
+else:
+  let INADDR_ALLRTRS_GROUP* = cast[cuint](3758096386'i64) ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/in.h:326:9
+when cast[cuint](3758096490'i64) is static:
+  const
+    INADDR_ALLSNOOPERS_GROUP* = cast[cuint](3758096490'i64) ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/in.h:327:9
+else:
+  let INADDR_ALLSNOOPERS_GROUP* = cast[cuint](3758096490'i64) ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/in.h:327:9
+when cast[cuint](3758096639'i64) is static:
+  const
+    INADDR_MAX_LOCAL_GROUP* = cast[cuint](3758096639'i64) ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/in.h:328:9
+else:
+  let INADDR_MAX_LOCAL_GROUP* = cast[cuint](3758096639'i64) ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/in.h:328:9
+when ipv6mr_multiaddr is typedesc:
+  type
+    ipv6mr_acaddr* = ipv6mr_multiaddr ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/in6.h:69:9
+else:
+  when ipv6mr_multiaddr is static:
+    const
+      ipv6mr_acaddr* = ipv6mr_multiaddr ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/in6.h:69:9
+  else:
+    let ipv6mr_acaddr* = ipv6mr_multiaddr ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/in6.h:69:9
+when 0 is static:
+  const
+    IPV6_FL_A_GET* = 0       ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/in6.h:83:9
+else:
+  let IPV6_FL_A_GET* = 0     ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/in6.h:83:9
+when 1 is static:
+  const
+    IPV6_FL_A_PUT* = 1       ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/in6.h:84:9
+else:
+  let IPV6_FL_A_PUT* = 1     ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/in6.h:84:9
+when 2 is static:
+  const
+    IPV6_FL_A_RENEW* = 2     ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/in6.h:85:9
+else:
+  let IPV6_FL_A_RENEW* = 2   ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/in6.h:85:9
+when 1 is static:
+  const
+    IPV6_FL_F_CREATE* = 1    ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/in6.h:87:9
+else:
+  let IPV6_FL_F_CREATE* = 1  ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/in6.h:87:9
+when 2 is static:
+  const
+    IPV6_FL_F_EXCL* = 2      ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/in6.h:88:9
+else:
+  let IPV6_FL_F_EXCL* = 2    ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/in6.h:88:9
+when 4 is static:
+  const
+    IPV6_FL_F_REFLECT* = 4   ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/in6.h:89:9
+else:
+  let IPV6_FL_F_REFLECT* = 4 ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/in6.h:89:9
+when 8 is static:
+  const
+    IPV6_FL_F_REMOTE* = 8    ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/in6.h:90:9
+else:
+  let IPV6_FL_F_REMOTE* = 8  ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/in6.h:90:9
+when 0 is static:
+  const
+    IPV6_FL_S_NONE* = 0      ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/in6.h:92:9
+else:
+  let IPV6_FL_S_NONE* = 0    ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/in6.h:92:9
+when 1 is static:
+  const
+    IPV6_FL_S_EXCL* = 1      ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/in6.h:93:9
+else:
+  let IPV6_FL_S_EXCL* = 1    ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/in6.h:93:9
+when 2 is static:
+  const
+    IPV6_FL_S_PROCESS* = 2   ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/in6.h:94:9
+else:
+  let IPV6_FL_S_PROCESS* = 2 ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/in6.h:94:9
+when 3 is static:
+  const
+    IPV6_FL_S_USER* = 3      ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/in6.h:95:9
+else:
+  let IPV6_FL_S_USER* = 3    ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/in6.h:95:9
+when 255 is static:
+  const
+    IPV6_FL_S_ANY* = 255     ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/in6.h:96:9
+else:
+  let IPV6_FL_S_ANY* = 255   ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/in6.h:96:9
+when 1048575 is static:
+  const
+    IPV6_FLOWINFO_FLOWLABEL* = 1048575 ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/in6.h:107:9
+else:
+  let IPV6_FLOWINFO_FLOWLABEL* = 1048575 ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/in6.h:107:9
+when 267386880 is static:
+  const
+    IPV6_FLOWINFO_PRIORITY* = 267386880 ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/in6.h:108:9
+else:
+  let IPV6_FLOWINFO_PRIORITY* = 267386880 ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/in6.h:108:9
+when 0 is static:
+  const
+    IPV6_PRIORITY_UNCHARACTERIZED* = 0 ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/in6.h:111:9
+else:
+  let IPV6_PRIORITY_UNCHARACTERIZED* = 0 ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/in6.h:111:9
+when 256 is static:
+  const
+    IPV6_PRIORITY_FILLER* = 256 ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/in6.h:112:9
+else:
+  let IPV6_PRIORITY_FILLER* = 256 ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/in6.h:112:9
+when 512 is static:
+  const
+    IPV6_PRIORITY_UNATTENDED* = 512 ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/in6.h:113:9
+else:
+  let IPV6_PRIORITY_UNATTENDED* = 512 ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/in6.h:113:9
+when 768 is static:
+  const
+    IPV6_PRIORITY_RESERVED1* = 768 ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/in6.h:114:9
+else:
+  let IPV6_PRIORITY_RESERVED1* = 768 ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/in6.h:114:9
+when 1024 is static:
+  const
+    IPV6_PRIORITY_BULK* = 1024 ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/in6.h:115:9
+else:
+  let IPV6_PRIORITY_BULK* = 1024 ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/in6.h:115:9
+when 1280 is static:
+  const
+    IPV6_PRIORITY_RESERVED2* = 1280 ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/in6.h:116:9
+else:
+  let IPV6_PRIORITY_RESERVED2* = 1280 ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/in6.h:116:9
+when 1536 is static:
+  const
+    IPV6_PRIORITY_INTERACTIVE* = 1536 ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/in6.h:117:9
+else:
+  let IPV6_PRIORITY_INTERACTIVE* = 1536 ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/in6.h:117:9
+when 1792 is static:
+  const
+    IPV6_PRIORITY_CONTROL* = 1792 ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/in6.h:118:9
+else:
+  let IPV6_PRIORITY_CONTROL* = 1792 ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/in6.h:118:9
+when 2048 is static:
+  const
+    IPV6_PRIORITY_8* = 2048  ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/in6.h:119:9
+else:
+  let IPV6_PRIORITY_8* = 2048 ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/in6.h:119:9
+when 2304 is static:
+  const
+    IPV6_PRIORITY_9* = 2304  ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/in6.h:120:9
+else:
+  let IPV6_PRIORITY_9* = 2304 ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/in6.h:120:9
+when 2560 is static:
+  const
+    IPV6_PRIORITY_10* = 2560 ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/in6.h:121:9
+else:
+  let IPV6_PRIORITY_10* = 2560 ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/in6.h:121:9
+when 2816 is static:
+  const
+    IPV6_PRIORITY_11* = 2816 ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/in6.h:122:9
+else:
+  let IPV6_PRIORITY_11* = 2816 ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/in6.h:122:9
+when 3072 is static:
+  const
+    IPV6_PRIORITY_12* = 3072 ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/in6.h:123:9
+else:
+  let IPV6_PRIORITY_12* = 3072 ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/in6.h:123:9
+when 3328 is static:
+  const
+    IPV6_PRIORITY_13* = 3328 ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/in6.h:124:9
+else:
+  let IPV6_PRIORITY_13* = 3328 ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/in6.h:124:9
+when 3584 is static:
+  const
+    IPV6_PRIORITY_14* = 3584 ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/in6.h:125:9
+else:
+  let IPV6_PRIORITY_14* = 3584 ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/in6.h:125:9
+when 3840 is static:
+  const
+    IPV6_PRIORITY_15* = 3840 ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/in6.h:126:9
+else:
+  let IPV6_PRIORITY_15* = 3840 ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/in6.h:126:9
+when 0 is static:
+  const
+    IPPROTO_HOPOPTS* = 0     ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/in6.h:132:9
+else:
+  let IPPROTO_HOPOPTS* = 0   ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/in6.h:132:9
+when 43 is static:
+  const
+    IPPROTO_ROUTING* = 43    ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/in6.h:133:9
+else:
+  let IPPROTO_ROUTING* = 43  ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/in6.h:133:9
+when 44 is static:
+  const
+    IPPROTO_FRAGMENT* = 44   ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/in6.h:134:9
+else:
+  let IPPROTO_FRAGMENT* = 44 ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/in6.h:134:9
+when 58 is static:
+  const
+    IPPROTO_ICMPV6* = 58     ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/in6.h:135:9
+else:
+  let IPPROTO_ICMPV6* = 58   ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/in6.h:135:9
+when 59 is static:
+  const
+    IPPROTO_NONE* = 59       ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/in6.h:136:9
+else:
+  let IPPROTO_NONE* = 59     ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/in6.h:136:9
+when 60 is static:
+  const
+    IPPROTO_DSTOPTS* = 60    ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/in6.h:137:9
+else:
+  let IPPROTO_DSTOPTS* = 60  ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/in6.h:137:9
+when 135 is static:
+  const
+    IPPROTO_MH* = 135        ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/in6.h:138:9
+else:
+  let IPPROTO_MH* = 135      ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/in6.h:138:9
+when 0 is static:
+  const
+    IPV6_TLV_PAD1* = 0       ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/in6.h:144:9
+else:
+  let IPV6_TLV_PAD1* = 0     ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/in6.h:144:9
+when 1 is static:
+  const
+    IPV6_TLV_PADN* = 1       ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/in6.h:145:9
+else:
+  let IPV6_TLV_PADN* = 1     ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/in6.h:145:9
+when 5 is static:
+  const
+    IPV6_TLV_ROUTERALERT* = 5 ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/in6.h:146:9
+else:
+  let IPV6_TLV_ROUTERALERT* = 5 ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/in6.h:146:9
+when 7 is static:
+  const
+    IPV6_TLV_CALIPSO* = 7    ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/in6.h:147:9
+else:
+  let IPV6_TLV_CALIPSO* = 7  ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/in6.h:147:9
+when 49 is static:
+  const
+    IPV6_TLV_IOAM* = 49      ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/in6.h:148:9
+else:
+  let IPV6_TLV_IOAM* = 49    ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/in6.h:148:9
+when 194 is static:
+  const
+    IPV6_TLV_JUMBO* = 194    ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/in6.h:149:9
+else:
+  let IPV6_TLV_JUMBO* = 194  ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/in6.h:149:9
+when 201 is static:
+  const
+    IPV6_TLV_HAO* = 201      ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/in6.h:150:9
+else:
+  let IPV6_TLV_HAO* = 201    ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/in6.h:150:9
+when 1 is static:
+  const
+    IPV6_ADDRFORM* = 1       ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/in6.h:156:9
+else:
+  let IPV6_ADDRFORM* = 1     ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/in6.h:156:9
+when 2 is static:
+  const
+    IPV6_2292PKTINFO* = 2    ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/in6.h:157:9
+else:
+  let IPV6_2292PKTINFO* = 2  ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/in6.h:157:9
+when 3 is static:
+  const
+    IPV6_2292HOPOPTS* = 3    ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/in6.h:158:9
+else:
+  let IPV6_2292HOPOPTS* = 3  ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/in6.h:158:9
+when 4 is static:
+  const
+    IPV6_2292DSTOPTS* = 4    ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/in6.h:159:9
+else:
+  let IPV6_2292DSTOPTS* = 4  ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/in6.h:159:9
+when 5 is static:
+  const
+    IPV6_2292RTHDR* = 5      ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/in6.h:160:9
+else:
+  let IPV6_2292RTHDR* = 5    ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/in6.h:160:9
+when 6 is static:
+  const
+    IPV6_2292PKTOPTIONS* = 6 ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/in6.h:161:9
+else:
+  let IPV6_2292PKTOPTIONS* = 6 ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/in6.h:161:9
+when 7 is static:
+  const
+    IPV6_CHECKSUM* = 7       ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/in6.h:162:9
+else:
+  let IPV6_CHECKSUM* = 7     ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/in6.h:162:9
+when 8 is static:
+  const
+    IPV6_2292HOPLIMIT* = 8   ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/in6.h:163:9
+else:
+  let IPV6_2292HOPLIMIT* = 8 ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/in6.h:163:9
+when 9 is static:
+  const
+    IPV6_NEXTHOP* = 9        ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/in6.h:164:9
+else:
+  let IPV6_NEXTHOP* = 9      ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/in6.h:164:9
+when 10 is static:
+  const
+    IPV6_AUTHHDR* = 10       ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/in6.h:165:9
+else:
+  let IPV6_AUTHHDR* = 10     ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/in6.h:165:9
+when 11 is static:
+  const
+    IPV6_FLOWINFO* = 11      ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/in6.h:166:9
+else:
+  let IPV6_FLOWINFO* = 11    ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/in6.h:166:9
+when 16 is static:
+  const
+    IPV6_UNICAST_HOPS* = 16  ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/in6.h:168:9
+else:
+  let IPV6_UNICAST_HOPS* = 16 ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/in6.h:168:9
+when 17 is static:
+  const
+    IPV6_MULTICAST_IF* = 17  ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/in6.h:169:9
+else:
+  let IPV6_MULTICAST_IF* = 17 ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/in6.h:169:9
+when 18 is static:
+  const
+    IPV6_MULTICAST_HOPS* = 18 ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/in6.h:170:9
+else:
+  let IPV6_MULTICAST_HOPS* = 18 ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/in6.h:170:9
+when 19 is static:
+  const
+    IPV6_MULTICAST_LOOP* = 19 ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/in6.h:171:9
+else:
+  let IPV6_MULTICAST_LOOP* = 19 ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/in6.h:171:9
+when 20 is static:
+  const
+    IPV6_ADD_MEMBERSHIP* = 20 ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/in6.h:172:9
+else:
+  let IPV6_ADD_MEMBERSHIP* = 20 ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/in6.h:172:9
+when 21 is static:
+  const
+    IPV6_DROP_MEMBERSHIP* = 21 ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/in6.h:173:9
+else:
+  let IPV6_DROP_MEMBERSHIP* = 21 ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/in6.h:173:9
+when 22 is static:
+  const
+    IPV6_ROUTER_ALERT* = 22  ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/in6.h:174:9
+else:
+  let IPV6_ROUTER_ALERT* = 22 ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/in6.h:174:9
+when 23 is static:
+  const
+    IPV6_MTU_DISCOVER* = 23  ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/in6.h:175:9
+else:
+  let IPV6_MTU_DISCOVER* = 23 ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/in6.h:175:9
+when 24 is static:
+  const
+    IPV6_MTU* = 24           ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/in6.h:176:9
+else:
+  let IPV6_MTU* = 24         ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/in6.h:176:9
+when 25 is static:
+  const
+    IPV6_RECVERR* = 25       ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/in6.h:177:9
+else:
+  let IPV6_RECVERR* = 25     ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/in6.h:177:9
+when 26 is static:
+  const
+    IPV6_V6ONLY* = 26        ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/in6.h:178:9
+else:
+  let IPV6_V6ONLY* = 26      ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/in6.h:178:9
+when 27 is static:
+  const
+    IPV6_JOIN_ANYCAST* = 27  ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/in6.h:179:9
+else:
+  let IPV6_JOIN_ANYCAST* = 27 ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/in6.h:179:9
+when 28 is static:
+  const
+    IPV6_LEAVE_ANYCAST* = 28 ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/in6.h:180:9
+else:
+  let IPV6_LEAVE_ANYCAST* = 28 ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/in6.h:180:9
+when 29 is static:
+  const
+    IPV6_MULTICAST_ALL* = 29 ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/in6.h:181:9
+else:
+  let IPV6_MULTICAST_ALL* = 29 ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/in6.h:181:9
+when 30 is static:
+  const
+    IPV6_ROUTER_ALERT_ISOLATE* = 30 ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/in6.h:182:9
+else:
+  let IPV6_ROUTER_ALERT_ISOLATE* = 30 ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/in6.h:182:9
+when 31 is static:
+  const
+    IPV6_RECVERR_RFC4884* = 31 ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/in6.h:183:9
+else:
+  let IPV6_RECVERR_RFC4884* = 31 ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/in6.h:183:9
+when 0 is static:
+  const
+    IPV6_PMTUDISC_DONT* = 0  ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/in6.h:186:9
+else:
+  let IPV6_PMTUDISC_DONT* = 0 ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/in6.h:186:9
+when 1 is static:
+  const
+    IPV6_PMTUDISC_WANT* = 1  ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/in6.h:187:9
+else:
+  let IPV6_PMTUDISC_WANT* = 1 ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/in6.h:187:9
+when 2 is static:
+  const
+    IPV6_PMTUDISC_DO* = 2    ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/in6.h:188:9
+else:
+  let IPV6_PMTUDISC_DO* = 2  ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/in6.h:188:9
+when 3 is static:
+  const
+    IPV6_PMTUDISC_PROBE* = 3 ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/in6.h:189:9
+else:
+  let IPV6_PMTUDISC_PROBE* = 3 ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/in6.h:189:9
+when 4 is static:
+  const
+    IPV6_PMTUDISC_INTERFACE* = 4 ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/in6.h:193:9
+else:
+  let IPV6_PMTUDISC_INTERFACE* = 4 ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/in6.h:193:9
+when 5 is static:
+  const
+    IPV6_PMTUDISC_OMIT* = 5  ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/in6.h:197:9
+else:
+  let IPV6_PMTUDISC_OMIT* = 5 ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/in6.h:197:9
+when 32 is static:
+  const
+    IPV6_FLOWLABEL_MGR* = 32 ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/in6.h:200:9
+else:
+  let IPV6_FLOWLABEL_MGR* = 32 ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/in6.h:200:9
+when 33 is static:
+  const
+    IPV6_FLOWINFO_SEND* = 33 ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/in6.h:201:9
+else:
+  let IPV6_FLOWINFO_SEND* = 33 ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/in6.h:201:9
+when 34 is static:
+  const
+    IPV6_IPSEC_POLICY* = 34  ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/in6.h:203:9
+else:
+  let IPV6_IPSEC_POLICY* = 34 ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/in6.h:203:9
+when 35 is static:
+  const
+    IPV6_XFRM_POLICY* = 35   ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/in6.h:204:9
+else:
+  let IPV6_XFRM_POLICY* = 35 ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/in6.h:204:9
+when 36 is static:
+  const
+    IPV6_HDRINCL* = 36       ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/in6.h:205:9
+else:
+  let IPV6_HDRINCL* = 36     ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/in6.h:205:9
+when 49 is static:
+  const
+    IPV6_RECVPKTINFO* = 49   ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/in6.h:227:9
+else:
+  let IPV6_RECVPKTINFO* = 49 ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/in6.h:227:9
+when 50 is static:
+  const
+    IPV6_PKTINFO* = 50       ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/in6.h:228:9
+else:
+  let IPV6_PKTINFO* = 50     ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/in6.h:228:9
+when 51 is static:
+  const
+    IPV6_RECVHOPLIMIT* = 51  ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/in6.h:229:9
+else:
+  let IPV6_RECVHOPLIMIT* = 51 ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/in6.h:229:9
+when 52 is static:
+  const
+    IPV6_HOPLIMIT* = 52      ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/in6.h:230:9
+else:
+  let IPV6_HOPLIMIT* = 52    ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/in6.h:230:9
+when 53 is static:
+  const
+    IPV6_RECVHOPOPTS* = 53   ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/in6.h:231:9
+else:
+  let IPV6_RECVHOPOPTS* = 53 ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/in6.h:231:9
+when 54 is static:
+  const
+    IPV6_HOPOPTS* = 54       ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/in6.h:232:9
+else:
+  let IPV6_HOPOPTS* = 54     ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/in6.h:232:9
+when 55 is static:
+  const
+    IPV6_RTHDRDSTOPTS* = 55  ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/in6.h:233:9
+else:
+  let IPV6_RTHDRDSTOPTS* = 55 ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/in6.h:233:9
+when 56 is static:
+  const
+    IPV6_RECVRTHDR* = 56     ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/in6.h:234:9
+else:
+  let IPV6_RECVRTHDR* = 56   ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/in6.h:234:9
+when 57 is static:
+  const
+    IPV6_RTHDR* = 57         ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/in6.h:235:9
+else:
+  let IPV6_RTHDR* = 57       ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/in6.h:235:9
+when 58 is static:
+  const
+    IPV6_RECVDSTOPTS* = 58   ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/in6.h:236:9
+else:
+  let IPV6_RECVDSTOPTS* = 58 ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/in6.h:236:9
+when 59 is static:
+  const
+    IPV6_DSTOPTS* = 59       ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/in6.h:237:9
+else:
+  let IPV6_DSTOPTS* = 59     ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/in6.h:237:9
+when 60 is static:
+  const
+    IPV6_RECVPATHMTU* = 60   ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/in6.h:238:9
+else:
+  let IPV6_RECVPATHMTU* = 60 ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/in6.h:238:9
+when 61 is static:
+  const
+    IPV6_PATHMTU* = 61       ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/in6.h:239:9
+else:
+  let IPV6_PATHMTU* = 61     ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/in6.h:239:9
+when 62 is static:
+  const
+    IPV6_DONTFRAG* = 62      ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/in6.h:240:9
+else:
+  let IPV6_DONTFRAG* = 62    ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/in6.h:240:9
+when 66 is static:
+  const
+    IPV6_RECVTCLASS* = 66    ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/in6.h:258:9
+else:
+  let IPV6_RECVTCLASS* = 66  ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/in6.h:258:9
+when 67 is static:
+  const
+    IPV6_TCLASS* = 67        ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/in6.h:259:9
+else:
+  let IPV6_TCLASS* = 67      ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/in6.h:259:9
+when 70 is static:
+  const
+    IPV6_AUTOFLOWLABEL* = 70 ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/in6.h:272:9
+else:
+  let IPV6_AUTOFLOWLABEL* = 70 ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/in6.h:272:9
+when 72 is static:
+  const
+    IPV6_ADDR_PREFERENCES* = 72 ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/in6.h:274:9
+else:
+  let IPV6_ADDR_PREFERENCES* = 72 ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/in6.h:274:9
+when 1 is static:
+  const
+    IPV6_PREFER_SRC_TMP* = 1 ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/in6.h:276:9
+else:
+  let IPV6_PREFER_SRC_TMP* = 1 ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/in6.h:276:9
+when 2 is static:
+  const
+    IPV6_PREFER_SRC_PUBLIC* = 2 ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/in6.h:277:9
+else:
+  let IPV6_PREFER_SRC_PUBLIC* = 2 ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/in6.h:277:9
+when 256 is static:
+  const
+    IPV6_PREFER_SRC_PUBTMP_DEFAULT* = 256 ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/in6.h:278:9
+else:
+  let IPV6_PREFER_SRC_PUBTMP_DEFAULT* = 256 ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/in6.h:278:9
+when 4 is static:
+  const
+    IPV6_PREFER_SRC_COA* = 4 ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/in6.h:279:9
+else:
+  let IPV6_PREFER_SRC_COA* = 4 ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/in6.h:279:9
+when 1024 is static:
+  const
+    IPV6_PREFER_SRC_HOME* = 1024 ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/in6.h:280:9
+else:
+  let IPV6_PREFER_SRC_HOME* = 1024 ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/in6.h:280:9
+when 8 is static:
+  const
+    IPV6_PREFER_SRC_CGA* = 8 ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/in6.h:281:9
+else:
+  let IPV6_PREFER_SRC_CGA* = 8 ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/in6.h:281:9
+when 2048 is static:
+  const
+    IPV6_PREFER_SRC_NONCGA* = 2048 ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/in6.h:282:9
+else:
+  let IPV6_PREFER_SRC_NONCGA* = 2048 ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/in6.h:282:9
+when 73 is static:
+  const
+    IPV6_MINHOPCOUNT* = 73   ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/in6.h:285:9
+else:
+  let IPV6_MINHOPCOUNT* = 73 ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/in6.h:285:9
+when 74 is static:
+  const
+    IPV6_ORIGDSTADDR* = 74   ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/in6.h:287:9
+else:
+  let IPV6_ORIGDSTADDR* = 74 ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/in6.h:287:9
+when IPV6_ORIGDSTADDR is typedesc:
+  type
+    IPV6_RECVORIGDSTADDR* = IPV6_ORIGDSTADDR ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/in6.h:288:9
+else:
+  when IPV6_ORIGDSTADDR is static:
+    const
+      IPV6_RECVORIGDSTADDR* = IPV6_ORIGDSTADDR ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/in6.h:288:9
+  else:
+    let IPV6_RECVORIGDSTADDR* = IPV6_ORIGDSTADDR ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/in6.h:288:9
+when 75 is static:
+  const
+    IPV6_TRANSPARENT* = 75   ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/in6.h:289:9
+else:
+  let IPV6_TRANSPARENT* = 75 ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/in6.h:289:9
+when 76 is static:
+  const
+    IPV6_UNICAST_IF* = 76    ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/in6.h:290:9
+else:
+  let IPV6_UNICAST_IF* = 76  ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/in6.h:290:9
+when 77 is static:
+  const
+    IPV6_RECVFRAGSIZE* = 77  ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/in6.h:291:9
+else:
+  let IPV6_RECVFRAGSIZE* = 77 ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/in6.h:291:9
+when 78 is static:
+  const
+    IPV6_FREEBIND* = 78      ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/in6.h:292:9
+else:
+  let IPV6_FREEBIND* = 78    ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/in6.h:292:9
+when 0 is static:
+  const
+    NF_DROP* = 0             ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/netfilter.h:11:9
+else:
+  let NF_DROP* = 0           ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/netfilter.h:11:9
+when 1 is static:
+  const
+    NF_ACCEPT* = 1           ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/netfilter.h:12:9
+else:
+  let NF_ACCEPT* = 1         ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/netfilter.h:12:9
+when 2 is static:
+  const
+    NF_STOLEN* = 2           ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/netfilter.h:13:9
+else:
+  let NF_STOLEN* = 2         ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/netfilter.h:13:9
+when 3 is static:
+  const
+    NF_QUEUE* = 3            ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/netfilter.h:14:9
+else:
+  let NF_QUEUE* = 3          ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/netfilter.h:14:9
+when 4 is static:
+  const
+    NF_REPEAT* = 4           ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/netfilter.h:15:9
+else:
+  let NF_REPEAT* = 4         ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/netfilter.h:15:9
+when 5 is static:
+  const
+    NF_STOP* = 5             ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/netfilter.h:16:9
+else:
+  let NF_STOP* = 5           ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/netfilter.h:16:9
+when NF_STOP is typedesc:
+  type
+    NF_MAX_VERDICT* = NF_STOP ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/netfilter.h:17:9
+else:
+  when NF_STOP is static:
+    const
+      NF_MAX_VERDICT* = NF_STOP ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/netfilter.h:17:9
+  else:
+    let NF_MAX_VERDICT* = NF_STOP ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/netfilter.h:17:9
+when 255 is static:
+  const
+    NF_VERDICT_MASK* = 255   ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/netfilter.h:22:9
+else:
+  let NF_VERDICT_MASK* = 255 ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/netfilter.h:22:9
+when 32768 is static:
+  const
+    NF_VERDICT_FLAG_QUEUE_BYPASS* = 32768 ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/netfilter.h:25:9
+else:
+  let NF_VERDICT_FLAG_QUEUE_BYPASS* = 32768 ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/netfilter.h:25:9
+when 4294901760 is static:
+  const
+    NF_VERDICT_QMASK* = 4294901760'i64 ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/netfilter.h:28:9
+else:
+  let NF_VERDICT_QMASK* = 4294901760'i64 ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/netfilter.h:28:9
+when 16 is static:
+  const
+    NF_VERDICT_QBITS* = 16   ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/netfilter.h:29:9
+else:
+  let NF_VERDICT_QBITS* = 16 ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/netfilter.h:29:9
+when 16 is static:
+  const
+    NF_VERDICT_BITS* = 16    ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/netfilter.h:38:9
+else:
+  let NF_VERDICT_BITS* = 16  ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/netfilter.h:38:9
+when 256 is static:
+  const
+    NFT_NAME_MAXLEN* = 256   ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/netfilter/nf_tables.h:5:9
+else:
+  let NFT_NAME_MAXLEN* = 256 ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/netfilter/nf_tables.h:5:9
+when NFT_NAME_MAXLEN is typedesc:
+  type
+    NFT_TABLE_MAXNAMELEN* = NFT_NAME_MAXLEN ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/netfilter/nf_tables.h:6:9
+else:
+  when NFT_NAME_MAXLEN is static:
+    const
+      NFT_TABLE_MAXNAMELEN* = NFT_NAME_MAXLEN ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/netfilter/nf_tables.h:6:9
+  else:
+    let NFT_TABLE_MAXNAMELEN* = NFT_NAME_MAXLEN ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/netfilter/nf_tables.h:6:9
+when NFT_NAME_MAXLEN is typedesc:
+  type
+    NFT_CHAIN_MAXNAMELEN* = NFT_NAME_MAXLEN ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/netfilter/nf_tables.h:7:9
+else:
+  when NFT_NAME_MAXLEN is static:
+    const
+      NFT_CHAIN_MAXNAMELEN* = NFT_NAME_MAXLEN ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/netfilter/nf_tables.h:7:9
+  else:
+    let NFT_CHAIN_MAXNAMELEN* = NFT_NAME_MAXLEN ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/netfilter/nf_tables.h:7:9
+when NFT_NAME_MAXLEN is typedesc:
+  type
+    NFT_SET_MAXNAMELEN* = NFT_NAME_MAXLEN ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/netfilter/nf_tables.h:8:9
+else:
+  when NFT_NAME_MAXLEN is static:
+    const
+      NFT_SET_MAXNAMELEN* = NFT_NAME_MAXLEN ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/netfilter/nf_tables.h:8:9
+  else:
+    let NFT_SET_MAXNAMELEN* = NFT_NAME_MAXLEN ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/netfilter/nf_tables.h:8:9
+when NFT_NAME_MAXLEN is typedesc:
+  type
+    NFT_OBJ_MAXNAMELEN* = NFT_NAME_MAXLEN ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/netfilter/nf_tables.h:9:9
+else:
+  when NFT_NAME_MAXLEN is static:
+    const
+      NFT_OBJ_MAXNAMELEN* = NFT_NAME_MAXLEN ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/netfilter/nf_tables.h:9:9
+  else:
+    let NFT_OBJ_MAXNAMELEN* = NFT_NAME_MAXLEN ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/netfilter/nf_tables.h:9:9
+when 256 is static:
+  const
+    NFT_USERDATA_MAXLEN* = 256 ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/netfilter/nf_tables.h:10:9
+else:
+  let NFT_USERDATA_MAXLEN* = 256 ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/netfilter/nf_tables.h:10:9
+when 16 is static:
+  const
+    NFT_OSF_MAXGENRELEN* = 16 ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/netfilter/nf_tables.h:11:9
+else:
+  let NFT_OSF_MAXGENRELEN* = 16 ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/netfilter/nf_tables.h:11:9
+when 16 is static:
+  const
+    NFT_REG_SIZE* = 16       ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/netfilter/nf_tables.h:49:9
+else:
+  let NFT_REG_SIZE* = 16     ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/netfilter/nf_tables.h:49:9
+when 4 is static:
+  const
+    NFT_REG32_SIZE* = 4      ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/netfilter/nf_tables.h:50:9
+else:
+  let NFT_REG32_SIZE* = 4    ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/netfilter/nf_tables.h:50:9
 when cast[cuint](4294967040'i64) is static:
   const
-    NFT_DATA_RESERVED_MASK* = cast[cuint](4294967040'i64) ## Generated based on /nix/store/sh3sjmgq543lfpjsq3dc0ksb6ckvhpdi-glibc-2.40-66-dev/include/linux/netfilter/nf_tables.h:501:9
+    NFT_DATA_RESERVED_MASK* = cast[cuint](4294967040'i64) ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/netfilter/nf_tables.h:501:9
 else:
-  let NFT_DATA_RESERVED_MASK* = cast[cuint](4294967040'i64) ## Generated based on /nix/store/sh3sjmgq543lfpjsq3dc0ksb6ckvhpdi-glibc-2.40-66-dev/include/linux/netfilter/nf_tables.h:501:9
+  let NFT_DATA_RESERVED_MASK* = cast[cuint](4294967040'i64) ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/netfilter/nf_tables.h:501:9
 when 64 is static:
   const
-    NFT_DATA_VALUE_MAXLEN* = 64 ## Generated based on /nix/store/sh3sjmgq543lfpjsq3dc0ksb6ckvhpdi-glibc-2.40-66-dev/include/linux/netfilter/nf_tables.h:518:9
+    NFT_DATA_VALUE_MAXLEN* = 64 ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/netfilter/nf_tables.h:518:9
 else:
-  let NFT_DATA_VALUE_MAXLEN* = 64 ## Generated based on /nix/store/sh3sjmgq543lfpjsq3dc0ksb6ckvhpdi-glibc-2.40-66-dev/include/linux/netfilter/nf_tables.h:518:9
+  let NFT_DATA_VALUE_MAXLEN* = 64 ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/netfilter/nf_tables.h:518:9
 when NFT_META_IFTYPE is typedesc:
   type
-    NFT_META_IIFTYPE* = NFT_META_IFTYPE ## Generated based on /nix/store/sh3sjmgq543lfpjsq3dc0ksb6ckvhpdi-glibc-2.40-66-dev/include/linux/netfilter/nf_tables.h:957:9
+    NFT_META_IIFTYPE* = NFT_META_IFTYPE ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/netfilter/nf_tables.h:957:9
 else:
   when NFT_META_IFTYPE is static:
     const
-      NFT_META_IIFTYPE* = NFT_META_IFTYPE ## Generated based on /nix/store/sh3sjmgq543lfpjsq3dc0ksb6ckvhpdi-glibc-2.40-66-dev/include/linux/netfilter/nf_tables.h:957:9
+      NFT_META_IIFTYPE* = NFT_META_IFTYPE ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/netfilter/nf_tables.h:957:9
   else:
-    let NFT_META_IIFTYPE* = NFT_META_IFTYPE ## Generated based on /nix/store/sh3sjmgq543lfpjsq3dc0ksb6ckvhpdi-glibc-2.40-66-dev/include/linux/netfilter/nf_tables.h:957:9
+    let NFT_META_IIFTYPE* = NFT_META_IFTYPE ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/netfilter/nf_tables.h:957:9
 when 1 is static:
   const
-    NFT_QUEUE_FLAG_BYPASS* = 1 ## Generated based on /nix/store/sh3sjmgq543lfpjsq3dc0ksb6ckvhpdi-glibc-2.40-66-dev/include/linux/netfilter/nf_tables.h:1340:9
+    NFT_QUEUE_FLAG_BYPASS* = 1 ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/netfilter/nf_tables.h:1340:9
 else:
-  let NFT_QUEUE_FLAG_BYPASS* = 1 ## Generated based on /nix/store/sh3sjmgq543lfpjsq3dc0ksb6ckvhpdi-glibc-2.40-66-dev/include/linux/netfilter/nf_tables.h:1340:9
+  let NFT_QUEUE_FLAG_BYPASS* = 1 ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/netfilter/nf_tables.h:1340:9
 when 2 is static:
   const
-    NFT_QUEUE_FLAG_CPU_FANOUT* = 2 ## Generated based on /nix/store/sh3sjmgq543lfpjsq3dc0ksb6ckvhpdi-glibc-2.40-66-dev/include/linux/netfilter/nf_tables.h:1341:9
+    NFT_QUEUE_FLAG_CPU_FANOUT* = 2 ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/netfilter/nf_tables.h:1341:9
 else:
-  let NFT_QUEUE_FLAG_CPU_FANOUT* = 2 ## Generated based on /nix/store/sh3sjmgq543lfpjsq3dc0ksb6ckvhpdi-glibc-2.40-66-dev/include/linux/netfilter/nf_tables.h:1341:9
+  let NFT_QUEUE_FLAG_CPU_FANOUT* = 2 ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/netfilter/nf_tables.h:1341:9
 when 3 is static:
   const
-    NFT_QUEUE_FLAG_MASK* = 3 ## Generated based on /nix/store/sh3sjmgq543lfpjsq3dc0ksb6ckvhpdi-glibc-2.40-66-dev/include/linux/netfilter/nf_tables.h:1342:9
+    NFT_QUEUE_FLAG_MASK* = 3 ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/netfilter/nf_tables.h:1342:9
 else:
-  let NFT_QUEUE_FLAG_MASK* = 3 ## Generated based on /nix/store/sh3sjmgq543lfpjsq3dc0ksb6ckvhpdi-glibc-2.40-66-dev/include/linux/netfilter/nf_tables.h:1342:9
+  let NFT_QUEUE_FLAG_MASK* = 3 ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/netfilter/nf_tables.h:1342:9
 when 4096 is static:
   const
-    NFT_SECMARK_CTX_MAXLEN* = 4096 ## Generated based on /nix/store/sh3sjmgq543lfpjsq3dc0ksb6ckvhpdi-glibc-2.40-66-dev/include/linux/netfilter/nf_tables.h:1379:9
+    NFT_SECMARK_CTX_MAXLEN* = 4096 ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/netfilter/nf_tables.h:1379:9
 else:
-  let NFT_SECMARK_CTX_MAXLEN* = 4096 ## Generated based on /nix/store/sh3sjmgq543lfpjsq3dc0ksb6ckvhpdi-glibc-2.40-66-dev/include/linux/netfilter/nf_tables.h:1379:9
+  let NFT_SECMARK_CTX_MAXLEN* = 4096 ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/netfilter/nf_tables.h:1379:9
 when 0 is static:
   const
-    NFT_OBJECT_UNSPEC* = 0   ## Generated based on /nix/store/sh3sjmgq543lfpjsq3dc0ksb6ckvhpdi-glibc-2.40-66-dev/include/linux/netfilter/nf_tables.h:1640:9
+    NFT_OBJECT_UNSPEC* = 0   ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/netfilter/nf_tables.h:1640:9
 else:
-  let NFT_OBJECT_UNSPEC* = 0 ## Generated based on /nix/store/sh3sjmgq543lfpjsq3dc0ksb6ckvhpdi-glibc-2.40-66-dev/include/linux/netfilter/nf_tables.h:1640:9
+  let NFT_OBJECT_UNSPEC* = 0 ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/netfilter/nf_tables.h:1640:9
 when 1 is static:
   const
-    NFT_OBJECT_COUNTER* = 1  ## Generated based on /nix/store/sh3sjmgq543lfpjsq3dc0ksb6ckvhpdi-glibc-2.40-66-dev/include/linux/netfilter/nf_tables.h:1641:9
+    NFT_OBJECT_COUNTER* = 1  ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/netfilter/nf_tables.h:1641:9
 else:
-  let NFT_OBJECT_COUNTER* = 1 ## Generated based on /nix/store/sh3sjmgq543lfpjsq3dc0ksb6ckvhpdi-glibc-2.40-66-dev/include/linux/netfilter/nf_tables.h:1641:9
+  let NFT_OBJECT_COUNTER* = 1 ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/netfilter/nf_tables.h:1641:9
 when 2 is static:
   const
-    NFT_OBJECT_QUOTA* = 2    ## Generated based on /nix/store/sh3sjmgq543lfpjsq3dc0ksb6ckvhpdi-glibc-2.40-66-dev/include/linux/netfilter/nf_tables.h:1642:9
+    NFT_OBJECT_QUOTA* = 2    ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/netfilter/nf_tables.h:1642:9
 else:
-  let NFT_OBJECT_QUOTA* = 2  ## Generated based on /nix/store/sh3sjmgq543lfpjsq3dc0ksb6ckvhpdi-glibc-2.40-66-dev/include/linux/netfilter/nf_tables.h:1642:9
+  let NFT_OBJECT_QUOTA* = 2  ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/netfilter/nf_tables.h:1642:9
 when 3 is static:
   const
-    NFT_OBJECT_CT_HELPER* = 3 ## Generated based on /nix/store/sh3sjmgq543lfpjsq3dc0ksb6ckvhpdi-glibc-2.40-66-dev/include/linux/netfilter/nf_tables.h:1643:9
+    NFT_OBJECT_CT_HELPER* = 3 ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/netfilter/nf_tables.h:1643:9
 else:
-  let NFT_OBJECT_CT_HELPER* = 3 ## Generated based on /nix/store/sh3sjmgq543lfpjsq3dc0ksb6ckvhpdi-glibc-2.40-66-dev/include/linux/netfilter/nf_tables.h:1643:9
+  let NFT_OBJECT_CT_HELPER* = 3 ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/netfilter/nf_tables.h:1643:9
 when 4 is static:
   const
-    NFT_OBJECT_LIMIT* = 4    ## Generated based on /nix/store/sh3sjmgq543lfpjsq3dc0ksb6ckvhpdi-glibc-2.40-66-dev/include/linux/netfilter/nf_tables.h:1644:9
+    NFT_OBJECT_LIMIT* = 4    ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/netfilter/nf_tables.h:1644:9
 else:
-  let NFT_OBJECT_LIMIT* = 4  ## Generated based on /nix/store/sh3sjmgq543lfpjsq3dc0ksb6ckvhpdi-glibc-2.40-66-dev/include/linux/netfilter/nf_tables.h:1644:9
+  let NFT_OBJECT_LIMIT* = 4  ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/netfilter/nf_tables.h:1644:9
 when 5 is static:
   const
-    NFT_OBJECT_CONNLIMIT* = 5 ## Generated based on /nix/store/sh3sjmgq543lfpjsq3dc0ksb6ckvhpdi-glibc-2.40-66-dev/include/linux/netfilter/nf_tables.h:1645:9
+    NFT_OBJECT_CONNLIMIT* = 5 ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/netfilter/nf_tables.h:1645:9
 else:
-  let NFT_OBJECT_CONNLIMIT* = 5 ## Generated based on /nix/store/sh3sjmgq543lfpjsq3dc0ksb6ckvhpdi-glibc-2.40-66-dev/include/linux/netfilter/nf_tables.h:1645:9
+  let NFT_OBJECT_CONNLIMIT* = 5 ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/netfilter/nf_tables.h:1645:9
 when 6 is static:
   const
-    NFT_OBJECT_TUNNEL* = 6   ## Generated based on /nix/store/sh3sjmgq543lfpjsq3dc0ksb6ckvhpdi-glibc-2.40-66-dev/include/linux/netfilter/nf_tables.h:1646:9
+    NFT_OBJECT_TUNNEL* = 6   ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/netfilter/nf_tables.h:1646:9
 else:
-  let NFT_OBJECT_TUNNEL* = 6 ## Generated based on /nix/store/sh3sjmgq543lfpjsq3dc0ksb6ckvhpdi-glibc-2.40-66-dev/include/linux/netfilter/nf_tables.h:1646:9
+  let NFT_OBJECT_TUNNEL* = 6 ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/netfilter/nf_tables.h:1646:9
 when 7 is static:
   const
-    NFT_OBJECT_CT_TIMEOUT* = 7 ## Generated based on /nix/store/sh3sjmgq543lfpjsq3dc0ksb6ckvhpdi-glibc-2.40-66-dev/include/linux/netfilter/nf_tables.h:1647:9
+    NFT_OBJECT_CT_TIMEOUT* = 7 ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/netfilter/nf_tables.h:1647:9
 else:
-  let NFT_OBJECT_CT_TIMEOUT* = 7 ## Generated based on /nix/store/sh3sjmgq543lfpjsq3dc0ksb6ckvhpdi-glibc-2.40-66-dev/include/linux/netfilter/nf_tables.h:1647:9
+  let NFT_OBJECT_CT_TIMEOUT* = 7 ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/netfilter/nf_tables.h:1647:9
 when 8 is static:
   const
-    NFT_OBJECT_SECMARK* = 8  ## Generated based on /nix/store/sh3sjmgq543lfpjsq3dc0ksb6ckvhpdi-glibc-2.40-66-dev/include/linux/netfilter/nf_tables.h:1648:9
+    NFT_OBJECT_SECMARK* = 8  ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/netfilter/nf_tables.h:1648:9
 else:
-  let NFT_OBJECT_SECMARK* = 8 ## Generated based on /nix/store/sh3sjmgq543lfpjsq3dc0ksb6ckvhpdi-glibc-2.40-66-dev/include/linux/netfilter/nf_tables.h:1648:9
+  let NFT_OBJECT_SECMARK* = 8 ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/netfilter/nf_tables.h:1648:9
 when 9 is static:
   const
-    NFT_OBJECT_CT_EXPECT* = 9 ## Generated based on /nix/store/sh3sjmgq543lfpjsq3dc0ksb6ckvhpdi-glibc-2.40-66-dev/include/linux/netfilter/nf_tables.h:1649:9
+    NFT_OBJECT_CT_EXPECT* = 9 ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/netfilter/nf_tables.h:1649:9
 else:
-  let NFT_OBJECT_CT_EXPECT* = 9 ## Generated based on /nix/store/sh3sjmgq543lfpjsq3dc0ksb6ckvhpdi-glibc-2.40-66-dev/include/linux/netfilter/nf_tables.h:1649:9
+  let NFT_OBJECT_CT_EXPECT* = 9 ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/netfilter/nf_tables.h:1649:9
 when 10 is static:
   const
-    NFT_OBJECT_SYNPROXY* = 10 ## Generated based on /nix/store/sh3sjmgq543lfpjsq3dc0ksb6ckvhpdi-glibc-2.40-66-dev/include/linux/netfilter/nf_tables.h:1650:9
+    NFT_OBJECT_SYNPROXY* = 10 ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/netfilter/nf_tables.h:1650:9
 else:
-  let NFT_OBJECT_SYNPROXY* = 10 ## Generated based on /nix/store/sh3sjmgq543lfpjsq3dc0ksb6ckvhpdi-glibc-2.40-66-dev/include/linux/netfilter/nf_tables.h:1650:9
+  let NFT_OBJECT_SYNPROXY* = 10 ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/netfilter/nf_tables.h:1650:9
 when 11 is static:
   const
-    compiler_NFT_OBJECT_MAX* = 11 ## Generated based on /nix/store/sh3sjmgq543lfpjsq3dc0ksb6ckvhpdi-glibc-2.40-66-dev/include/linux/netfilter/nf_tables.h:1651:9
+    compiler_NFT_OBJECT_MAX* = 11 ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/netfilter/nf_tables.h:1651:9
 else:
-  let compiler_NFT_OBJECT_MAX* = 11 ## Generated based on /nix/store/sh3sjmgq543lfpjsq3dc0ksb6ckvhpdi-glibc-2.40-66-dev/include/linux/netfilter/nf_tables.h:1651:9
-when 0 is static:
-  const
-    NFNETLINK_V0* = 0        ## Generated based on /nix/store/sh3sjmgq543lfpjsq3dc0ksb6ckvhpdi-glibc-2.40-66-dev/include/linux/netfilter/nfnetlink.h:40:9
-else:
-  let NFNETLINK_V0* = 0      ## Generated based on /nix/store/sh3sjmgq543lfpjsq3dc0ksb6ckvhpdi-glibc-2.40-66-dev/include/linux/netfilter/nfnetlink.h:40:9
-when 0 is static:
-  const
-    NFNL_SUBSYS_NONE* = 0    ## Generated based on /nix/store/sh3sjmgq543lfpjsq3dc0ksb6ckvhpdi-glibc-2.40-66-dev/include/linux/netfilter/nfnetlink.h:51:9
-else:
-  let NFNL_SUBSYS_NONE* = 0  ## Generated based on /nix/store/sh3sjmgq543lfpjsq3dc0ksb6ckvhpdi-glibc-2.40-66-dev/include/linux/netfilter/nfnetlink.h:51:9
+  let compiler_NFT_OBJECT_MAX* = 11 ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/netfilter/nf_tables.h:1651:9
 when 1 is static:
   const
-    NFNL_SUBSYS_CTNETLINK* = 1 ## Generated based on /nix/store/sh3sjmgq543lfpjsq3dc0ksb6ckvhpdi-glibc-2.40-66-dev/include/linux/netfilter/nfnetlink.h:52:9
+    NF_NETLINK_CONNTRACK_NEW* = 1 ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/netfilter/nfnetlink_compat.h:10:9
 else:
-  let NFNL_SUBSYS_CTNETLINK* = 1 ## Generated based on /nix/store/sh3sjmgq543lfpjsq3dc0ksb6ckvhpdi-glibc-2.40-66-dev/include/linux/netfilter/nfnetlink.h:52:9
+  let NF_NETLINK_CONNTRACK_NEW* = 1 ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/netfilter/nfnetlink_compat.h:10:9
 when 2 is static:
   const
-    NFNL_SUBSYS_CTNETLINK_EXP* = 2 ## Generated based on /nix/store/sh3sjmgq543lfpjsq3dc0ksb6ckvhpdi-glibc-2.40-66-dev/include/linux/netfilter/nfnetlink.h:53:9
+    NF_NETLINK_CONNTRACK_UPDATE* = 2 ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/netfilter/nfnetlink_compat.h:11:9
 else:
-  let NFNL_SUBSYS_CTNETLINK_EXP* = 2 ## Generated based on /nix/store/sh3sjmgq543lfpjsq3dc0ksb6ckvhpdi-glibc-2.40-66-dev/include/linux/netfilter/nfnetlink.h:53:9
-when 3 is static:
-  const
-    NFNL_SUBSYS_QUEUE* = 3   ## Generated based on /nix/store/sh3sjmgq543lfpjsq3dc0ksb6ckvhpdi-glibc-2.40-66-dev/include/linux/netfilter/nfnetlink.h:54:9
-else:
-  let NFNL_SUBSYS_QUEUE* = 3 ## Generated based on /nix/store/sh3sjmgq543lfpjsq3dc0ksb6ckvhpdi-glibc-2.40-66-dev/include/linux/netfilter/nfnetlink.h:54:9
+  let NF_NETLINK_CONNTRACK_UPDATE* = 2 ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/netfilter/nfnetlink_compat.h:11:9
 when 4 is static:
   const
-    NFNL_SUBSYS_ULOG* = 4    ## Generated based on /nix/store/sh3sjmgq543lfpjsq3dc0ksb6ckvhpdi-glibc-2.40-66-dev/include/linux/netfilter/nfnetlink.h:55:9
+    NF_NETLINK_CONNTRACK_DESTROY* = 4 ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/netfilter/nfnetlink_compat.h:12:9
 else:
-  let NFNL_SUBSYS_ULOG* = 4  ## Generated based on /nix/store/sh3sjmgq543lfpjsq3dc0ksb6ckvhpdi-glibc-2.40-66-dev/include/linux/netfilter/nfnetlink.h:55:9
-when 5 is static:
-  const
-    NFNL_SUBSYS_OSF* = 5     ## Generated based on /nix/store/sh3sjmgq543lfpjsq3dc0ksb6ckvhpdi-glibc-2.40-66-dev/include/linux/netfilter/nfnetlink.h:56:9
-else:
-  let NFNL_SUBSYS_OSF* = 5   ## Generated based on /nix/store/sh3sjmgq543lfpjsq3dc0ksb6ckvhpdi-glibc-2.40-66-dev/include/linux/netfilter/nfnetlink.h:56:9
-when 6 is static:
-  const
-    NFNL_SUBSYS_IPSET* = 6   ## Generated based on /nix/store/sh3sjmgq543lfpjsq3dc0ksb6ckvhpdi-glibc-2.40-66-dev/include/linux/netfilter/nfnetlink.h:57:9
-else:
-  let NFNL_SUBSYS_IPSET* = 6 ## Generated based on /nix/store/sh3sjmgq543lfpjsq3dc0ksb6ckvhpdi-glibc-2.40-66-dev/include/linux/netfilter/nfnetlink.h:57:9
-when 7 is static:
-  const
-    NFNL_SUBSYS_ACCT* = 7    ## Generated based on /nix/store/sh3sjmgq543lfpjsq3dc0ksb6ckvhpdi-glibc-2.40-66-dev/include/linux/netfilter/nfnetlink.h:58:9
-else:
-  let NFNL_SUBSYS_ACCT* = 7  ## Generated based on /nix/store/sh3sjmgq543lfpjsq3dc0ksb6ckvhpdi-glibc-2.40-66-dev/include/linux/netfilter/nfnetlink.h:58:9
+  let NF_NETLINK_CONNTRACK_DESTROY* = 4 ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/netfilter/nfnetlink_compat.h:12:9
 when 8 is static:
   const
-    NFNL_SUBSYS_CTNETLINK_TIMEOUT* = 8 ## Generated based on /nix/store/sh3sjmgq543lfpjsq3dc0ksb6ckvhpdi-glibc-2.40-66-dev/include/linux/netfilter/nfnetlink.h:59:9
+    NF_NETLINK_CONNTRACK_EXP_NEW* = 8 ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/netfilter/nfnetlink_compat.h:13:9
 else:
-  let NFNL_SUBSYS_CTNETLINK_TIMEOUT* = 8 ## Generated based on /nix/store/sh3sjmgq543lfpjsq3dc0ksb6ckvhpdi-glibc-2.40-66-dev/include/linux/netfilter/nfnetlink.h:59:9
+  let NF_NETLINK_CONNTRACK_EXP_NEW* = 8 ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/netfilter/nfnetlink_compat.h:13:9
+when 16 is static:
+  const
+    NF_NETLINK_CONNTRACK_EXP_UPDATE* = 16 ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/netfilter/nfnetlink_compat.h:14:9
+else:
+  let NF_NETLINK_CONNTRACK_EXP_UPDATE* = 16 ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/netfilter/nfnetlink_compat.h:14:9
+when 32 is static:
+  const
+    NF_NETLINK_CONNTRACK_EXP_DESTROY* = 32 ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/netfilter/nfnetlink_compat.h:15:9
+else:
+  let NF_NETLINK_CONNTRACK_EXP_DESTROY* = 32 ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/netfilter/nfnetlink_compat.h:15:9
+when 32768 is static:
+  const
+    NFNL_NFA_NEST* = 32768   ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/netfilter/nfnetlink_compat.h:33:9
+else:
+  let NFNL_NFA_NEST* = 32768 ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/netfilter/nfnetlink_compat.h:33:9
+when 4 is static:
+  const
+    NFA_ALIGNTO* = 4         ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/netfilter/nfnetlink_compat.h:36:9
+else:
+  let NFA_ALIGNTO* = 4       ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/netfilter/nfnetlink_compat.h:36:9
+when 0 is static:
+  const
+    NFNETLINK_V0* = 0        ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/netfilter/nfnetlink.h:40:9
+else:
+  let NFNETLINK_V0* = 0      ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/netfilter/nfnetlink.h:40:9
+when 0 is static:
+  const
+    NFNL_SUBSYS_NONE* = 0    ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/netfilter/nfnetlink.h:51:9
+else:
+  let NFNL_SUBSYS_NONE* = 0  ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/netfilter/nfnetlink.h:51:9
+when 1 is static:
+  const
+    NFNL_SUBSYS_CTNETLINK* = 1 ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/netfilter/nfnetlink.h:52:9
+else:
+  let NFNL_SUBSYS_CTNETLINK* = 1 ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/netfilter/nfnetlink.h:52:9
+when 2 is static:
+  const
+    NFNL_SUBSYS_CTNETLINK_EXP* = 2 ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/netfilter/nfnetlink.h:53:9
+else:
+  let NFNL_SUBSYS_CTNETLINK_EXP* = 2 ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/netfilter/nfnetlink.h:53:9
+when 3 is static:
+  const
+    NFNL_SUBSYS_QUEUE* = 3   ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/netfilter/nfnetlink.h:54:9
+else:
+  let NFNL_SUBSYS_QUEUE* = 3 ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/netfilter/nfnetlink.h:54:9
+when 4 is static:
+  const
+    NFNL_SUBSYS_ULOG* = 4    ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/netfilter/nfnetlink.h:55:9
+else:
+  let NFNL_SUBSYS_ULOG* = 4  ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/netfilter/nfnetlink.h:55:9
+when 5 is static:
+  const
+    NFNL_SUBSYS_OSF* = 5     ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/netfilter/nfnetlink.h:56:9
+else:
+  let NFNL_SUBSYS_OSF* = 5   ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/netfilter/nfnetlink.h:56:9
+when 6 is static:
+  const
+    NFNL_SUBSYS_IPSET* = 6   ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/netfilter/nfnetlink.h:57:9
+else:
+  let NFNL_SUBSYS_IPSET* = 6 ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/netfilter/nfnetlink.h:57:9
+when 7 is static:
+  const
+    NFNL_SUBSYS_ACCT* = 7    ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/netfilter/nfnetlink.h:58:9
+else:
+  let NFNL_SUBSYS_ACCT* = 7  ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/netfilter/nfnetlink.h:58:9
+when 8 is static:
+  const
+    NFNL_SUBSYS_CTNETLINK_TIMEOUT* = 8 ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/netfilter/nfnetlink.h:59:9
+else:
+  let NFNL_SUBSYS_CTNETLINK_TIMEOUT* = 8 ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/netfilter/nfnetlink.h:59:9
 when 9 is static:
   const
-    NFNL_SUBSYS_CTHELPER* = 9 ## Generated based on /nix/store/sh3sjmgq543lfpjsq3dc0ksb6ckvhpdi-glibc-2.40-66-dev/include/linux/netfilter/nfnetlink.h:60:9
+    NFNL_SUBSYS_CTHELPER* = 9 ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/netfilter/nfnetlink.h:60:9
 else:
-  let NFNL_SUBSYS_CTHELPER* = 9 ## Generated based on /nix/store/sh3sjmgq543lfpjsq3dc0ksb6ckvhpdi-glibc-2.40-66-dev/include/linux/netfilter/nfnetlink.h:60:9
+  let NFNL_SUBSYS_CTHELPER* = 9 ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/netfilter/nfnetlink.h:60:9
 when 10 is static:
   const
-    NFNL_SUBSYS_NFTABLES* = 10 ## Generated based on /nix/store/sh3sjmgq543lfpjsq3dc0ksb6ckvhpdi-glibc-2.40-66-dev/include/linux/netfilter/nfnetlink.h:61:9
+    NFNL_SUBSYS_NFTABLES* = 10 ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/netfilter/nfnetlink.h:61:9
 else:
-  let NFNL_SUBSYS_NFTABLES* = 10 ## Generated based on /nix/store/sh3sjmgq543lfpjsq3dc0ksb6ckvhpdi-glibc-2.40-66-dev/include/linux/netfilter/nfnetlink.h:61:9
+  let NFNL_SUBSYS_NFTABLES* = 10 ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/netfilter/nfnetlink.h:61:9
 when 11 is static:
   const
-    NFNL_SUBSYS_NFT_COMPAT* = 11 ## Generated based on /nix/store/sh3sjmgq543lfpjsq3dc0ksb6ckvhpdi-glibc-2.40-66-dev/include/linux/netfilter/nfnetlink.h:62:9
+    NFNL_SUBSYS_NFT_COMPAT* = 11 ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/netfilter/nfnetlink.h:62:9
 else:
-  let NFNL_SUBSYS_NFT_COMPAT* = 11 ## Generated based on /nix/store/sh3sjmgq543lfpjsq3dc0ksb6ckvhpdi-glibc-2.40-66-dev/include/linux/netfilter/nfnetlink.h:62:9
+  let NFNL_SUBSYS_NFT_COMPAT* = 11 ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/netfilter/nfnetlink.h:62:9
 when 12 is static:
   const
-    NFNL_SUBSYS_HOOK* = 12   ## Generated based on /nix/store/sh3sjmgq543lfpjsq3dc0ksb6ckvhpdi-glibc-2.40-66-dev/include/linux/netfilter/nfnetlink.h:63:9
+    NFNL_SUBSYS_HOOK* = 12   ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/netfilter/nfnetlink.h:63:9
 else:
-  let NFNL_SUBSYS_HOOK* = 12 ## Generated based on /nix/store/sh3sjmgq543lfpjsq3dc0ksb6ckvhpdi-glibc-2.40-66-dev/include/linux/netfilter/nfnetlink.h:63:9
+  let NFNL_SUBSYS_HOOK* = 12 ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/netfilter/nfnetlink.h:63:9
 when 13 is static:
   const
-    NFNL_SUBSYS_COUNT* = 13  ## Generated based on /nix/store/sh3sjmgq543lfpjsq3dc0ksb6ckvhpdi-glibc-2.40-66-dev/include/linux/netfilter/nfnetlink.h:64:9
+    NFNL_SUBSYS_COUNT* = 13  ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/netfilter/nfnetlink.h:64:9
 else:
-  let NFNL_SUBSYS_COUNT* = 13 ## Generated based on /nix/store/sh3sjmgq543lfpjsq3dc0ksb6ckvhpdi-glibc-2.40-66-dev/include/linux/netfilter/nfnetlink.h:64:9
+  let NFNL_SUBSYS_COUNT* = 13 ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/netfilter/nfnetlink.h:64:9
 when NLMSG_MIN_TYPE is typedesc:
   type
-    NFNL_MSG_BATCH_BEGIN* = NLMSG_MIN_TYPE ## Generated based on /nix/store/sh3sjmgq543lfpjsq3dc0ksb6ckvhpdi-glibc-2.40-66-dev/include/linux/netfilter/nfnetlink.h:67:9
+    NFNL_MSG_BATCH_BEGIN* = NLMSG_MIN_TYPE ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/netfilter/nfnetlink.h:67:9
 else:
   when NLMSG_MIN_TYPE is static:
     const
-      NFNL_MSG_BATCH_BEGIN* = NLMSG_MIN_TYPE ## Generated based on /nix/store/sh3sjmgq543lfpjsq3dc0ksb6ckvhpdi-glibc-2.40-66-dev/include/linux/netfilter/nfnetlink.h:67:9
+      NFNL_MSG_BATCH_BEGIN* = NLMSG_MIN_TYPE ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/netfilter/nfnetlink.h:67:9
   else:
-    let NFNL_MSG_BATCH_BEGIN* = NLMSG_MIN_TYPE ## Generated based on /nix/store/sh3sjmgq543lfpjsq3dc0ksb6ckvhpdi-glibc-2.40-66-dev/include/linux/netfilter/nfnetlink.h:67:9
+    let NFNL_MSG_BATCH_BEGIN* = NLMSG_MIN_TYPE ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/netfilter/nfnetlink.h:67:9
+when 1 is static:
+  const
+    internal_LIBC_LIMITS_H_private* = 1 ## Generated based on /nix/store/sh3sjmgq543lfpjsq3dc0ksb6ckvhpdi-glibc-2.40-66-dev/include/limits.h:23:9
+else:
+  let internal_LIBC_LIMITS_H_private* = 1 ## Generated based on /nix/store/sh3sjmgq543lfpjsq3dc0ksb6ckvhpdi-glibc-2.40-66-dev/include/limits.h:23:9
+when 0 is static:
+  const
+    compiler_GLIBC_USE_LIB_EXT2* = 0 ## Generated based on /nix/store/sh3sjmgq543lfpjsq3dc0ksb6ckvhpdi-glibc-2.40-66-dev/include/bits/libc-header-start.h:42:10
+else:
+  let compiler_GLIBC_USE_LIB_EXT2* = 0 ## Generated based on /nix/store/sh3sjmgq543lfpjsq3dc0ksb6ckvhpdi-glibc-2.40-66-dev/include/bits/libc-header-start.h:42:10
+when 0 is static:
+  const
+    compiler_GLIBC_USE_IEC_60559_BFP_EXT* = 0 ## Generated based on /nix/store/sh3sjmgq543lfpjsq3dc0ksb6ckvhpdi-glibc-2.40-66-dev/include/bits/libc-header-start.h:71:10
+else:
+  let compiler_GLIBC_USE_IEC_60559_BFP_EXT* = 0 ## Generated based on /nix/store/sh3sjmgq543lfpjsq3dc0ksb6ckvhpdi-glibc-2.40-66-dev/include/bits/libc-header-start.h:71:10
+when 0 is static:
+  const
+    compiler_GLIBC_USE_IEC_60559_BFP_EXT_C23* = 0 ## Generated based on /nix/store/sh3sjmgq543lfpjsq3dc0ksb6ckvhpdi-glibc-2.40-66-dev/include/bits/libc-header-start.h:77:10
+else:
+  let compiler_GLIBC_USE_IEC_60559_BFP_EXT_C23* = 0 ## Generated based on /nix/store/sh3sjmgq543lfpjsq3dc0ksb6ckvhpdi-glibc-2.40-66-dev/include/bits/libc-header-start.h:77:10
+when 0 is static:
+  const
+    compiler_GLIBC_USE_IEC_60559_EXT* = 0 ## Generated based on /nix/store/sh3sjmgq543lfpjsq3dc0ksb6ckvhpdi-glibc-2.40-66-dev/include/bits/libc-header-start.h:83:10
+else:
+  let compiler_GLIBC_USE_IEC_60559_EXT* = 0 ## Generated based on /nix/store/sh3sjmgq543lfpjsq3dc0ksb6ckvhpdi-glibc-2.40-66-dev/include/bits/libc-header-start.h:83:10
+when 0 is static:
+  const
+    compiler_GLIBC_USE_IEC_60559_FUNCS_EXT* = 0 ## Generated based on /nix/store/sh3sjmgq543lfpjsq3dc0ksb6ckvhpdi-glibc-2.40-66-dev/include/bits/libc-header-start.h:94:10
+else:
+  let compiler_GLIBC_USE_IEC_60559_FUNCS_EXT* = 0 ## Generated based on /nix/store/sh3sjmgq543lfpjsq3dc0ksb6ckvhpdi-glibc-2.40-66-dev/include/bits/libc-header-start.h:94:10
+when 0 is static:
+  const
+    compiler_GLIBC_USE_IEC_60559_FUNCS_EXT_C23* = 0 ## Generated based on /nix/store/sh3sjmgq543lfpjsq3dc0ksb6ckvhpdi-glibc-2.40-66-dev/include/bits/libc-header-start.h:100:10
+else:
+  let compiler_GLIBC_USE_IEC_60559_FUNCS_EXT_C23* = 0 ## Generated based on /nix/store/sh3sjmgq543lfpjsq3dc0ksb6ckvhpdi-glibc-2.40-66-dev/include/bits/libc-header-start.h:100:10
+when 0 is static:
+  const
+    compiler_GLIBC_USE_IEC_60559_TYPES_EXT* = 0 ## Generated based on /nix/store/sh3sjmgq543lfpjsq3dc0ksb6ckvhpdi-glibc-2.40-66-dev/include/bits/libc-header-start.h:109:10
+else:
+  let compiler_GLIBC_USE_IEC_60559_TYPES_EXT* = 0 ## Generated based on /nix/store/sh3sjmgq543lfpjsq3dc0ksb6ckvhpdi-glibc-2.40-66-dev/include/bits/libc-header-start.h:109:10
+when 16 is static:
+  const
+    MB_LEN_MAX* = 16         ## Generated based on /nix/store/sh3sjmgq543lfpjsq3dc0ksb6ckvhpdi-glibc-2.40-66-dev/include/limits.h:32:9
+else:
+  let MB_LEN_MAX* = 16       ## Generated based on /nix/store/sh3sjmgq543lfpjsq3dc0ksb6ckvhpdi-glibc-2.40-66-dev/include/limits.h:32:9
+when 1 is static:
+  const
+    internal_BITS_POSIX1_LIM_H* = 1 ## Generated based on /nix/store/sh3sjmgq543lfpjsq3dc0ksb6ckvhpdi-glibc-2.40-66-dev/include/bits/posix1_lim.h:25:9
+else:
+  let internal_BITS_POSIX1_LIM_H* = 1 ## Generated based on /nix/store/sh3sjmgq543lfpjsq3dc0ksb6ckvhpdi-glibc-2.40-66-dev/include/bits/posix1_lim.h:25:9
+when 2 is static:
+  const
+    internal_POSIX_AIO_LISTIO_MAX* = 2 ## Generated based on /nix/store/sh3sjmgq543lfpjsq3dc0ksb6ckvhpdi-glibc-2.40-66-dev/include/bits/posix1_lim.h:32:9
+else:
+  let internal_POSIX_AIO_LISTIO_MAX* = 2 ## Generated based on /nix/store/sh3sjmgq543lfpjsq3dc0ksb6ckvhpdi-glibc-2.40-66-dev/include/bits/posix1_lim.h:32:9
+when 1 is static:
+  const
+    internal_POSIX_AIO_MAX* = 1 ## Generated based on /nix/store/sh3sjmgq543lfpjsq3dc0ksb6ckvhpdi-glibc-2.40-66-dev/include/bits/posix1_lim.h:35:9
+else:
+  let internal_POSIX_AIO_MAX* = 1 ## Generated based on /nix/store/sh3sjmgq543lfpjsq3dc0ksb6ckvhpdi-glibc-2.40-66-dev/include/bits/posix1_lim.h:35:9
+when 4096 is static:
+  const
+    internal_POSIX_ARG_MAX* = 4096 ## Generated based on /nix/store/sh3sjmgq543lfpjsq3dc0ksb6ckvhpdi-glibc-2.40-66-dev/include/bits/posix1_lim.h:38:9
+else:
+  let internal_POSIX_ARG_MAX* = 4096 ## Generated based on /nix/store/sh3sjmgq543lfpjsq3dc0ksb6ckvhpdi-glibc-2.40-66-dev/include/bits/posix1_lim.h:38:9
+when 25 is static:
+  const
+    internal_POSIX_CHILD_MAX* = 25 ## Generated based on /nix/store/sh3sjmgq543lfpjsq3dc0ksb6ckvhpdi-glibc-2.40-66-dev/include/bits/posix1_lim.h:42:10
+else:
+  let internal_POSIX_CHILD_MAX* = 25 ## Generated based on /nix/store/sh3sjmgq543lfpjsq3dc0ksb6ckvhpdi-glibc-2.40-66-dev/include/bits/posix1_lim.h:42:10
+when 32 is static:
+  const
+    internal_POSIX_DELAYTIMER_MAX* = 32 ## Generated based on /nix/store/sh3sjmgq543lfpjsq3dc0ksb6ckvhpdi-glibc-2.40-66-dev/include/bits/posix1_lim.h:48:9
+else:
+  let internal_POSIX_DELAYTIMER_MAX* = 32 ## Generated based on /nix/store/sh3sjmgq543lfpjsq3dc0ksb6ckvhpdi-glibc-2.40-66-dev/include/bits/posix1_lim.h:48:9
+when 255 is static:
+  const
+    internal_POSIX_HOST_NAME_MAX* = 255 ## Generated based on /nix/store/sh3sjmgq543lfpjsq3dc0ksb6ckvhpdi-glibc-2.40-66-dev/include/bits/posix1_lim.h:52:9
+else:
+  let internal_POSIX_HOST_NAME_MAX* = 255 ## Generated based on /nix/store/sh3sjmgq543lfpjsq3dc0ksb6ckvhpdi-glibc-2.40-66-dev/include/bits/posix1_lim.h:52:9
+when 8 is static:
+  const
+    internal_POSIX_LINK_MAX* = 8 ## Generated based on /nix/store/sh3sjmgq543lfpjsq3dc0ksb6ckvhpdi-glibc-2.40-66-dev/include/bits/posix1_lim.h:55:9
+else:
+  let internal_POSIX_LINK_MAX* = 8 ## Generated based on /nix/store/sh3sjmgq543lfpjsq3dc0ksb6ckvhpdi-glibc-2.40-66-dev/include/bits/posix1_lim.h:55:9
+when 9 is static:
+  const
+    internal_POSIX_LOGIN_NAME_MAX* = 9 ## Generated based on /nix/store/sh3sjmgq543lfpjsq3dc0ksb6ckvhpdi-glibc-2.40-66-dev/include/bits/posix1_lim.h:58:9
+else:
+  let internal_POSIX_LOGIN_NAME_MAX* = 9 ## Generated based on /nix/store/sh3sjmgq543lfpjsq3dc0ksb6ckvhpdi-glibc-2.40-66-dev/include/bits/posix1_lim.h:58:9
+when 255 is static:
+  const
+    internal_POSIX_MAX_CANON* = 255 ## Generated based on /nix/store/sh3sjmgq543lfpjsq3dc0ksb6ckvhpdi-glibc-2.40-66-dev/include/bits/posix1_lim.h:61:9
+else:
+  let internal_POSIX_MAX_CANON* = 255 ## Generated based on /nix/store/sh3sjmgq543lfpjsq3dc0ksb6ckvhpdi-glibc-2.40-66-dev/include/bits/posix1_lim.h:61:9
+when 255 is static:
+  const
+    internal_POSIX_MAX_INPUT* = 255 ## Generated based on /nix/store/sh3sjmgq543lfpjsq3dc0ksb6ckvhpdi-glibc-2.40-66-dev/include/bits/posix1_lim.h:65:9
+else:
+  let internal_POSIX_MAX_INPUT* = 255 ## Generated based on /nix/store/sh3sjmgq543lfpjsq3dc0ksb6ckvhpdi-glibc-2.40-66-dev/include/bits/posix1_lim.h:65:9
+when 8 is static:
+  const
+    internal_POSIX_MQ_OPEN_MAX* = 8 ## Generated based on /nix/store/sh3sjmgq543lfpjsq3dc0ksb6ckvhpdi-glibc-2.40-66-dev/include/bits/posix1_lim.h:68:9
+else:
+  let internal_POSIX_MQ_OPEN_MAX* = 8 ## Generated based on /nix/store/sh3sjmgq543lfpjsq3dc0ksb6ckvhpdi-glibc-2.40-66-dev/include/bits/posix1_lim.h:68:9
+when 32 is static:
+  const
+    internal_POSIX_MQ_PRIO_MAX* = 32 ## Generated based on /nix/store/sh3sjmgq543lfpjsq3dc0ksb6ckvhpdi-glibc-2.40-66-dev/include/bits/posix1_lim.h:71:9
+else:
+  let internal_POSIX_MQ_PRIO_MAX* = 32 ## Generated based on /nix/store/sh3sjmgq543lfpjsq3dc0ksb6ckvhpdi-glibc-2.40-66-dev/include/bits/posix1_lim.h:71:9
+when 14 is static:
+  const
+    internal_POSIX_NAME_MAX* = 14 ## Generated based on /nix/store/sh3sjmgq543lfpjsq3dc0ksb6ckvhpdi-glibc-2.40-66-dev/include/bits/posix1_lim.h:74:9
+else:
+  let internal_POSIX_NAME_MAX* = 14 ## Generated based on /nix/store/sh3sjmgq543lfpjsq3dc0ksb6ckvhpdi-glibc-2.40-66-dev/include/bits/posix1_lim.h:74:9
+when 8 is static:
+  const
+    internal_POSIX_NGROUPS_MAX* = 8 ## Generated based on /nix/store/sh3sjmgq543lfpjsq3dc0ksb6ckvhpdi-glibc-2.40-66-dev/include/bits/posix1_lim.h:78:10
+else:
+  let internal_POSIX_NGROUPS_MAX* = 8 ## Generated based on /nix/store/sh3sjmgq543lfpjsq3dc0ksb6ckvhpdi-glibc-2.40-66-dev/include/bits/posix1_lim.h:78:10
+when 20 is static:
+  const
+    internal_POSIX_OPEN_MAX* = 20 ## Generated based on /nix/store/sh3sjmgq543lfpjsq3dc0ksb6ckvhpdi-glibc-2.40-66-dev/include/bits/posix1_lim.h:85:10
+else:
+  let internal_POSIX_OPEN_MAX* = 20 ## Generated based on /nix/store/sh3sjmgq543lfpjsq3dc0ksb6ckvhpdi-glibc-2.40-66-dev/include/bits/posix1_lim.h:85:10
+when 256 is static:
+  const
+    internal_POSIX_PATH_MAX* = 256 ## Generated based on /nix/store/sh3sjmgq543lfpjsq3dc0ksb6ckvhpdi-glibc-2.40-66-dev/include/bits/posix1_lim.h:97:9
+else:
+  let internal_POSIX_PATH_MAX* = 256 ## Generated based on /nix/store/sh3sjmgq543lfpjsq3dc0ksb6ckvhpdi-glibc-2.40-66-dev/include/bits/posix1_lim.h:97:9
+when 512 is static:
+  const
+    internal_POSIX_PIPE_BUF* = 512 ## Generated based on /nix/store/sh3sjmgq543lfpjsq3dc0ksb6ckvhpdi-glibc-2.40-66-dev/include/bits/posix1_lim.h:100:9
+else:
+  let internal_POSIX_PIPE_BUF* = 512 ## Generated based on /nix/store/sh3sjmgq543lfpjsq3dc0ksb6ckvhpdi-glibc-2.40-66-dev/include/bits/posix1_lim.h:100:9
+when 255 is static:
+  const
+    internal_POSIX_RE_DUP_MAX* = 255 ## Generated based on /nix/store/sh3sjmgq543lfpjsq3dc0ksb6ckvhpdi-glibc-2.40-66-dev/include/bits/posix1_lim.h:104:9
+else:
+  let internal_POSIX_RE_DUP_MAX* = 255 ## Generated based on /nix/store/sh3sjmgq543lfpjsq3dc0ksb6ckvhpdi-glibc-2.40-66-dev/include/bits/posix1_lim.h:104:9
+when 8 is static:
+  const
+    internal_POSIX_RTSIG_MAX* = 8 ## Generated based on /nix/store/sh3sjmgq543lfpjsq3dc0ksb6ckvhpdi-glibc-2.40-66-dev/include/bits/posix1_lim.h:107:9
+else:
+  let internal_POSIX_RTSIG_MAX* = 8 ## Generated based on /nix/store/sh3sjmgq543lfpjsq3dc0ksb6ckvhpdi-glibc-2.40-66-dev/include/bits/posix1_lim.h:107:9
+when 256 is static:
+  const
+    internal_POSIX_SEM_NSEMS_MAX* = 256 ## Generated based on /nix/store/sh3sjmgq543lfpjsq3dc0ksb6ckvhpdi-glibc-2.40-66-dev/include/bits/posix1_lim.h:110:9
+else:
+  let internal_POSIX_SEM_NSEMS_MAX* = 256 ## Generated based on /nix/store/sh3sjmgq543lfpjsq3dc0ksb6ckvhpdi-glibc-2.40-66-dev/include/bits/posix1_lim.h:110:9
+when 32767 is static:
+  const
+    internal_POSIX_SEM_VALUE_MAX* = 32767 ## Generated based on /nix/store/sh3sjmgq543lfpjsq3dc0ksb6ckvhpdi-glibc-2.40-66-dev/include/bits/posix1_lim.h:113:9
+else:
+  let internal_POSIX_SEM_VALUE_MAX* = 32767 ## Generated based on /nix/store/sh3sjmgq543lfpjsq3dc0ksb6ckvhpdi-glibc-2.40-66-dev/include/bits/posix1_lim.h:113:9
+when 32 is static:
+  const
+    internal_POSIX_SIGQUEUE_MAX* = 32 ## Generated based on /nix/store/sh3sjmgq543lfpjsq3dc0ksb6ckvhpdi-glibc-2.40-66-dev/include/bits/posix1_lim.h:116:9
+else:
+  let internal_POSIX_SIGQUEUE_MAX* = 32 ## Generated based on /nix/store/sh3sjmgq543lfpjsq3dc0ksb6ckvhpdi-glibc-2.40-66-dev/include/bits/posix1_lim.h:116:9
+when 32767 is static:
+  const
+    internal_POSIX_SSIZE_MAX* = 32767 ## Generated based on /nix/store/sh3sjmgq543lfpjsq3dc0ksb6ckvhpdi-glibc-2.40-66-dev/include/bits/posix1_lim.h:119:9
+else:
+  let internal_POSIX_SSIZE_MAX* = 32767 ## Generated based on /nix/store/sh3sjmgq543lfpjsq3dc0ksb6ckvhpdi-glibc-2.40-66-dev/include/bits/posix1_lim.h:119:9
+when 8 is static:
+  const
+    internal_POSIX_STREAM_MAX* = 8 ## Generated based on /nix/store/sh3sjmgq543lfpjsq3dc0ksb6ckvhpdi-glibc-2.40-66-dev/include/bits/posix1_lim.h:122:9
+else:
+  let internal_POSIX_STREAM_MAX* = 8 ## Generated based on /nix/store/sh3sjmgq543lfpjsq3dc0ksb6ckvhpdi-glibc-2.40-66-dev/include/bits/posix1_lim.h:122:9
+when 255 is static:
+  const
+    internal_POSIX_SYMLINK_MAX* = 255 ## Generated based on /nix/store/sh3sjmgq543lfpjsq3dc0ksb6ckvhpdi-glibc-2.40-66-dev/include/bits/posix1_lim.h:125:9
+else:
+  let internal_POSIX_SYMLINK_MAX* = 255 ## Generated based on /nix/store/sh3sjmgq543lfpjsq3dc0ksb6ckvhpdi-glibc-2.40-66-dev/include/bits/posix1_lim.h:125:9
+when 8 is static:
+  const
+    internal_POSIX_SYMLOOP_MAX* = 8 ## Generated based on /nix/store/sh3sjmgq543lfpjsq3dc0ksb6ckvhpdi-glibc-2.40-66-dev/include/bits/posix1_lim.h:129:9
+else:
+  let internal_POSIX_SYMLOOP_MAX* = 8 ## Generated based on /nix/store/sh3sjmgq543lfpjsq3dc0ksb6ckvhpdi-glibc-2.40-66-dev/include/bits/posix1_lim.h:129:9
+when 32 is static:
+  const
+    internal_POSIX_TIMER_MAX* = 32 ## Generated based on /nix/store/sh3sjmgq543lfpjsq3dc0ksb6ckvhpdi-glibc-2.40-66-dev/include/bits/posix1_lim.h:132:9
+else:
+  let internal_POSIX_TIMER_MAX* = 32 ## Generated based on /nix/store/sh3sjmgq543lfpjsq3dc0ksb6ckvhpdi-glibc-2.40-66-dev/include/bits/posix1_lim.h:132:9
+when 9 is static:
+  const
+    internal_POSIX_TTY_NAME_MAX* = 9 ## Generated based on /nix/store/sh3sjmgq543lfpjsq3dc0ksb6ckvhpdi-glibc-2.40-66-dev/include/bits/posix1_lim.h:135:9
+else:
+  let internal_POSIX_TTY_NAME_MAX* = 9 ## Generated based on /nix/store/sh3sjmgq543lfpjsq3dc0ksb6ckvhpdi-glibc-2.40-66-dev/include/bits/posix1_lim.h:135:9
+when 6 is static:
+  const
+    internal_POSIX_TZNAME_MAX* = 6 ## Generated based on /nix/store/sh3sjmgq543lfpjsq3dc0ksb6ckvhpdi-glibc-2.40-66-dev/include/bits/posix1_lim.h:139:10
+else:
+  let internal_POSIX_TZNAME_MAX* = 6 ## Generated based on /nix/store/sh3sjmgq543lfpjsq3dc0ksb6ckvhpdi-glibc-2.40-66-dev/include/bits/posix1_lim.h:139:10
+when 20000000 is static:
+  const
+    internal_POSIX_CLOCKRES_MIN* = 20000000 ## Generated based on /nix/store/sh3sjmgq543lfpjsq3dc0ksb6ckvhpdi-glibc-2.40-66-dev/include/bits/posix1_lim.h:157:9
+else:
+  let internal_POSIX_CLOCKRES_MIN* = 20000000 ## Generated based on /nix/store/sh3sjmgq543lfpjsq3dc0ksb6ckvhpdi-glibc-2.40-66-dev/include/bits/posix1_lim.h:157:9
+when 1024 is static:
+  const
+    NR_OPEN* = 1024          ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/limits.h:5:9
+else:
+  let NR_OPEN* = 1024        ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/limits.h:5:9
+when 65536 is static:
+  const
+    NGROUPS_MAX* = 65536     ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/limits.h:7:9
+else:
+  let NGROUPS_MAX* = 65536   ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/limits.h:7:9
+when 131072 is static:
+  const
+    ARG_MAX* = 131072        ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/limits.h:8:9
+else:
+  let ARG_MAX* = 131072      ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/limits.h:8:9
+when 127 is static:
+  const
+    LINK_MAX* = 127          ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/limits.h:9:9
+else:
+  let LINK_MAX* = 127        ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/limits.h:9:9
+when 255 is static:
+  const
+    MAX_CANON* = 255         ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/limits.h:10:9
+else:
+  let MAX_CANON* = 255       ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/limits.h:10:9
+when 255 is static:
+  const
+    MAX_INPUT* = 255         ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/limits.h:11:9
+else:
+  let MAX_INPUT* = 255       ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/limits.h:11:9
+when 255 is static:
+  const
+    NAME_MAX* = 255          ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/limits.h:12:9
+else:
+  let NAME_MAX* = 255        ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/limits.h:12:9
+when 4096 is static:
+  const
+    PATH_MAX* = 4096         ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/limits.h:13:9
+else:
+  let PATH_MAX* = 4096       ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/limits.h:13:9
+when 4096 is static:
+  const
+    PIPE_BUF* = 4096         ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/limits.h:14:9
+else:
+  let PIPE_BUF* = 4096       ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/limits.h:14:9
+when 255 is static:
+  const
+    XATTR_NAME_MAX* = 255    ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/limits.h:15:9
+else:
+  let XATTR_NAME_MAX* = 255  ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/limits.h:15:9
+when 65536 is static:
+  const
+    XATTR_SIZE_MAX* = 65536  ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/limits.h:16:9
+else:
+  let XATTR_SIZE_MAX* = 65536 ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/limits.h:16:9
+when 65536 is static:
+  const
+    XATTR_LIST_MAX* = 65536  ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/limits.h:17:9
+else:
+  let XATTR_LIST_MAX* = 65536 ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/limits.h:17:9
+when 32 is static:
+  const
+    RTSIG_MAX* = 32          ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/limits.h:19:9
+else:
+  let RTSIG_MAX* = 32        ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/limits.h:19:9
+when 128 is static:
+  const
+    internal_POSIX_THREAD_KEYS_MAX* = 128 ## Generated based on /nix/store/sh3sjmgq543lfpjsq3dc0ksb6ckvhpdi-glibc-2.40-66-dev/include/bits/local_lim.h:62:9
+else:
+  let internal_POSIX_THREAD_KEYS_MAX* = 128 ## Generated based on /nix/store/sh3sjmgq543lfpjsq3dc0ksb6ckvhpdi-glibc-2.40-66-dev/include/bits/local_lim.h:62:9
+when 1024 is static:
+  const
+    PTHREAD_KEYS_MAX* = 1024 ## Generated based on /nix/store/sh3sjmgq543lfpjsq3dc0ksb6ckvhpdi-glibc-2.40-66-dev/include/bits/local_lim.h:64:9
+else:
+  let PTHREAD_KEYS_MAX* = 1024 ## Generated based on /nix/store/sh3sjmgq543lfpjsq3dc0ksb6ckvhpdi-glibc-2.40-66-dev/include/bits/local_lim.h:64:9
+when 4 is static:
+  const
+    internal_POSIX_THREAD_DESTRUCTOR_ITERATIONS* = 4 ## Generated based on /nix/store/sh3sjmgq543lfpjsq3dc0ksb6ckvhpdi-glibc-2.40-66-dev/include/bits/local_lim.h:67:9
+else:
+  let internal_POSIX_THREAD_DESTRUCTOR_ITERATIONS* = 4 ## Generated based on /nix/store/sh3sjmgq543lfpjsq3dc0ksb6ckvhpdi-glibc-2.40-66-dev/include/bits/local_lim.h:67:9
+when internal_POSIX_THREAD_DESTRUCTOR_ITERATIONS is typedesc:
+  type
+    PTHREAD_DESTRUCTOR_ITERATIONS* = internal_POSIX_THREAD_DESTRUCTOR_ITERATIONS ## Generated based on /nix/store/sh3sjmgq543lfpjsq3dc0ksb6ckvhpdi-glibc-2.40-66-dev/include/bits/local_lim.h:69:9
+else:
+  when internal_POSIX_THREAD_DESTRUCTOR_ITERATIONS is static:
+    const
+      PTHREAD_DESTRUCTOR_ITERATIONS* = internal_POSIX_THREAD_DESTRUCTOR_ITERATIONS ## Generated based on /nix/store/sh3sjmgq543lfpjsq3dc0ksb6ckvhpdi-glibc-2.40-66-dev/include/bits/local_lim.h:69:9
+  else:
+    let PTHREAD_DESTRUCTOR_ITERATIONS* = internal_POSIX_THREAD_DESTRUCTOR_ITERATIONS ## Generated based on /nix/store/sh3sjmgq543lfpjsq3dc0ksb6ckvhpdi-glibc-2.40-66-dev/include/bits/local_lim.h:69:9
+when 64 is static:
+  const
+    internal_POSIX_THREAD_THREADS_MAX* = 64 ## Generated based on /nix/store/sh3sjmgq543lfpjsq3dc0ksb6ckvhpdi-glibc-2.40-66-dev/include/bits/local_lim.h:72:9
+else:
+  let internal_POSIX_THREAD_THREADS_MAX* = 64 ## Generated based on /nix/store/sh3sjmgq543lfpjsq3dc0ksb6ckvhpdi-glibc-2.40-66-dev/include/bits/local_lim.h:72:9
+when 20 is static:
+  const
+    AIO_PRIO_DELTA_MAX* = 20 ## Generated based on /nix/store/sh3sjmgq543lfpjsq3dc0ksb6ckvhpdi-glibc-2.40-66-dev/include/bits/local_lim.h:78:9
+else:
+  let AIO_PRIO_DELTA_MAX* = 20 ## Generated based on /nix/store/sh3sjmgq543lfpjsq3dc0ksb6ckvhpdi-glibc-2.40-66-dev/include/bits/local_lim.h:78:9
+when 131072 is static:
+  const
+    PTHREAD_STACK_MIN* = 131072 ## Generated based on /nix/store/sh3sjmgq543lfpjsq3dc0ksb6ckvhpdi-glibc-2.40-66-dev/include/bits/pthread_stack_min.h:22:9
+else:
+  let PTHREAD_STACK_MIN* = 131072 ## Generated based on /nix/store/sh3sjmgq543lfpjsq3dc0ksb6ckvhpdi-glibc-2.40-66-dev/include/bits/pthread_stack_min.h:22:9
+when 2147483647 is static:
+  const
+    DELAYTIMER_MAX* = 2147483647 ## Generated based on /nix/store/sh3sjmgq543lfpjsq3dc0ksb6ckvhpdi-glibc-2.40-66-dev/include/bits/local_lim.h:84:9
+else:
+  let DELAYTIMER_MAX* = 2147483647 ## Generated based on /nix/store/sh3sjmgq543lfpjsq3dc0ksb6ckvhpdi-glibc-2.40-66-dev/include/bits/local_lim.h:84:9
+when 32 is static:
+  const
+    TTY_NAME_MAX* = 32       ## Generated based on /nix/store/sh3sjmgq543lfpjsq3dc0ksb6ckvhpdi-glibc-2.40-66-dev/include/bits/local_lim.h:87:9
+else:
+  let TTY_NAME_MAX* = 32     ## Generated based on /nix/store/sh3sjmgq543lfpjsq3dc0ksb6ckvhpdi-glibc-2.40-66-dev/include/bits/local_lim.h:87:9
+when 256 is static:
+  const
+    LOGIN_NAME_MAX* = 256    ## Generated based on /nix/store/sh3sjmgq543lfpjsq3dc0ksb6ckvhpdi-glibc-2.40-66-dev/include/bits/local_lim.h:90:9
+else:
+  let LOGIN_NAME_MAX* = 256  ## Generated based on /nix/store/sh3sjmgq543lfpjsq3dc0ksb6ckvhpdi-glibc-2.40-66-dev/include/bits/local_lim.h:90:9
+when 64 is static:
+  const
+    HOST_NAME_MAX* = 64      ## Generated based on /nix/store/sh3sjmgq543lfpjsq3dc0ksb6ckvhpdi-glibc-2.40-66-dev/include/bits/local_lim.h:93:9
+else:
+  let HOST_NAME_MAX* = 64    ## Generated based on /nix/store/sh3sjmgq543lfpjsq3dc0ksb6ckvhpdi-glibc-2.40-66-dev/include/bits/local_lim.h:93:9
+when 32768 is static:
+  const
+    MQ_PRIO_MAX* = 32768     ## Generated based on /nix/store/sh3sjmgq543lfpjsq3dc0ksb6ckvhpdi-glibc-2.40-66-dev/include/bits/local_lim.h:96:9
+else:
+  let MQ_PRIO_MAX* = 32768   ## Generated based on /nix/store/sh3sjmgq543lfpjsq3dc0ksb6ckvhpdi-glibc-2.40-66-dev/include/bits/local_lim.h:96:9
+when 2147483647 is static:
+  const
+    SEM_VALUE_MAX* = 2147483647 ## Generated based on /nix/store/sh3sjmgq543lfpjsq3dc0ksb6ckvhpdi-glibc-2.40-66-dev/include/bits/local_lim.h:99:9
+else:
+  let SEM_VALUE_MAX* = 2147483647 ## Generated based on /nix/store/sh3sjmgq543lfpjsq3dc0ksb6ckvhpdi-glibc-2.40-66-dev/include/bits/local_lim.h:99:9
+when 1 is static:
+  const
+    internal_BITS_POSIX2_LIM_H* = 1 ## Generated based on /nix/store/sh3sjmgq543lfpjsq3dc0ksb6ckvhpdi-glibc-2.40-66-dev/include/bits/posix2_lim.h:23:9
+else:
+  let internal_BITS_POSIX2_LIM_H* = 1 ## Generated based on /nix/store/sh3sjmgq543lfpjsq3dc0ksb6ckvhpdi-glibc-2.40-66-dev/include/bits/posix2_lim.h:23:9
+when 99 is static:
+  const
+    internal_POSIX2_BC_BASE_MAX* = 99 ## Generated based on /nix/store/sh3sjmgq543lfpjsq3dc0ksb6ckvhpdi-glibc-2.40-66-dev/include/bits/posix2_lim.h:27:9
+else:
+  let internal_POSIX2_BC_BASE_MAX* = 99 ## Generated based on /nix/store/sh3sjmgq543lfpjsq3dc0ksb6ckvhpdi-glibc-2.40-66-dev/include/bits/posix2_lim.h:27:9
+when 2048 is static:
+  const
+    internal_POSIX2_BC_DIM_MAX* = 2048 ## Generated based on /nix/store/sh3sjmgq543lfpjsq3dc0ksb6ckvhpdi-glibc-2.40-66-dev/include/bits/posix2_lim.h:30:9
+else:
+  let internal_POSIX2_BC_DIM_MAX* = 2048 ## Generated based on /nix/store/sh3sjmgq543lfpjsq3dc0ksb6ckvhpdi-glibc-2.40-66-dev/include/bits/posix2_lim.h:30:9
+when 99 is static:
+  const
+    internal_POSIX2_BC_SCALE_MAX* = 99 ## Generated based on /nix/store/sh3sjmgq543lfpjsq3dc0ksb6ckvhpdi-glibc-2.40-66-dev/include/bits/posix2_lim.h:33:9
+else:
+  let internal_POSIX2_BC_SCALE_MAX* = 99 ## Generated based on /nix/store/sh3sjmgq543lfpjsq3dc0ksb6ckvhpdi-glibc-2.40-66-dev/include/bits/posix2_lim.h:33:9
+when 1000 is static:
+  const
+    internal_POSIX2_BC_STRING_MAX* = 1000 ## Generated based on /nix/store/sh3sjmgq543lfpjsq3dc0ksb6ckvhpdi-glibc-2.40-66-dev/include/bits/posix2_lim.h:36:9
+else:
+  let internal_POSIX2_BC_STRING_MAX* = 1000 ## Generated based on /nix/store/sh3sjmgq543lfpjsq3dc0ksb6ckvhpdi-glibc-2.40-66-dev/include/bits/posix2_lim.h:36:9
+when 2 is static:
+  const
+    internal_POSIX2_COLL_WEIGHTS_MAX* = 2 ## Generated based on /nix/store/sh3sjmgq543lfpjsq3dc0ksb6ckvhpdi-glibc-2.40-66-dev/include/bits/posix2_lim.h:40:9
+else:
+  let internal_POSIX2_COLL_WEIGHTS_MAX* = 2 ## Generated based on /nix/store/sh3sjmgq543lfpjsq3dc0ksb6ckvhpdi-glibc-2.40-66-dev/include/bits/posix2_lim.h:40:9
+when 32 is static:
+  const
+    internal_POSIX2_EXPR_NEST_MAX* = 32 ## Generated based on /nix/store/sh3sjmgq543lfpjsq3dc0ksb6ckvhpdi-glibc-2.40-66-dev/include/bits/posix2_lim.h:44:9
+else:
+  let internal_POSIX2_EXPR_NEST_MAX* = 32 ## Generated based on /nix/store/sh3sjmgq543lfpjsq3dc0ksb6ckvhpdi-glibc-2.40-66-dev/include/bits/posix2_lim.h:44:9
+when 2048 is static:
+  const
+    internal_POSIX2_LINE_MAX* = 2048 ## Generated based on /nix/store/sh3sjmgq543lfpjsq3dc0ksb6ckvhpdi-glibc-2.40-66-dev/include/bits/posix2_lim.h:47:9
+else:
+  let internal_POSIX2_LINE_MAX* = 2048 ## Generated based on /nix/store/sh3sjmgq543lfpjsq3dc0ksb6ckvhpdi-glibc-2.40-66-dev/include/bits/posix2_lim.h:47:9
+when 255 is static:
+  const
+    internal_POSIX2_RE_DUP_MAX* = 255 ## Generated based on /nix/store/sh3sjmgq543lfpjsq3dc0ksb6ckvhpdi-glibc-2.40-66-dev/include/bits/posix2_lim.h:51:9
+else:
+  let internal_POSIX2_RE_DUP_MAX* = 255 ## Generated based on /nix/store/sh3sjmgq543lfpjsq3dc0ksb6ckvhpdi-glibc-2.40-66-dev/include/bits/posix2_lim.h:51:9
+when 14 is static:
+  const
+    internal_POSIX2_CHARCLASS_NAME_MAX* = 14 ## Generated based on /nix/store/sh3sjmgq543lfpjsq3dc0ksb6ckvhpdi-glibc-2.40-66-dev/include/bits/posix2_lim.h:55:9
+else:
+  let internal_POSIX2_CHARCLASS_NAME_MAX* = 14 ## Generated based on /nix/store/sh3sjmgq543lfpjsq3dc0ksb6ckvhpdi-glibc-2.40-66-dev/include/bits/posix2_lim.h:55:9
+when internal_POSIX2_BC_BASE_MAX is typedesc:
+  type
+    BC_BASE_MAX* = internal_POSIX2_BC_BASE_MAX ## Generated based on /nix/store/sh3sjmgq543lfpjsq3dc0ksb6ckvhpdi-glibc-2.40-66-dev/include/bits/posix2_lim.h:63:9
+else:
+  when internal_POSIX2_BC_BASE_MAX is static:
+    const
+      BC_BASE_MAX* = internal_POSIX2_BC_BASE_MAX ## Generated based on /nix/store/sh3sjmgq543lfpjsq3dc0ksb6ckvhpdi-glibc-2.40-66-dev/include/bits/posix2_lim.h:63:9
+  else:
+    let BC_BASE_MAX* = internal_POSIX2_BC_BASE_MAX ## Generated based on /nix/store/sh3sjmgq543lfpjsq3dc0ksb6ckvhpdi-glibc-2.40-66-dev/include/bits/posix2_lim.h:63:9
+when internal_POSIX2_BC_DIM_MAX is typedesc:
+  type
+    BC_DIM_MAX* = internal_POSIX2_BC_DIM_MAX ## Generated based on /nix/store/sh3sjmgq543lfpjsq3dc0ksb6ckvhpdi-glibc-2.40-66-dev/include/bits/posix2_lim.h:66:9
+else:
+  when internal_POSIX2_BC_DIM_MAX is static:
+    const
+      BC_DIM_MAX* = internal_POSIX2_BC_DIM_MAX ## Generated based on /nix/store/sh3sjmgq543lfpjsq3dc0ksb6ckvhpdi-glibc-2.40-66-dev/include/bits/posix2_lim.h:66:9
+  else:
+    let BC_DIM_MAX* = internal_POSIX2_BC_DIM_MAX ## Generated based on /nix/store/sh3sjmgq543lfpjsq3dc0ksb6ckvhpdi-glibc-2.40-66-dev/include/bits/posix2_lim.h:66:9
+when internal_POSIX2_BC_SCALE_MAX is typedesc:
+  type
+    BC_SCALE_MAX* = internal_POSIX2_BC_SCALE_MAX ## Generated based on /nix/store/sh3sjmgq543lfpjsq3dc0ksb6ckvhpdi-glibc-2.40-66-dev/include/bits/posix2_lim.h:69:9
+else:
+  when internal_POSIX2_BC_SCALE_MAX is static:
+    const
+      BC_SCALE_MAX* = internal_POSIX2_BC_SCALE_MAX ## Generated based on /nix/store/sh3sjmgq543lfpjsq3dc0ksb6ckvhpdi-glibc-2.40-66-dev/include/bits/posix2_lim.h:69:9
+  else:
+    let BC_SCALE_MAX* = internal_POSIX2_BC_SCALE_MAX ## Generated based on /nix/store/sh3sjmgq543lfpjsq3dc0ksb6ckvhpdi-glibc-2.40-66-dev/include/bits/posix2_lim.h:69:9
+when internal_POSIX2_BC_STRING_MAX is typedesc:
+  type
+    BC_STRING_MAX* = internal_POSIX2_BC_STRING_MAX ## Generated based on /nix/store/sh3sjmgq543lfpjsq3dc0ksb6ckvhpdi-glibc-2.40-66-dev/include/bits/posix2_lim.h:72:9
+else:
+  when internal_POSIX2_BC_STRING_MAX is static:
+    const
+      BC_STRING_MAX* = internal_POSIX2_BC_STRING_MAX ## Generated based on /nix/store/sh3sjmgq543lfpjsq3dc0ksb6ckvhpdi-glibc-2.40-66-dev/include/bits/posix2_lim.h:72:9
+  else:
+    let BC_STRING_MAX* = internal_POSIX2_BC_STRING_MAX ## Generated based on /nix/store/sh3sjmgq543lfpjsq3dc0ksb6ckvhpdi-glibc-2.40-66-dev/include/bits/posix2_lim.h:72:9
+when 255 is static:
+  const
+    COLL_WEIGHTS_MAX* = 255  ## Generated based on /nix/store/sh3sjmgq543lfpjsq3dc0ksb6ckvhpdi-glibc-2.40-66-dev/include/bits/posix2_lim.h:75:9
+else:
+  let COLL_WEIGHTS_MAX* = 255 ## Generated based on /nix/store/sh3sjmgq543lfpjsq3dc0ksb6ckvhpdi-glibc-2.40-66-dev/include/bits/posix2_lim.h:75:9
+when internal_POSIX2_EXPR_NEST_MAX is typedesc:
+  type
+    EXPR_NEST_MAX* = internal_POSIX2_EXPR_NEST_MAX ## Generated based on /nix/store/sh3sjmgq543lfpjsq3dc0ksb6ckvhpdi-glibc-2.40-66-dev/include/bits/posix2_lim.h:78:9
+else:
+  when internal_POSIX2_EXPR_NEST_MAX is static:
+    const
+      EXPR_NEST_MAX* = internal_POSIX2_EXPR_NEST_MAX ## Generated based on /nix/store/sh3sjmgq543lfpjsq3dc0ksb6ckvhpdi-glibc-2.40-66-dev/include/bits/posix2_lim.h:78:9
+  else:
+    let EXPR_NEST_MAX* = internal_POSIX2_EXPR_NEST_MAX ## Generated based on /nix/store/sh3sjmgq543lfpjsq3dc0ksb6ckvhpdi-glibc-2.40-66-dev/include/bits/posix2_lim.h:78:9
+when internal_POSIX2_LINE_MAX is typedesc:
+  type
+    LINE_MAX* = internal_POSIX2_LINE_MAX ## Generated based on /nix/store/sh3sjmgq543lfpjsq3dc0ksb6ckvhpdi-glibc-2.40-66-dev/include/bits/posix2_lim.h:81:9
+else:
+  when internal_POSIX2_LINE_MAX is static:
+    const
+      LINE_MAX* = internal_POSIX2_LINE_MAX ## Generated based on /nix/store/sh3sjmgq543lfpjsq3dc0ksb6ckvhpdi-glibc-2.40-66-dev/include/bits/posix2_lim.h:81:9
+  else:
+    let LINE_MAX* = internal_POSIX2_LINE_MAX ## Generated based on /nix/store/sh3sjmgq543lfpjsq3dc0ksb6ckvhpdi-glibc-2.40-66-dev/include/bits/posix2_lim.h:81:9
+when 2048 is static:
+  const
+    CHARCLASS_NAME_MAX* = 2048 ## Generated based on /nix/store/sh3sjmgq543lfpjsq3dc0ksb6ckvhpdi-glibc-2.40-66-dev/include/bits/posix2_lim.h:84:9
+else:
+  let CHARCLASS_NAME_MAX* = 2048 ## Generated based on /nix/store/sh3sjmgq543lfpjsq3dc0ksb6ckvhpdi-glibc-2.40-66-dev/include/bits/posix2_lim.h:84:9
+when 32767 is static:
+  const
+    RE_DUP_MAX* = 32767      ## Generated based on /nix/store/sh3sjmgq543lfpjsq3dc0ksb6ckvhpdi-glibc-2.40-66-dev/include/bits/posix2_lim.h:88:9
+else:
+  let RE_DUP_MAX* = 32767    ## Generated based on /nix/store/sh3sjmgq543lfpjsq3dc0ksb6ckvhpdi-glibc-2.40-66-dev/include/bits/posix2_lim.h:88:9
+when 0 is static:
+  const
+    NF_IP_PRE_ROUTING* = 0   ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/netfilter_ipv4.h:17:9
+else:
+  let NF_IP_PRE_ROUTING* = 0 ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/netfilter_ipv4.h:17:9
+when 1 is static:
+  const
+    NF_IP_LOCAL_IN* = 1      ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/netfilter_ipv4.h:19:9
+else:
+  let NF_IP_LOCAL_IN* = 1    ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/netfilter_ipv4.h:19:9
+when 2 is static:
+  const
+    NF_IP_FORWARD* = 2       ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/netfilter_ipv4.h:21:9
+else:
+  let NF_IP_FORWARD* = 2     ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/netfilter_ipv4.h:21:9
+when 3 is static:
+  const
+    NF_IP_LOCAL_OUT* = 3     ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/netfilter_ipv4.h:23:9
+else:
+  let NF_IP_LOCAL_OUT* = 3   ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/netfilter_ipv4.h:23:9
+when 4 is static:
+  const
+    NF_IP_POST_ROUTING* = 4  ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/netfilter_ipv4.h:25:9
+else:
+  let NF_IP_POST_ROUTING* = 4 ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/netfilter_ipv4.h:25:9
+when 5 is static:
+  const
+    NF_IP_NUMHOOKS* = 5      ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/netfilter_ipv4.h:26:9
+else:
+  let NF_IP_NUMHOOKS* = 5    ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/netfilter_ipv4.h:26:9
+when 80 is static:
+  const
+    SO_ORIGINAL_DST* = 80    ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/netfilter_ipv4.h:50:9
+else:
+  let SO_ORIGINAL_DST* = 80  ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/netfilter_ipv4.h:50:9
+when 0 is static:
+  const
+    NF_IP6_PRE_ROUTING* = 0  ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/netfilter_ipv6.h:20:9
+else:
+  let NF_IP6_PRE_ROUTING* = 0 ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/netfilter_ipv6.h:20:9
+when 1 is static:
+  const
+    NF_IP6_LOCAL_IN* = 1     ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/netfilter_ipv6.h:22:9
+else:
+  let NF_IP6_LOCAL_IN* = 1   ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/netfilter_ipv6.h:22:9
+when 2 is static:
+  const
+    NF_IP6_FORWARD* = 2      ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/netfilter_ipv6.h:24:9
+else:
+  let NF_IP6_FORWARD* = 2    ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/netfilter_ipv6.h:24:9
+when 3 is static:
+  const
+    NF_IP6_LOCAL_OUT* = 3    ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/netfilter_ipv6.h:26:9
+else:
+  let NF_IP6_LOCAL_OUT* = 3  ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/netfilter_ipv6.h:26:9
+when 4 is static:
+  const
+    NF_IP6_POST_ROUTING* = 4 ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/netfilter_ipv6.h:28:9
+else:
+  let NF_IP6_POST_ROUTING* = 4 ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/netfilter_ipv6.h:28:9
+when 5 is static:
+  const
+    NF_IP6_NUMHOOKS* = 5     ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/netfilter_ipv6.h:29:9
+else:
+  let NF_IP6_NUMHOOKS* = 5   ## Generated based on /nix/store/8i3h1i2g3f08l1klnr0q0j3jd7f8w4yg-linux-headers-6.12.7/include/linux/netfilter_ipv6.h:29:9
 proc select*(compiler_nfds: cint; compiler_readfds: ptr fd_set;
              compiler_writefds: ptr fd_set; compiler_exceptfds: ptr fd_set;
              compiler_timeout: ptr struct_timeval): cint {.cdecl,

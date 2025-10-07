@@ -54,13 +54,6 @@ suite "nftnl RAII and move-only semantics":
     check e1.raw.isNil
     check not e2.raw.isNil
 
-  # Ownership transfer into Rule
-  test "Expression added to Rule transfers ownership":
-    var r = Rule.create()
-    var e = Expression.create("cmp")
-    r.addExpr(e) # sink param moves e into r
-    check e.raw.isNil
-
   # Scope exit (no double free)
   test "Move temporary Table then scope-exit frees cleanly":
     var t2: Table

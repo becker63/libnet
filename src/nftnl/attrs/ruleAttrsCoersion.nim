@@ -29,11 +29,16 @@ proc rawGetAttr*[T](r: ptr struct_nftnl_rule, attr: uint16): T =
 proc rawSetAttr*[T](r: ptr struct_nftnl_rule, attr: uint16, v: T) =
   when T is string:
     rawSetAttr(r, attr, v)
-  elif T is SomeInteger:
+  elif T is SomeInteger: # handle int-like
     when sizeof(T) <= 4:
       rawSetAttr(r, attr, v.uint32)
     else:
       rawSetAttr(r, attr, v.uint64)
+  elif T is enum: # allow enums directly
+    when sizeof(ord(v)) <= 4:
+      rawSetAttr(r, attr, ord(v).uint32)
+    else:
+      rawSetAttr(r, attr, ord(v).uint64)
   elif T is uint32:
     rawSetAttr(r, attr, v)
   elif T is uint64:

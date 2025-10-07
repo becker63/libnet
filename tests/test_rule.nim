@@ -1,25 +1,32 @@
 import unittest
 import libnet
 
-suite "nftnl rule expr iteration":
-  test "add and iterate expressions (sugar)":
-    # create a rule using sugar constructor
-    var r = newRule(AF_INET, "filter", "input")
+suite "nftnl Rule RAII and props":
+  # Allocation / Freeing
+  test "Rule alloc/free":
+    var r = Rule.create()
+    check not r.raw.isNil
 
-    # build expressions using high-level builders
-    let cmpE = cmpEq(1, 0, "abcd") # from cmpprops
-    let payloadE = payloadExpr("transport", 8'u32, 2'u32) # from exprprops
+  # Move semantics
+  test "Rule move transfers ownership":
+    var r1 = Rule.create()
+    var r2 = move r1
+    check r1.raw.isNil
+    check not r2.raw.isNil
 
-    # add expressions safely (auto-move)
-    r.add(cmpE)
-    r.add(payloadE)
+  # Property setters/getters
+  test "Rule basic properties":
+    var r = Rule.create()
+    r.family = AF_INET.uint32
+    r.table = "filter"
+    r.chain = "input"
 
-    # iterate expressions and collect kinds
-    var kinds: seq[string]
-    for e in exprIter(r):
-      kinds.add(e.kind)
+    check r.family == AF_INET.uint32
+    check r.table == "filter"
+    check r.chain == "input"
 
-    # assertions
-    check kinds.len == 2
-    check "cmp" in kinds
-    check "payload" in kinds
+  # Ensure userdata roundtrip works
+  test "Rule userdata property":
+    var r = Rule.create()
+    r.userdata = "customdata"
+    check r.userdata == "customdata"

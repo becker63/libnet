@@ -2,19 +2,29 @@
 
 # Generate libnftnl bindings
 gen-nftnl:
-    nim r -d:useFuthark -d:nodeclguards src/nftnl/generator.nim
+    nim r -d:useFuthark -d:nodeclguards -d:futharkRebuild src/nftnl/generator.nim
 
 gen-linux:
-    nim r -d:useFuthark -d:nodeclguards src/linux/generator.nim
+    nim r -d:useFuthark -d:nodeclguards -d:futharkRebuild src/linux/generator.nim
+
+gen-mnl:
+    nim r -d:useFuthark -d:nodeclguards -d:futharkRebuild src/mnl/generator.nim
 
 # Run all generators
 gen:
     just gen-linux
     just gen-nftnl
+    just gen-mnl
 
 # Run tests
 test-all:
     nim r tests/all_tests.nim
+
+test-snprintf:
+    nim r tests/snprintf.nim
+
+test-base_chain:
+    nim r tests/base_chain.nim
 
 clean:
     find . -type f -exec sh -c 'file -b "$1" | grep -q ELF && rm "$1"' _ {} \;
