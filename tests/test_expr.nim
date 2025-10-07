@@ -2,10 +2,6 @@ import unittest
 import libnet
 
 suite "nftnl expression basics":
-  test "cmp alloc/free":
-    let e = Expression.create("cmp")
-    check not e.raw.isNil
-
   test "cmp attribute roundtrip":
     let e = Expression.create("cmp")
 

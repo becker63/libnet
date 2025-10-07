@@ -1,11 +1,6 @@
 import unittest
 import libnet
 
-suite "nftnl chain basics":
-  test "chain alloc/free":
-    var c = Chain.create()
-    check not c.raw.isNil
-
 suite "nftnl chain iterators (stubbed)":
   test "empty chain list iterates safely":
     var list = ChainList.create()

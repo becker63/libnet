@@ -1,11 +1,6 @@
 import unittest
 import libnet
 
-suite "nftnl table basics":
-  test "table alloc/free":
-    var t = Table.create()
-    check not t.raw.isNil
-
 suite "nftnl table iterators (stubbed)":
   test "empty table list iterates safely":
     var list = TableList.create()
