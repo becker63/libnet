@@ -7,8 +7,8 @@ template defChainProp(attr: static enum_nftnl_chain_attr, propName: untyped) =
   proc propName*(c: Chain): expectedType(attr) =
     c.getAttr(attr)
 
-  proc `propName=`*(c: Chain, v: auto) =
-    c.setAttr(attr, v) # let rawSetAttr handle coercion
+  proc `propName=`*(c: Chain, v: expectedType(attr)) =
+    c.setAttr(attr, v)
 
 # String properties
 defChainProp(NFTNL_CHAIN_NAME, name)

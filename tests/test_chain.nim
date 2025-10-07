@@ -10,43 +10,21 @@ suite "nftnl chain iterators (stubbed)":
       inc count
     check count == 0
 
-suite "nftnl chain attr typing compile time":
-  test "string attrs accept only string":
-    static:
-      var c: Chain
-      doAssert compiles(c.setAttr(NFTNL_CHAIN_NAME, "ok"))
-      doAssert compiles(c.getAttr(NFTNL_CHAIN_NAME))
-      doAssert not compiles(c.setAttr(NFTNL_CHAIN_NAME, 123))
-
-  test "uint32 attrs accept only integer types":
-    static:
-      var c: Chain
-      doAssert compiles(c.setAttr(NFTNL_CHAIN_FAMILY, 1))
-      doAssert compiles(c.getAttr(NFTNL_CHAIN_FAMILY))
-      doAssert not compiles(c.setAttr(NFTNL_CHAIN_FAMILY, "nope"))
-
-  test "uint64 attrs accept only 64-bit ints":
-    static:
-      var c: Chain
-      doAssert compiles(c.setAttr(NFTNL_CHAIN_HANDLE, 42))
-      doAssert compiles(c.getAttr(NFTNL_CHAIN_HANDLE))
-      doAssert not compiles(c.setAttr(NFTNL_CHAIN_HANDLE, "wrong"))
-
-suite "nftnl chain attr typing":
-  test "string attrs roundtrip":
+suite "nftnl chain props typing (runtime)":
+  test "string props roundtrip":
     var c = Chain.create()
-    c.setAttr(NFTNL_CHAIN_NAME, "roundtrip")
-    check c.getAttr(NFTNL_CHAIN_NAME) == "roundtrip"
+    c.name = "roundtrip"
+    check c.name == "roundtrip"
 
-  test "uint32 attrs roundtrip":
+  test "uint32 props roundtrip":
     var c = Chain.create()
-    c.setAttr(NFTNL_CHAIN_FAMILY, AF_INET)
-    check c.getAttr(NFTNL_CHAIN_FAMILY) == AF_INET
+    c.family = AF_INET
+    check c.family == AF_INET
 
-  test "uint64 attrs roundtrip":
+  test "uint64 props roundtrip":
     var c = Chain.create()
-    c.setAttr(NFTNL_CHAIN_HANDLE, 12345)
-    check c.getAttr(NFTNL_CHAIN_HANDLE) == 12345
+    c.handle = 12345'u64
+    check c.handle == 12345'u64
 
 suite "nftnl chain props sugar":
   test "chain.name roundtrip":
@@ -66,23 +44,23 @@ suite "nftnl chain props sugar":
 
   test "chain.hooknum roundtrip":
     var c = Chain.create()
-    c.hooknum = 1
-    check c.hooknum == 1
+    c.hooknum = 1'u32
+    check c.hooknum == 1'u32
 
   test "chain.prio roundtrip":
     var c = Chain.create()
-    c.prio = 5
-    check c.prio == 5
+    c.prio = 5'u32
+    check c.prio == 5'u32
 
   test "chain.policy roundtrip":
     var c = Chain.create()
-    c.policy = 0
-    check c.policy == 0
+    c.policy = 0'u32
+    check c.policy == 0'u32
 
   test "chain.handle roundtrip":
     var c = Chain.create()
-    c.handle = 99999
-    check c.handle == 99999
+    c.handle = 99999'u64
+    check c.handle == 99999'u64
 
   test "chain.userdata roundtrip":
     var c = Chain.create()

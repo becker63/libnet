@@ -29,8 +29,8 @@ export tableAttrsCoersion, chainAttrsCoersion, exprAttrsCoersion
 import nftnl/props/tableProps
 import nftnl/props/chainProps
 import nftnl/props/ruleProps
-import nftnl/props/expr/cmpProps
-export tableProps, chainProps, ruleProps, cmpProps
+import nftnl/props/exprProps
+export tableProps, chainProps, ruleProps, exprProps
 
 import messageBuilder
 export messageBuilder

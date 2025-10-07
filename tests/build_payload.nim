@@ -14,7 +14,7 @@ suite "libnet integration test":
     c.table = "filter"
     c.name = "input"
     c.typeName = "filter"
-    c.hooknum = NF_INET_LOCAL_IN
+    c.hooknum = NF_INET_LOCAL_IN.uint32
     c.prio = 0'u32
     c.policy = NF_ACCEPT.uint32
 
@@ -27,7 +27,7 @@ suite "libnet integration test":
     # Step 4: add a cmp expression (sreg == 0x1234)
     var e = Expression.create("cmp")
     e.sreg = 1'u32
-    e.op = NFT_CMP_EQ
+    e.op = NFT_CMP_EQ.uint32
     e.data = @[0x12'u8, 0x34'u8]
     addExpr(r, move e) # move, so no copy/double free
 
