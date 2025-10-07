@@ -13,7 +13,8 @@ export gen_nftnl, gen_linux
 # ---------------------------------------------------------------------------
 import nftnl/raii/basics
 import nftnl/raii/iterators
-export basics, iterators
+import nftnl/raii/expresions
+export basics, iterators, expresions
 
 # ---------------------------------------------------------------------------
 # attribute coercion layers
@@ -29,8 +30,8 @@ export tableAttrsCoersion, chainAttrsCoersion, exprAttrsCoersion
 import nftnl/props/tableProps
 import nftnl/props/chainProps
 import nftnl/props/ruleProps
-import nftnl/props/exprProps
-export tableProps, chainProps, ruleProps, exprProps
+import nftnl/props/expr/cmpProps
+export tableProps, chainProps, ruleProps, cmpProps
 
 import messageBuilder
 export messageBuilder

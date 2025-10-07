@@ -25,9 +25,9 @@ suite "libnet integration test":
     r.chain = "input"
 
     # Step 4: add a cmp expression (sreg == 0x1234)
-    var e = Expression.create("cmp")
+    var e = CmpExpr.create()
     e.sreg = 1'u32
-    e.op = NFT_CMP_EQ.uint32
+    e.op = NFT_CMP_EQ
     e.data = @[0x12'u8, 0x34'u8]
     addExpr(r, move e) # move, so no copy/double free
 

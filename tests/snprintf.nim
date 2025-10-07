@@ -44,9 +44,9 @@ suite "libnet smoke test":
     r.family = AF_INET.uint32
     r.table = "filter"
     r.chain = "input"
-    var e = Expression.create("cmp")
+    var e = CmpExpr.create()
     e.sreg = 1'u32
-    e.op = NFT_CMP_EQ.uint32
+    e.op = NFT_CMP_EQ
     e.data = @[0x12'u8, 0x34'u8]
     addExpr(r, move(e))
     var buf = newString(1024)

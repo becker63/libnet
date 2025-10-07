@@ -44,34 +44,3 @@ makeWrapper(
 )
 makeWrapper(SetList, struct_nftnl_set_list, nftnl_set_list_alloc, nftnl_set_list_free)
 makeWrapper(SetElem, struct_nftnl_set_elem, nftnl_set_elem_alloc, nftnl_set_elem_free)
-
-# --- Expression ------------------------------------------------------------
-type Expression* = object
-  raw*: ptr struct_nftnl_expr
-
-proc create*(_: type Expression, kind: string): Expression =
-  Expression(raw: nftnl_expr_alloc(cast[ptr uint8](kind.cstring)))
-
-proc `=destroy`*(x: var Expression) =
-  if x.raw != nil:
-    nftnl_expr_free(x.raw)
-    x.raw = nil
-
-proc `=wasMoved`*(x: var Expression) =
-  x.raw = nil
-
-proc `=copy`*(dst: var Expression, src: Expression) {.error.}
-
-proc `=sink`*(dst: var Expression, src: Expression) =
-  if dst.raw == src.raw:
-    return
-  `=destroy`(dst)
-  dst.raw = src.raw
-
-proc raw*(e: Expression): ptr struct_nftnl_expr {.inline.} =
-  e.raw
-
-proc kind*(e: Expression): string =
-  if e.raw == nil:
-    return ""
-  $cast[cstring](nftnl_expr_get_str(e.raw, NFTNL_EXPR_NAME.uint16))

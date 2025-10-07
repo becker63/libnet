@@ -19,8 +19,8 @@ suite "nftnl RAII and move-only semantics":
     var s = Set.create()
     check not s.raw.isNil
 
-  test "Expression alloc/free":
-    let e = Expression.create("cmp")
+  test "CmpExpr alloc/free":
+    let e = CmpExpr.create()
     check not e.raw.isNil
 
   # Move semantics
@@ -48,8 +48,8 @@ suite "nftnl RAII and move-only semantics":
     check s1.raw.isNil
     check not s2.raw.isNil
 
-  test "Expression move transfers ownership":
-    var e1 = Expression.create("cmp")
+  test "CmpExpr move transfers ownership":
+    var e1 = CmpExpr.create()
     var e2 = move e1
     check e1.raw.isNil
     check not e2.raw.isNil

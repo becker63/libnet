@@ -23,8 +23,8 @@ test-all:
 test-snprintf:
     nim r tests/snprintf.nim
 
-test-base_chain:
-    nim r tests/base_chain.nim
+test-build_payload:
+    nim r tests/build_payload.nim
 
 clean:
     find . -type f -exec sh -c 'file -b "$1" | grep -q ELF && rm "$1"' _ {} \;
