@@ -30,11 +30,6 @@ proc `=sink`*(dst: var Expression, src: Expression) =
 proc raw*(e: Expression): ptr struct_nftnl_expr {.inline.} =
   e.raw
 
-proc kind*(e: Expression): string =
-  if e.raw == nil:
-    return ""
-  $cast[cstring](nftnl_expr_get_str(e.raw, NFTNL_EXPR_NAME.uint16))
-
 # ---------------------------------------------------------------------------
 # 🧩 Typed variants (CmpExpr, PayloadExpr, MetaExpr)
 # ---------------------------------------------------------------------------
@@ -54,14 +49,12 @@ proc create*(_: type MetaExpr): MetaExpr =
   MetaExpr(Expression.create("meta"))
 
 template raw*(e: typed): ptr struct_nftnl_expr =
-  ## Direct access to the underlying nftnl expression pointer.
   when e is Expression:
     e.raw
   else:
     Expression(e).raw
 
 template toRaw*(e: typed): ptr struct_nftnl_expr =
-  ## Alias for raw(e); kept for readability and API parity.
   when e is Expression:
     e.raw
   else:
