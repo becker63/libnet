@@ -21,8 +21,8 @@ export basics, iterators, expresions
 # ---------------------------------------------------------------------------
 import nftnl/attrs/tableAttrsCoersion
 import nftnl/attrs/chainAttrsCoersion
-import nftnl/attrs/exprAttrsCoersion
-export tableAttrsCoersion, chainAttrsCoersion, exprAttrsCoersion
+import nftnl/attrs/expr/cmpAttrsCoersion
+export tableAttrsCoersion, chainAttrsCoersion, cmpAttrsCoersion
 
 # ---------------------------------------------------------------------------
 # dot-property sugar for high-level access
