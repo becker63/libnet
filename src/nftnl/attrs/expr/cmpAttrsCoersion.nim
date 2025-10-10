@@ -30,7 +30,7 @@ const
   idCmpOp* = uint16(NFTNL_EXPR_CMP_OP)
   idCmpData* = uint16(NFTNL_EXPR_CMP_DATA)
 
-# --- high-level bridges (no {.derive: CmpExpr.}) ----------------------------
+# --- high-level bridges ----------------------------
 
 proc getCmpSreg*(e: CmpExpr): uint32 =
   getU32(toRaw(e), idCmpSreg)
