@@ -1,0 +1,32 @@
+{
+  "cacheVersion": "D20240927T193831",
+  "outputFile": "/home/becker/projects/libnet/tests/bench_table",
+  "outputLastModificationTime": "",
+  "compile": [],
+  "link": [
+    "/home/becker/projects/libnet/nimcache/tests/bench_table.nim_4a8a08f09d37b73795649038408b5f33/@z..@f..@f..@f..@f..@favk@ffgber@fuwq6mf0x1s87oymcm2ad9lfsc3zppqof-avz-hajenccrq-2.2.4@favz@fyvo@fflfgrz@frkprcgvbaf.nim.c.o",
+    "/home/becker/projects/libnet/nimcache/tests/bench_table.nim_4a8a08f09d37b73795649038408b5f33/@z..@f..@f..@f..@f..@favk@ffgber@fuwq6mf0x1s87oymcm2ad9lfsc3zppqof-avz-hajenccrq-2.2.4@favz@fyvo@ffgq@fcevingr@fqvtvgfhgvyf.nim.c.o",
+    "/home/becker/projects/libnet/nimcache/tests/bench_table.nim_4a8a08f09d37b73795649038408b5f33/@z..@f..@f..@f..@f..@favk@ffgber@fuwq6mf0x1s87oymcm2ad9lfsc3zppqof-avz-hajenccrq-2.2.4@favz@fyvo@fflfgrz@fqbyynef.nim.c.o",
+    "/home/becker/projects/libnet/nimcache/tests/bench_table.nim_4a8a08f09d37b73795649038408b5f33/@z..@f..@f..@f..@f..@favk@ffgber@fuwq6mf0x1s87oymcm2ad9lfsc3zppqof-avz-hajenccrq-2.2.4@favz@fyvo@fflfgrz.nim.c.o",
+    "/home/becker/projects/libnet/nimcache/tests/bench_table.nim_4a8a08f09d37b73795649038408b5f33/@z..@f..@f..@f..@f..@favk@ffgber@fuwq6mf0x1s87oymcm2ad9lfsc3zppqof-avz-hajenccrq-2.2.4@favz@fyvo@fcher@fgvzrf.nim.c.o",
+    "/home/becker/projects/libnet/nimcache/tests/bench_table.nim_4a8a08f09d37b73795649038408b5f33/@z..@ffep@fasgay@fnhgbtrarengrq@ftrarengrq_asgay.nim.c.o",
+    "/home/becker/projects/libnet/nimcache/tests/bench_table.nim_4a8a08f09d37b73795649038408b5f33/@z..@ffep@fasgay@fenvv@fonfvpf.nim.c.o",
+    "/home/becker/projects/libnet/nimcache/tests/bench_table.nim_4a8a08f09d37b73795649038408b5f33/@z..@ffep@fasgay@fnggef@fgnoyr.nim.c.o",
+    "/home/becker/projects/libnet/nimcache/tests/bench_table.nim_4a8a08f09d37b73795649038408b5f33/@z..@ffep@fzay@fnhgbtrarengrq@ftrarengrq_zay.nim.c.o",
+    "/home/becker/projects/libnet/nimcache/tests/bench_table.nim_4a8a08f09d37b73795649038408b5f33/@zorapu_gnoyr.nim.c.o"
+  ],
+  "linkcmd": "gcc   -o /home/becker/projects/libnet/tests/bench_table /home/becker/projects/libnet/nimcache/tests/bench_table.nim_4a8a08f09d37b73795649038408b5f33/@z..@f..@f..@f..@f..@favk@ffgber@fuwq6mf0x1s87oymcm2ad9lfsc3zppqof-avz-hajenccrq-2.2.4@favz@fyvo@fflfgrz@frkprcgvbaf.nim.c.o /home/becker/projects/libnet/nimcache/tests/bench_table.nim_4a8a08f09d37b73795649038408b5f33/@z..@f..@f..@f..@f..@favk@ffgber@fuwq6mf0x1s87oymcm2ad9lfsc3zppqof-avz-hajenccrq-2.2.4@favz@fyvo@ffgq@fcevingr@fqvtvgfhgvyf.nim.c.o /home/becker/projects/libnet/nimcache/tests/bench_table.nim_4a8a08f09d37b73795649038408b5f33/@z..@f..@f..@f..@f..@favk@ffgber@fuwq6mf0x1s87oymcm2ad9lfsc3zppqof-avz-hajenccrq-2.2.4@favz@fyvo@fflfgrz@fqbyynef.nim.c.o /home/becker/projects/libnet/nimcache/tests/bench_table.nim_4a8a08f09d37b73795649038408b5f33/@z..@f..@f..@f..@f..@favk@ffgber@fuwq6mf0x1s87oymcm2ad9lfsc3zppqof-avz-hajenccrq-2.2.4@favz@fyvo@fflfgrz.nim.c.o /home/becker/projects/libnet/nimcache/tests/bench_table.nim_4a8a08f09d37b73795649038408b5f33/@z..@f..@f..@f..@f..@favk@ffgber@fuwq6mf0x1s87oymcm2ad9lfsc3zppqof-avz-hajenccrq-2.2.4@favz@fyvo@fcher@fgvzrf.nim.c.o /home/becker/projects/libnet/nimcache/tests/bench_table.nim_4a8a08f09d37b73795649038408b5f33/@z..@ffep@fasgay@fnhgbtrarengrq@ftrarengrq_asgay.nim.c.o /home/becker/projects/libnet/nimcache/tests/bench_table.nim_4a8a08f09d37b73795649038408b5f33/@z..@ffep@fasgay@fenvv@fonfvpf.nim.c.o /home/becker/projects/libnet/nimcache/tests/bench_table.nim_4a8a08f09d37b73795649038408b5f33/@z..@ffep@fasgay@fnggef@fgnoyr.nim.c.o /home/becker/projects/libnet/nimcache/tests/bench_table.nim_4a8a08f09d37b73795649038408b5f33/@z..@ffep@fzay@fnhgbtrarengrq@ftrarengrq_zay.nim.c.o /home/becker/projects/libnet/nimcache/tests/bench_table.nim_4a8a08f09d37b73795649038408b5f33/@zorapu_gnoyr.nim.c.o  -pthread -pthread -lm -lm -lrt -L/nix/store/sxyzg0vgfqrslaxdlbygi9qd8ccc7rf1-libnftnl-1.3.0/lib -lnftnl   -ldl",
+  "extraCmds": [],
+  "configFiles": [
+    "/nix/store/m9q47siz06gpz4y8h836wp4291j07js9-aarch64-unknown-linux-gnu-nim-wrapper-2.2.4/etc/nim/nim.cfg",
+    "/nix/store/m9q47siz06gpz4y8h836wp4291j07js9-aarch64-unknown-linux-gnu-nim-wrapper-2.2.4/etc/nim/config.nims",
+    "/home/becker/projects/libnet/tests/config.nims"
+  ],
+  "stdinInput": false,
+  "projectIsCmd": false,
+  "cmdInput": "",
+  "currentDir": "/home/becker/projects/libnet",
+  "cmdline": "",
+  "depfiles": [],
+  "nimexe": ""
+}

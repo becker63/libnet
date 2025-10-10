@@ -10,4 +10,5 @@ srcDir = "src"
 
 requires "nim >= 2.2.4"
 requires "futhark >= 0.15.0"
-requires "deriveables >= 0.1.0"
+requires "https://github.com/gabearro/binio"
+requires "unittest2"

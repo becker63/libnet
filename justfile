@@ -1,6 +1,5 @@
-# justfile
+# --- Code generation ---------------------------------------------------
 
-# Generate libnftnl bindings
 gen-nftnl:
     nim r -d:useFuthark -d:nodeclguards -d:futharkRebuild src/nftnl/generator.nim
 
@@ -16,15 +15,48 @@ gen:
     just gen-nftnl
     just gen-mnl
 
-# Run tests
+
+# --- Testing -----------------------------------------------------------
+
+# Run all tests (flat layout: tests/*.nim)
 test-all:
-    nim r tests/all_tests.nim
+  #!/usr/bin/env bash
+  nim r tests/test_all.nim
 
-test-snprintf:
-    nim r tests/snprintf.nim
+# Run a specific test file
+test FILE:
+  #!/usr/bin/env bash
+  echo "🔹 Running {{FILE}}"
+  nim r -d:unittest2 "{{FILE}}"
 
-test-build_payload:
-    nim r tests/build_payload.nim
+# Run only core_* tests
+test-core:
+  #!/usr/bin/env bash
+  set -e
+  for f in tests/core_*.nim; do
+    echo ""
+    echo "🔹 Running $f"
+    nim r -d:unittest2 "$f"
+  done
 
-clean:
-    find . -type f -exec sh -c 'file -b "$1" | grep -q ELF && rm "$1"' _ {} \;
+# Run only integration_* tests
+test-integration:
+  #!/usr/bin/env bash
+  set -e
+  for f in tests/integration_*.nim; do
+    echo ""
+    echo "🔹 Running $f"
+    nim r -d:unittest2 "$f"
+  done
+
+
+# --- Benchmarks --------------------------------------------------------
+
+bench:
+  #!/usr/bin/env bash
+  set -e
+  for f in tests/bench_*.nim; do
+    echo ""
+    echo "🏎  Running benchmark $f"
+    nim c -r "$f"
+  done
