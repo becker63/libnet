@@ -10,17 +10,17 @@ suite "libnet integration test":
 
     # Step 2: construct a **base chain**
     var c = Chain.create()
-    c.family = AF_INET.uint32
+    c.family = AF_INET
     c.table = "filter"
     c.name = "input"
     c.typeName = "filter"
     c.hooknum = NF_INET_LOCAL_IN.uint32
     c.prio = 0'u32
-    c.policy = NF_ACCEPT.uint32
+    c.policy = NF_ACCEPT
 
     # Step 3: construct a rule
     var r = Rule.create()
-    r.family = AF_INET.uint32
+    r.family = AF_INET
     r.table = "filter"
     r.chain = "input"
 

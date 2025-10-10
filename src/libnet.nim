@@ -24,14 +24,5 @@ import nftnl/attrs/chainAttrsCoersion
 import nftnl/attrs/expr/cmpAttrsCoersion
 export tableAttrsCoersion, chainAttrsCoersion, cmpAttrsCoersion
 
-# ---------------------------------------------------------------------------
-# dot-property sugar for high-level access
-# ---------------------------------------------------------------------------
-import nftnl/props/tableProps
-import nftnl/props/chainProps
-import nftnl/props/ruleProps
-import nftnl/props/expr/cmpProps
-export tableProps, chainProps, ruleProps, cmpProps
-
 import messageBuilder
 export messageBuilder
