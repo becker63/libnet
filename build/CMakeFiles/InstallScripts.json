@@ -1,7 +1,0 @@
-{
-	"InstallScripts" : 
-	[
-		"/home/becker/projects/libnet/build/cmake_install.cmake"
-	],
-	"Parallel" : false
-}

@@ -1,2 +1,0 @@
-# Hashes of file build rules.
-e8aa53c82004d2244a55e8ca08b27901 test.pb.h

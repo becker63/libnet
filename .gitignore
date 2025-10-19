@@ -1,0 +1,66 @@
+# ------------------------------
+# Build & compilation artifacts
+# ------------------------------
+/build/
+/CMakeFiles/
+/CMakeCache.txt
+/Makefile
+/cmake_install.cmake
+/compile_commands.json
+
+# Protobuf generated sources
+*.pb.cc
+*.pb.h
+
+# Object files, binaries, libraries
+*.o
+*.obj
+*.lo
+*.a
+*.so
+*.dylib
+*.dll
+*.exe
+
+# Fuzzer and crash artifacts
+crash-*
+leak-*
+timeout-*
+corpus/
+default.profraw
+*.log
+
+# ------------------------------
+# Nim build artifacts
+# ------------------------------
+nimcache/
+*.exe
+*.out
+*.bin
+
+# Nimble package manager
+.nimble/
+*.nimble-cache/
+
+# ------------------------------
+# Editor & tooling
+# ------------------------------
+.idea/
+.vscode/
+.DS_Store
+*.swp
+*.swo
+*.bak
+
+# Zed, Xonsh, etc.
+.zed/
+xonsh_history
+xonshrc
+
+# ------------------------------
+# Nix / flake artifacts
+# ------------------------------
+result
+result-*
+.direnv/
+.cache/

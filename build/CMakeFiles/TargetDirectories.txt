@@ -1,3 +1,0 @@
-/home/becker/projects/libnet/build/CMakeFiles/lpm-consumer-fuzz.dir
-/home/becker/projects/libnet/build/CMakeFiles/edit_cache.dir
-/home/becker/projects/libnet/build/CMakeFiles/rebuild_cache.dir
