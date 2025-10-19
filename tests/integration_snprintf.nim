@@ -20,8 +20,9 @@ suite "libnet smoke test":
       0'u32,
     )
     check written > 0
-    #echo "=== nftnl_table_snprintf ==="
+    #echo ""
     #echo buf[0 ..< written]
+    #echo ""
 
   test "chain pretty-prints":
     var c = Chain.create()
@@ -41,8 +42,9 @@ suite "libnet smoke test":
       0'u32,
     )
     check written > 0
-    #echo "=== nftnl_chain_snprintf ==="
+    #echo ""
     #echo buf[0 ..< written]
+    #echo ""
 
   test "rule with simple cmp expr pretty-prints":
     var r = Rule.create()
@@ -63,5 +65,6 @@ suite "libnet smoke test":
       0'u32,
     )
     check written > 0
-    #echo "=== nftnl_rule_snprintf ==="
+    #echo ""
     #echo buf[0 ..< written]
+    #echo ""
