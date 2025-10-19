@@ -60,11 +60,11 @@ proc run_from_pb*(
       fileEcho "--- Table ---"
       fileEcho "name: " & t.name
       fileEcho "family: " & $t.family
-      if t.family == 42 or t.family == 0x2A or
-          (t.name.len > 0 and ord(t.name[0]) == 0x66):
-        echo "[BUG] triggered intentional crash path"
-        flushLogs()
-        quit(1)
+      #if t.family == 42 or t.family == 0x2A or
+      #    (t.name.len > 0 and ord(t.name[0]) == 0x66):
+      #  echo "[BUG] triggered intentional crash path"
+      #  flushLogs()
+      #  quit(1)
 
     buildTop(top)
     flushLogs()

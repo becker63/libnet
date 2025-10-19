@@ -8,6 +8,9 @@ set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 find_package(Protobuf CONFIG REQUIRED)
 find_package(libprotobuf-mutator CONFIG REQUIRED)
 
+# ✅ Add prometheus-cpp (from Nix or system package)
+find_package(prometheus-cpp CONFIG REQUIRED)
+
 # ---------------------------------------------------------------------------
 # Protobuf generation
 # ---------------------------------------------------------------------------
@@ -24,10 +27,16 @@ set(NIM_LIB_PATH ${CMAKE_BINARY_DIR}/libnetfuzz${CMAKE_SHARED_LIBRARY_SUFFIX})
 
 add_custom_command(
   OUTPUT ${NIM_LIB_PATH}
-  COMMAND nim c --app:lib --out:${NIM_LIB_PATH} harness/export_fuzz.nim
+  COMMAND nim c -d:release -g --mm:orc --threads:on --app:lib
+          --opt:speed
+          --passC=-O3
+          --passC=-fomit-frame-pointer
+          --out:${NIM_LIB_PATH}
+          harness/export_fuzz.nim
   WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
-  COMMENT "Building Nim fuzz library"
+  COMMENT "Building Nim fuzz library (release mode)"
 )
+
 add_custom_target(nimlib ALL DEPENDS ${NIM_LIB_PATH})
 
 add_library(libnetfuzz SHARED IMPORTED)
@@ -43,16 +52,20 @@ add_executable(lpm-consumer-fuzz
   ${RAW_PROTO_HDRS}
 )
 
+target_include_directories(lpm-consumer-fuzz PRIVATE
+  ${CMAKE_SOURCE_DIR}/harness
+)
+
 target_link_libraries(lpm-consumer-fuzz PRIVATE
   protobuf::libprotobuf
   libprotobuf-mutator::protobuf-mutator
   libprotobuf-mutator::protobuf-mutator-libfuzzer
   unwind
   libnetfuzz
-)
 
-target_include_directories(lpm-consumer-fuzz PRIVATE
-  ${CMAKE_SOURCE_DIR}/harness
+  # ✅ Prometheus C++ core libraries
+  prometheus-cpp::core
+  prometheus-cpp::pull
 )
 
 # ---------------------------------------------------------------------------

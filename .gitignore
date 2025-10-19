@@ -8,6 +8,13 @@
 /cmake_install.cmake
 /compile_commands.json
 
+# --- Perf / Flamegraph artifacts ---
+perf.data
+perf.data.*
+out.folded
+flame.svg
+
+
 # Protobuf generated sources
 *.pb.cc
 *.pb.h
