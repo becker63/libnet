@@ -44,3 +44,8 @@ test FILE:
 
 bench:
   nim c -r tests/bench.nim
+
+rebuild:
+    rm -rf build
+    cmake -B build -S .
+    cmake --build build

@@ -17,10 +17,6 @@ import nftnl/attrs/expr/[cmp, payload]
 import messageBuilder
 export basics, iterators, expresions, table, chain, rule, cmp, payload, messageBuilder
 
-# protobuf schema (generated via import_proto3 in this module)
-import ./proto_raw as proto_raw
-export proto_raw
-
 # mapping helpers
-import ./mapping/mappings
+import ./mappings
 export mappings

@@ -29,8 +29,11 @@ proc buildRuleMsg*(nlh: ptr NlMsgHdr, r: Rule) =
 # --- addExpr overloads -------------------------------------------------------
 
 proc addExpr*(r: Rule, e: sink Expression) =
+  # Bail if either side isn't initialized
+  if r.raw.isNil or e.raw.isNil:
+    return
   nftnl_rule_add_expr(r.raw, e.raw)
-  e.raw = nil # hand off ownership to libnftnl
+  e.raw = nil # ownership moved to libnftnl
 
 proc addExpr*(r: Rule, e: sink CmpExpr) =
   addExpr(r, Expression(e))

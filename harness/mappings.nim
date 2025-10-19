@@ -1,9 +1,25 @@
-import ../libnet as nft
-import ../proto_raw as pb
-import ../messageBuilder
-import ../nftnl/attrs/expr/all
+# harness/mappings.nim
+import ./libnet as nft
+import ./proto_raw as pb
+import ./messageBuilder
+import ./nftnl/attrs/expr/all
 import macros
 
+# ──────────────────────────────────────────────────────────────
+# Debug control
+# Enable with: nim c -d:DEBUG_MAPPING harness/export_fuzz.nim
+# ──────────────────────────────────────────────────────────────
+when defined(DEBUG_MAPPING):
+  proc dbg(msg: string) =
+    echo msg
+
+else:
+  template dbg(msg: string) =
+    discard
+
+# ──────────────────────────────────────────────────────────────
+
+# Helpers to unpack protobuf Attr.data into numeric or string types
 proc toU32Le*(b: openArray[uint8]): uint32 =
   case b.len
   of 0:
@@ -17,7 +33,7 @@ proc toU32Le*(b: openArray[uint8]): uint32 =
       (uint32(b[3]) shl 24)
 
 proc toU64Le*(b: openArray[uint8]): uint64 =
-  result = 0'u64
+  result = 0
   for i, byte in b:
     result = result or (uint64(byte) shl (i * 8))
 
@@ -29,7 +45,6 @@ proc bytesToStr*(b: seq[uint8]): string =
     result[i] = char(byte)
 
 template assignAttrExpr*(obj: typed, id: uint32, data: seq[uint8]) =
-  ## Convert protobuf Attr → nftnl setter call using expectedType() metadata.
   when compiles(expectedType(attr = id.enumType)):
     when expectedType(attr = id.enumType) is uint32:
       obj.setAttr(id.enumType, data.toU32Le)
@@ -44,16 +59,14 @@ template assignAttrExpr*(obj: typed, id: uint32, data: seq[uint8]) =
 
 proc toNftnlExpr*(x: pb.Expr): nft.Expression =
   var e: nft.Expression
-
   case x.`type`
   of 1'u32:
     e = nft.Expression(nft.PayloadExpr.create())
   of 2'u32:
     e = nft.Expression(nft.CmpExpr.create())
   else:
-    echo "      [warn] unknown expr type=", x.`type`
+    dbg "      [warn] unknown expr type=" & $x.`type`
     return nft.Expression()
-
   for a in x.attrs:
     assignAttrExpr(e, a.id, a.data)
   e
@@ -63,11 +76,15 @@ proc toNftnlRule*(x: pb.Rule): nft.Rule =
   r.family = x.family
   r.table = x.table
   r.chain = x.chain
-  echo "    → Rule(family=", x.family, ", table=", x.table, ", chain=", x.chain, ")"
+  dbg "    → Rule(family=" & $x.family & ", table=" & x.table & ", chain=" & x.chain &
+    ")"
 
   for ex in x.exprs:
     var e = toNftnlExpr(ex)
-    addExpr(r, move e)
+    if e.raw.isNil:
+      dbg "      [skip] invalid expr; not adding"
+      continue
+    addExpr(r, e)
   r
 
 proc toNftnlChain*(x: pb.Chain): nft.Chain =
@@ -75,8 +92,7 @@ proc toNftnlChain*(x: pb.Chain): nft.Chain =
   c.family = x.family
   c.table = x.table
   c.name = x.name
-  echo "  → Chain(", x.name, ") table=", x.table
-
+  dbg "  → Chain(" & x.name & ") table=" & x.table
   for r in x.rules:
     discard toNftnlRule(r)
   c
@@ -85,8 +101,7 @@ proc toNftnlTable*(x: pb.Table): nft.Table =
   let t = nft.Table.create()
   t.family = x.family
   t.name = x.name
-  echo "→ Table(", x.name, ") family=", x.family
-
+  dbg "→ Table(" & x.name & ") family=" & $x.family
   for ch in x.chains:
     discard toNftnlChain(ch)
   t

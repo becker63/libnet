@@ -1,5 +1,4 @@
 import unittest
-import ../harness/mapping/mappings
 import ../harness/proto_raw as pb
 import libnet
 

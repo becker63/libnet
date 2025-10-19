@@ -8,18 +8,39 @@ set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 find_package(Protobuf CONFIG REQUIRED)
 find_package(libprotobuf-mutator CONFIG REQUIRED)
 
-# Generate protobuf sources from schema/Use the schema directory for .proto files
+# ---------------------------------------------------------------------------
+# Protobuf generation
+# ---------------------------------------------------------------------------
 set(PROTO_SCHEMA_DIR ${CMAKE_SOURCE_DIR}/schema)
-protobuf_generate_cpp(TREE_PROTO_SRCS TREE_PROTO_HDRS ${PROTO_SCHEMA_DIR}/test.proto)
-
-# Make sure generated headers are visible
+protobuf_generate_cpp(RAW_PROTO_SRCS RAW_PROTO_HDRS
+  ${PROTO_SCHEMA_DIR}/raw.proto
+)
 include_directories(${CMAKE_CURRENT_BINARY_DIR})
 
-# Fuzz target executable
+# ---------------------------------------------------------------------------
+# Build Nim fuzz library (using --app:lib)
+# ---------------------------------------------------------------------------
+set(NIM_LIB_PATH ${CMAKE_BINARY_DIR}/libnetfuzz${CMAKE_SHARED_LIBRARY_SUFFIX})
+
+add_custom_command(
+  OUTPUT ${NIM_LIB_PATH}
+  COMMAND nim c --app:lib --out:${NIM_LIB_PATH} harness/export_fuzz.nim
+  WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
+  COMMENT "Building Nim fuzz library"
+)
+add_custom_target(nimlib ALL DEPENDS ${NIM_LIB_PATH})
+
+add_library(libnetfuzz SHARED IMPORTED)
+set_target_properties(libnetfuzz PROPERTIES IMPORTED_LOCATION ${NIM_LIB_PATH})
+add_dependencies(libnetfuzz nimlib)
+
+# ---------------------------------------------------------------------------
+# Fuzz target
+# ---------------------------------------------------------------------------
 add_executable(lpm-consumer-fuzz
   mutator/test.cpp
-  ${TREE_PROTO_SRCS}
-  ${TREE_PROTO_HDRS}
+  ${RAW_PROTO_SRCS}
+  ${RAW_PROTO_HDRS}
 )
 
 target_link_libraries(lpm-consumer-fuzz PRIVATE
@@ -27,9 +48,16 @@ target_link_libraries(lpm-consumer-fuzz PRIVATE
   libprotobuf-mutator::protobuf-mutator
   libprotobuf-mutator::protobuf-mutator-libfuzzer
   unwind
+  libnetfuzz
 )
 
-# Clang/LLVM fuzzing options (libFuzzer + Address/UB sanitizers)
+target_include_directories(lpm-consumer-fuzz PRIVATE
+  ${CMAKE_SOURCE_DIR}/harness
+)
+
+# ---------------------------------------------------------------------------
+# Sanitizer options (Clang / libFuzzer)
+# ---------------------------------------------------------------------------
 if (CMAKE_CXX_COMPILER_ID MATCHES "Clang")
   target_compile_options(lpm-consumer-fuzz PRIVATE
     -fsanitize=fuzzer-no-link,address,undefined
