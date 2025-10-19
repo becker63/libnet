@@ -1,55 +1,33 @@
 syntax = "proto3";
-package nftnl;
 
-// A generic attribute (id + data blob)
 message Attr {
-  // Numeric identifier, usually one of NFTNL_* constants.
-  uint32 id   = 1;
-
-  // Arbitrary data payload for this attribute.
-  bytes  data = 2;
+  uint32 id = 1;
+  bytes data = 2;
 }
 
-// An nftnl expression (cmp, payload, etc.)
 message Expr {
-  // Expression type (e.g. NFT_EXPR_CMP, NFT_EXPR_PAYLOAD, ...)
-  uint32 type = 1;
-
-  // Expression attributes — each interpreted via your Nim coercion layer.
+  uint32 type = 1; // 1 = payload, 2 = cmp
   repeated Attr attrs = 2;
 }
 
-// A rule: the primary object built and serialized by libnftnl.
 message Rule {
-  // Address family (AF_INET, AF_INET6, etc.)
   uint32 family = 1;
-
-  // Table name (e.g. "filter").
-  string table  = 2;
-
-  // Chain name (e.g. "input").
-  string chain  = 3;
-
-  // All expressions that belong to this rule.
+  string table = 2;
+  string chain = 3;
   repeated Expr exprs = 4;
 }
 
-// A chain, if you ever want to fuzz higher-level groupings.
 message Chain {
   uint32 family = 1;
-  string table  = 2;
-  string name   = 3;
+  string table = 2;
+  string name = 3;
   repeated Rule rules = 4;
 }
 
-// A table (for completeness)
 message Table {
   uint32 family = 1;
-  string name   = 2;
+  string name = 2;
   repeated Chain chains = 3;
 }
 
-// Top-level container for the whole set of nftnl objects.
-message Top {
-  repeated Table tables = 1;
-}
+message Top { repeated Table tables = 1; }

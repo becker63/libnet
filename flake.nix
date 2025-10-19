@@ -38,6 +38,7 @@
             nimlsp
             nph
             clang
+            just
 
             # protobuf + fuzz infra
             protobuf
