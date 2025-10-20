@@ -68,15 +68,34 @@
           [server]
           http_port = 3000
           domain = localhost
+
+          [live]
+          enabled = true
         '';
 
         prometheusConfig = pkgs.writeTextDir "etc/prometheus/prometheus.yml" ''
           global:
-            scrape_interval: 2s
+            scrape_interval: 500ms
+            evaluation_interval: 500ms
+
           scrape_configs:
             - job_name: "lpm-consumer"
               static_configs:
-                - targets: ["localhost:8080"]
+                - targets:
+                    - "localhost:8080"
+                    - "localhost:8081"
+                    - "localhost:8082"
+                    - "localhost:8083"
+                    - "localhost:8084"
+                    - "localhost:8085"
+                    - "localhost:8086"
+                    - "localhost:8087"
+                    - "localhost:8088"
+              relabel_configs:
+                - source_labels: [__address__]
+                  regex: '.*:(808[0-9]+)'
+                  target_label: core
+                  replacement: '$1'
         '';
 
         common = {

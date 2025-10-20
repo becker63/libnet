@@ -142,3 +142,26 @@ metrics-logs:
     @echo "🧾 Tailing Grafana + Prometheus logs (Ctrl+C to exit)"
     podman logs -f grafana &
     podman logs -f prometheus
+
+fuzz-all:
+    @echo "🔥 Running fuzz harness on all $(nproc) cores"
+    @mkdir -p /dev/shm/libfuzz_corpus ./seeds
+    @echo "🧠 Using in-memory corpus at /dev/shm/libfuzz_corpus"
+    @echo "💾 Merge control file: /dev/shm/merge.state"
+    @./build/lpm-consumer-fuzz \
+        -close_fd_mask=3 \
+        -use_value_profile=1 \
+        -entropic=1 \
+        -reload=1 \
+        -merge_control_file=/dev/shm/merge.state \
+        -max_len=512 \
+        -rss_limit_mb=4096 \
+        -artifact_prefix=/dev/shm/libfuzz_corpus/ \
+        -jobs=$(nproc) \
+        -workers=$(nproc) \
+        -print_final_stats=1 \
+        /dev/shm/libfuzz_corpus ./seeds
+
+clean-corpus:
+    @echo "🧹 Cleaning /dev/shm/libfuzz_corpus"
+    @rm -rf /dev/shm/libfuzz_corpus /dev/shm/merge.state

@@ -16,7 +16,7 @@ find_package(prometheus-cpp CONFIG REQUIRED)
 # ---------------------------------------------------------------------------
 set(PROTO_SCHEMA_DIR ${CMAKE_SOURCE_DIR}/schema)
 protobuf_generate_cpp(RAW_PROTO_SRCS RAW_PROTO_HDRS
-  ${PROTO_SCHEMA_DIR}/raw.proto
+  ${PROTO_SCHEMA_DIR}/elaborate.proto
 )
 include_directories(${CMAKE_CURRENT_BINARY_DIR})
 
@@ -69,15 +69,31 @@ target_link_libraries(lpm-consumer-fuzz PRIVATE
 )
 
 # ---------------------------------------------------------------------------
-# Sanitizer options (Clang / libFuzzer)
+# Sanitizer + Coverage options (Clang / libFuzzer)
 # ---------------------------------------------------------------------------
 if (CMAKE_CXX_COMPILER_ID MATCHES "Clang")
-  target_compile_options(lpm-consumer-fuzz PRIVATE
-    -fsanitize=fuzzer-no-link,address,undefined
-    -fno-omit-frame-pointer
-    -g
-  )
-  target_link_options(lpm-consumer-fuzz PRIVATE
-    -fsanitize=fuzzer,address,undefined
-  )
+  message(STATUS "Configuring Clang sanitizer coverage for libFuzzer build")
+
+target_compile_options(lpm-consumer-fuzz PRIVATE
+  -fsanitize=fuzzer-no-link,address,undefined
+  -fno-omit-frame-pointer
+  -g
+  -O2
+)
+
+
+target_link_options(lpm-consumer-fuzz PRIVATE
+  -fsanitize=fuzzer,address,undefined
+)
+
 endif()
+
+# ---------------------------------------------------------------------------
+# Optional: Show helpful summary
+# ---------------------------------------------------------------------------
+message(STATUS "")
+message(STATUS "🔧 Fuzz target: lpm-consumer-fuzz")
+message(STATUS "📈 Prometheus metrics: http://localhost:8080/metrics")
+message(STATUS "🧪 Run with:")
+message(STATUS "    ./build/lpm-consumer-fuzz corpus_dir -max_total_time=60 -jobs=$(nproc)")
+message(STATUS "")

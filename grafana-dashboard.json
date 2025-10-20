@@ -1,27 +1,88 @@
 {
   "id": null,
   "uid": "fuzz-monitor",
-  "title": "LibFuzzer Harness Metrics",
+  "title": "LibFuzzer Harness Metrics (Multi-Core + Aggregate)",
   "timezone": "browser",
   "schemaVersion": 38,
-  "version": 1,
-  "refresh": "2s",
+  "version": 6,
+  "refresh": "500ms",
+  "time": { "from": "now-10m", "to": "now" },
+  "templating": {
+    "list": [
+      {
+        "name": "core",
+        "label": "Core",
+        "type": "query",
+        "datasource": "prometheus",
+        "refresh": 1,
+        "query": "label_values(fuzz_executions_total, core)",
+        "includeAll": true,
+        "multi": true
+      }
+    ]
+  },
   "panels": [
     {
+      "type": "row",
+      "title": "Aggregate Overview",
+      "id": 0,
+      "gridPos": { "x": 0, "y": 0, "w": 24, "h": 1 },
+      "collapsed": false
+    },
+    {
       "type": "stat",
-      "title": "Total Fuzz Executions",
+      "title": "Total Executions (All Cores)",
       "id": 1,
-      "gridPos": { "x": 0, "y": 0, "w": 6, "h": 4 },
+      "gridPos": { "x": 0, "y": 1, "w": 6, "h": 4 },
       "datasource": { "type": "prometheus", "uid": "prometheus" },
-      "targets": [
-        {
-          "expr": "fuzz_executions_total",
-          "legendFormat": "executions",
-          "refId": "A"
-        }
-      ],
+      "targets": [{ "expr": "sum(fuzz_executions_total)", "refId": "A" }],
       "options": {
-        "reduceOptions": { "calcs": ["last"], "fields": "", "values": false },
+        "reduceOptions": { "calcs": ["last"] },
+        "orientation": "horizontal",
+        "colorMode": "value",
+        "graphMode": "none",
+        "justifyMode": "auto"
+      }
+    },
+    {
+      "type": "stat",
+      "title": "Aggregate Exec Speed (execs/sec)",
+      "id": 2,
+      "gridPos": { "x": 6, "y": 1, "w": 6, "h": 4 },
+      "datasource": { "type": "prometheus", "uid": "prometheus" },
+      "targets": [{ "expr": "sum(fuzzer_execs_per_sec)", "refId": "A" }],
+      "options": {
+        "reduceOptions": { "calcs": ["last"] },
+        "orientation": "horizontal",
+        "colorMode": "value",
+        "graphMode": "none",
+        "justifyMode": "auto"
+      }
+    },
+    {
+      "type": "stat",
+      "title": "Total Corpus Size",
+      "id": 3,
+      "gridPos": { "x": 12, "y": 1, "w": 6, "h": 4 },
+      "datasource": { "type": "prometheus", "uid": "prometheus" },
+      "targets": [{ "expr": "sum(fuzzer_corpus_size)", "refId": "A" }],
+      "options": {
+        "reduceOptions": { "calcs": ["last"] },
+        "orientation": "horizontal",
+        "colorMode": "value",
+        "graphMode": "none",
+        "justifyMode": "auto"
+      }
+    },
+    {
+      "type": "stat",
+      "title": "Total Crashes",
+      "id": 4,
+      "gridPos": { "x": 18, "y": 1, "w": 6, "h": 4 },
+      "datasource": { "type": "prometheus", "uid": "prometheus" },
+      "targets": [{ "expr": "sum(fuzz_crashes_total)", "refId": "A" }],
+      "options": {
+        "reduceOptions": { "calcs": ["last"] },
         "orientation": "horizontal",
         "colorMode": "value",
         "graphMode": "none",
@@ -30,89 +91,103 @@
     },
     {
       "type": "graph",
-      "title": "Execution Rate (execs/sec)",
-      "id": 2,
-      "gridPos": { "x": 6, "y": 0, "w": 18, "h": 8 },
+      "title": "Aggregate Execution Rate (All Cores)",
+      "id": 5,
+      "gridPos": { "x": 0, "y": 5, "w": 24, "h": 8 },
       "datasource": { "type": "prometheus", "uid": "prometheus" },
       "targets": [
         {
-          "expr": "rate(fuzz_executions_total[5s])",
-          "legendFormat": "rate(5s)",
+          "expr": "sum(rate(fuzz_executions_total[5s]))",
+          "legendFormat": "execs/sec",
           "refId": "A"
         }
       ],
       "lines": true,
       "fill": 3,
       "linewidth": 2,
-      "pointradius": 1,
-      "yaxes": [{ "format": "short", "logBase": 1 }, { "format": "short" }],
-      "legend": { "show": true, "values": false }
-    },
-    {
-      "type": "graph",
-      "title": "Crash Count",
-      "id": 3,
-      "gridPos": { "x": 0, "y": 8, "w": 12, "h": 8 },
-      "datasource": { "type": "prometheus", "uid": "prometheus" },
-      "targets": [
-        {
-          "expr": "fuzz_crashes_total",
-          "legendFormat": "crashes",
-          "refId": "A"
-        }
-      ],
-      "lines": true,
-      "fill": 1,
-      "linewidth": 2,
-      "yaxes": [{ "format": "short", "logBase": 1 }, { "format": "short" }],
+      "yaxes": [{ "format": "short" }, { "format": "short" }],
       "legend": { "show": true }
     },
     {
       "type": "graph",
-      "title": "Corpus Size",
-      "id": 4,
-      "gridPos": { "x": 12, "y": 8, "w": 12, "h": 8 },
+      "title": "Average Corpus Growth (entries/sec)",
+      "id": 6,
+      "gridPos": { "x": 0, "y": 13, "w": 12, "h": 8 },
+      "datasource": { "type": "prometheus", "uid": "prometheus" },
+      "targets": [
+        {
+          "expr": "avg(rate(fuzzer_corpus_size[5m]))",
+          "legendFormat": "avg corpus growth",
+          "refId": "A"
+        }
+      ],
+      "lines": true,
+      "fill": 3,
+      "linewidth": 2,
+      "yaxes": [{ "format": "short" }, { "format": "short" }],
+      "legend": { "show": true }
+    },
+    {
+      "type": "graph",
+      "title": "Average Coverage Growth (edges/sec)",
+      "id": 7,
+      "gridPos": { "x": 12, "y": 13, "w": 12, "h": 8 },
+      "datasource": { "type": "prometheus", "uid": "prometheus" },
+      "targets": [
+        {
+          "expr": "avg(rate(fuzzer_coverage_unique_edges[5m]))",
+          "legendFormat": "avg unique edges/sec",
+          "refId": "A"
+        }
+      ],
+      "lines": true,
+      "fill": 3,
+      "linewidth": 2,
+      "yaxes": [{ "format": "short" }, { "format": "short" }],
+      "legend": { "show": true }
+    },
+    {
+      "type": "row",
+      "title": "Per-Core Breakdown",
+      "id": 8,
+      "gridPos": { "x": 0, "y": 21, "w": 24, "h": 1 },
+      "collapsed": false
+    },
+    {
+      "type": "graph",
+      "title": "Execution Rate by Core",
+      "id": 9,
+      "gridPos": { "x": 0, "y": 22, "w": 24, "h": 8 },
+      "datasource": { "type": "prometheus", "uid": "prometheus" },
+      "targets": [
+        {
+          "expr": "rate(fuzz_executions_total[5s])",
+          "legendFormat": "core={{core}}",
+          "refId": "A"
+        }
+      ],
+      "lines": true,
+      "fill": 3,
+      "linewidth": 2,
+      "legend": { "show": true }
+    },
+    {
+      "type": "graph",
+      "title": "Corpus Size by Core",
+      "id": 10,
+      "gridPos": { "x": 0, "y": 30, "w": 24, "h": 8 },
       "datasource": { "type": "prometheus", "uid": "prometheus" },
       "targets": [
         {
           "expr": "fuzzer_corpus_size",
-          "legendFormat": "corpus",
+          "legendFormat": "core={{core}}",
           "refId": "A"
         }
       ],
       "lines": true,
       "fill": 2,
       "linewidth": 2,
-      "yaxes": [{ "format": "short", "logBase": 1 }, { "format": "short" }],
       "legend": { "show": true }
-    },
-    {
-      "type": "stat",
-      "title": "Current Execution Speed",
-      "id": 5,
-      "gridPos": { "x": 0, "y": 16, "w": 6, "h": 4 },
-      "datasource": { "type": "prometheus", "uid": "prometheus" },
-      "targets": [
-        {
-          "expr": "fuzzer_execs_per_sec",
-          "legendFormat": "exec/s",
-          "refId": "A"
-        }
-      ],
-      "options": {
-        "reduceOptions": { "calcs": ["last"], "fields": "", "values": false },
-        "orientation": "horizontal",
-        "colorMode": "value",
-        "graphMode": "none",
-        "justifyMode": "auto"
-      }
     }
-  ],
-  "templating": {
-    "list": []
-  },
-  "time": {
-    "from": "now-5m",
-    "to": "now"
-  }
+  ]
 }

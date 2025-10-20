@@ -1,0 +1,51 @@
+syntax = "proto3";
+package nftnl;
+
+// All enums flattened to uint32 because protobuf_serialization
+// doesn’t properly support proto3 enums or oneof for our use.
+
+message ExprPayload {
+  uint32 dreg = 1; // NFT_REG_x
+  uint32 base = 2; // e.g. NFT_PAYLOAD_LL_HEADER
+  uint32 offset = 3;
+  uint32 len = 4;
+}
+
+message ExprCmp {
+  uint32 sreg = 1; // NFT_REG_x
+  uint32 op = 2;   // e.g. NFT_CMP_EQ
+  bytes data = 3;  // blob being compared
+}
+
+// Expr.kind emulated: type == 1 => payload; type == 2 => cmp
+message Expr {
+  uint32 type = 1; // 1: payload, 2: cmp
+  ExprPayload payload = 2;
+  ExprCmp cmp = 3;
+}
+
+message Rule {
+  uint32 family = 1; // AF_* (e.g. 2 for AF_INET)
+  string table = 2;
+  string chain = 3;
+  repeated Expr exprs = 4;
+}
+
+message Chain {
+  uint32 family = 1; // AF_*
+  string table = 2;
+  string name = 3;
+  string type = 4; // "filter", etc
+  uint32 hook = 5; // NF_INET_* (0..4)
+  sint32 prio = 6;
+  uint32 policy = 7; // NF_ACCEPT=1 / NF_DROP=0
+  repeated Rule rules = 8;
+}
+
+message Table {
+  uint32 family = 1; // AF_*
+  string name = 2;
+  repeated Chain chains = 3;
+}
+
+message Top { repeated Table tables = 1; }
