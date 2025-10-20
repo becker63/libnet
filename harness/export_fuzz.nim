@@ -129,7 +129,7 @@ proc run_from_pb*(
       fileEcho "family: " & $t.family
 
     # Map protobuf to our bindings mappings.nim
-    buildTop(top)
+    discard buildTop(top)
     flushLogs()
     return 0
   except CatchableError as e:

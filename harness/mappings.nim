@@ -25,7 +25,7 @@ else:
     discard
 
 # ──────────────────────────────────────────────────────────────
-# Small byte helpers (kept because they’re handy elsewhere)
+# Small byte helpers
 # ──────────────────────────────────────────────────────────────
 proc toU32Le*(b: openArray[uint8]): uint32 =
   case b.len
@@ -59,19 +59,17 @@ proc toNftnlExpr*(x: pbraw.Expr): expresions.Expression =
   var e: expresions.Expression
   case x.`type`
   of 1'u32:
-    # payload
     e = expresions.Expression(expresions.PayloadExpr.create())
     let p = x.payload
     setU32(toRaw(e), payload.idPayloadDreg, p.dreg)
-    setU32(toRaw(e), payload.idPayloadBase, p.base) # already uint32
+    setU32(toRaw(e), payload.idPayloadBase, p.base)
     setU32(toRaw(e), payload.idPayloadOffset, p.offset)
     setU32(toRaw(e), payload.idPayloadLen, p.len)
   of 2'u32:
-    # cmp
     e = expresions.Expression(expresions.CmpExpr.create())
     let c = x.cmp
     setU32(toRaw(e), cmp.idCmpSreg, c.sreg)
-    setU32(toRaw(e), cmp.idCmpOp, c.op) # already uint32
+    setU32(toRaw(e), cmp.idCmpOp, c.op)
     if c.data.len > 0:
       setBlob(toRaw(e), cmp.idCmpData, c.data)
   else:
@@ -102,7 +100,6 @@ proc toNftnlChain*(x: pbraw.Chain): basics.Chain =
   c.family = x.family
   c.table = x.table
   c.name = x.name
-  # You can add the rest (type/hook/prio/policy) once their props exist
   dbg "  → Chain(" & x.name & ") table=" & x.table
   for r in x.rules:
     discard toNftnlRule(r)
@@ -117,6 +114,65 @@ proc toNftnlTable*(x: pbraw.Table): basics.Table =
     discard toNftnlChain(ch)
   t
 
-proc buildTop*(x: pbraw.Top) =
-  for t in x.tables:
-    discard toNftnlTable(t)
+# ──────────────────────────────────────────────────────────────
+# ⚙️  Serialization helpers (use only newNlMsg + build*Msg)
+# ──────────────────────────────────────────────────────────────
+const
+  NFT_MSG_NEWTABLE* = 0x10'u32
+  NFT_MSG_NEWCHAIN* = 0x11'u32
+  NFT_MSG_NEWRULE* = 0x12'u32
+  NLM_F_CREATE* = 0x400'u32
+  NLM_F_EXCL* = 0x200'u32
+  NLM_F_ACK* = 0x4'u32
+
+proc serializeTableWithNewNlMsg*(t: basics.Table, seqNum: uint32): seq[uint8] =
+  let nlh = newNlMsg(
+    NFT_MSG_NEWTABLE.cint,
+    t.family.cint,
+    (NLM_F_CREATE or NLM_F_EXCL or NLM_F_ACK).cint,
+    seqNum,
+  )
+  buildTableMsg(nlh, t)
+  result = cast[seq[uint8]](cast[ptr UncheckedArray[uint8]](nlh))
+  result.setLen(MNL_SOCKET_BUFFER_SIZE)
+
+proc serializeChainWithNewNlMsg*(c: basics.Chain, seqNum: uint32): seq[uint8] =
+  let nlh = newNlMsg(
+    NFT_MSG_NEWCHAIN.cint,
+    c.family.cint,
+    (NLM_F_CREATE or NLM_F_EXCL or NLM_F_ACK).cint,
+    seqNum,
+  )
+  buildChainMsg(nlh, c)
+  result = cast[seq[uint8]](cast[ptr UncheckedArray[uint8]](nlh))
+  result.setLen(MNL_SOCKET_BUFFER_SIZE)
+
+proc serializeRuleWithNewNlMsg*(r: basics.Rule, seqNum: uint32): seq[uint8] =
+  let nlh = newNlMsg(
+    NFT_MSG_NEWRULE.cint,
+    r.family.cint,
+    (NLM_F_CREATE or NLM_F_EXCL or NLM_F_ACK).cint,
+    seqNum,
+  )
+  buildRuleMsg(nlh, r)
+  result = cast[seq[uint8]](cast[ptr UncheckedArray[uint8]](nlh))
+  result.setLen(MNL_SOCKET_BUFFER_SIZE)
+
+# ---------------------------------------------------------------------
+# buildTop: walks Top and calls the serialization helpers
+# ---------------------------------------------------------------------
+proc buildTop*(x: pbraw.Top): seq[seq[uint8]] =
+  result = @[]
+  var seqNum: uint32 = 1
+  for tpb in x.tables:
+    let t = toNftnlTable(tpb)
+    result.add serializeTableWithNewNlMsg(t, seqNum)
+    seqNum.inc
+    for cpb in tpb.chains:
+      let c = toNftnlChain(cpb)
+      result.add serializeChainWithNewNlMsg(c, seqNum)
+      seqNum.inc
+      for rpb in cpb.rules:
+        let r = toNftnlRule(rpb)
+        result.add serializeRuleWithNewNlMsg(r, seqNum)
+        seqNum.inc
