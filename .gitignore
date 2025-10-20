@@ -72,3 +72,9 @@ result-*
 .direnv/
 .cache/
 saved_corpus/
+
+# Ignore fuzz artifacts
+saved_corpus/
+crash-*
+timeout-*
+leak-*
