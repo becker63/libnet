@@ -144,7 +144,7 @@
             export NIM_LSP=${pkgs.nimlsp}/bin/nimlsp
             unset CPATH CPLUS_INCLUDE_PATH LIBRARY_PATH
             echo "🔧 LLVM + libc++ + lld + Nim + libprotobuf-mutator environment ready"
-            xonsh
+            #xonsh
           '';
         };
       in
