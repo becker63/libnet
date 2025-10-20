@@ -84,10 +84,8 @@ view-flame:
 
 
 # --- Metrics Stack (Prometheus + Grafana via Podman) -----------------------
+
 set shell := ["bash", "-eu", "-o", "pipefail", "-c"]
-
-
-# Build and load Prometheus + Grafana images directly into Podman
 
 metrics-build:
     echo "🚀 Building and loading Prometheus + Grafana into Podman..."
@@ -96,15 +94,12 @@ metrics-build:
     echo "✅ Images loaded into Podman as:"
     podman images | grep -E "prometheus|grafana" || true
 
-
-# Rebuild + restart everything cleanly
 metrics-rebuild:
     echo "🧱 Rebuilding metrics containers..."
     just metrics-down
     just metrics-build
     just metrics-up
     echo "✅ Metrics stack rebuilt and restarted!"
-
 
 metrics-up:
     echo "🧹 Stopping any old containers..."
@@ -131,37 +126,164 @@ metrics-up:
     echo "   • Prometheus → http://localhost:9090"
     echo "   • Grafana → http://localhost:3000 (admin / admin)"
 
-
 metrics-down:
     echo "🛑 Stopping metrics stack..."
     podman stop grafana prometheus || true
     echo "✅ Stopped."
-
 
 metrics-logs:
     @echo "🧾 Tailing Grafana + Prometheus logs (Ctrl+C to exit)"
     podman logs -f grafana &
     podman logs -f prometheus
 
-fuzz-all:
-    @echo "🔥 Running fuzz harness on all $(nproc) cores"
-    @mkdir -p /dev/shm/libfuzz_corpus ./seeds
-    @echo "🧠 Using in-memory corpus at /dev/shm/libfuzz_corpus"
-    @echo "💾 Merge control file: /dev/shm/merge.state"
-    @./build/lpm-consumer-fuzz \
-        -close_fd_mask=3 \
-        -use_value_profile=1 \
-        -entropic=1 \
-        -reload=1 \
-        -merge_control_file=/dev/shm/merge.state \
-        -max_len=512 \
-        -rss_limit_mb=4096 \
-        -artifact_prefix=/dev/shm/libfuzz_corpus/ \
-        -jobs=$(nproc) \
-        -workers=$(nproc) \
-        -print_final_stats=1 \
-        /dev/shm/libfuzz_corpus ./seeds
 
-clean-corpus:
-    @echo "🧹 Cleaning /dev/shm/libfuzz_corpus"
-    @rm -rf /dev/shm/libfuzz_corpus /dev/shm/merge.state
+# --- Corpus persistence ------------------------------------------------
+
+save-corpus:
+  #!/usr/bin/env bash
+  set -euo pipefail
+
+  TARGET_DIR="${TARGET_DIR:-./saved_corpus}"
+
+  echo "💾 Saving current corpus from /dev/shm/libfuzz_corpus → $TARGET_DIR"
+  mkdir -p "$TARGET_DIR"
+
+  if [[ -d /dev/shm/libfuzz_corpus ]]; then
+    echo "📂 Syncing files (no deletions)..."
+    rsync -a --ignore-existing /dev/shm/libfuzz_corpus/ "$TARGET_DIR"/
+    echo "✅ Corpus saved to $TARGET_DIR"
+  else
+    echo "⚠️  No active in-memory corpus found at /dev/shm/libfuzz_corpus"
+  fi
+
+
+load-corpus:
+  #!/usr/bin/env bash
+  set -euo pipefail
+
+  SRC_DIR="${SRC_DIR:-./saved_corpus}"
+  DEST_DIR="/dev/shm/libfuzz_corpus"
+
+  echo "♻️  Loading corpus from $SRC_DIR → $DEST_DIR"
+  mkdir -p "$DEST_DIR"
+
+  if [[ -d "$SRC_DIR" ]]; then
+    echo "📂 Syncing files into in-memory corpus (no deletions)..."
+    rsync -a --ignore-existing "$SRC_DIR"/ "$DEST_DIR"/
+    echo "✅ Corpus loaded into $DEST_DIR"
+  else
+    echo "⚠️  No saved corpus found at $SRC_DIR"
+  fi
+
+
+sync-corpus:
+  #!/usr/bin/env bash
+  set -euo pipefail
+
+  SRC_DIR="./saved_corpus"
+  SHM_DIR="/dev/shm/libfuzz_corpus"
+
+  echo "🔄 Syncing corpus between $SRC_DIR ⇄ $SHM_DIR"
+  mkdir -p "$SRC_DIR" "$SHM_DIR"
+
+  if [[ -z "$(ls -A "$SRC_DIR" 2>/dev/null || true)" && -z "$(ls -A "$SHM_DIR" 2>/dev/null || true)" ]]; then
+    echo "⚠️  Both corpora are empty — nothing to sync."
+    exit 0
+  fi
+
+  echo "⬆️  Copying new files from in-memory corpus → disk..."
+  rsync -a --ignore-existing "$SHM_DIR"/ "$SRC_DIR"/
+
+  echo "⬇️  Copying new files from disk corpus → in-memory..."
+  rsync -a --ignore-existing "$SRC_DIR"/ "$SHM_DIR"/
+
+  echo "✅ Sync complete! Both corpora are up to date."
+
+
+auto-sync-corpus:
+  #!/usr/bin/env bash
+  set -euo pipefail
+
+  INTERVAL="${INTERVAL:-600}"  # default every 10 min
+  echo "⏱️  Auto corpus sync running every $INTERVAL seconds..."
+  while true; do
+    just sync-corpus || true
+    sleep "$INTERVAL"
+  done
+
+
+# --- Fuzzing workflow --------------------------------------------------
+
+fuzz-all:
+  #!/usr/bin/env bash
+  set -euo pipefail
+
+  echo "♻️  Preparing fuzzing session..."
+  just load-corpus
+
+  echo "⏱️  Starting background corpus sync (every 10 minutes)..."
+  ( INTERVAL=600 just auto-sync-corpus & disown )
+
+  CORES=$(nproc)
+  CORPUS_DIR="/dev/shm/libfuzz_corpus"
+  MERGE_FILE="/dev/shm/merge.state"
+
+  echo "🔥 Running fuzz harness on all $CORES cores"
+
+  # Ensure build exists
+  if [[ ! -x ./build/lpm-consumer-fuzz ]]; then
+    echo "⚙️  Build not found — rebuilding..."
+    just rebuild
+  fi
+
+  # Ensure corpus directories exist
+  mkdir -p "$CORPUS_DIR" ./seeds
+
+  echo "🧠 Using in-memory corpus at $CORPUS_DIR"
+  echo "💾 Merge control file: $MERGE_FILE"
+
+  # Avoid duplicate fuzzers if rerun
+  if pgrep -f lpm-consumer-fuzz >/dev/null 2>&1; then
+    echo "⚠️  Fuzzers already running — aborting duplicate run."
+    exit 0
+  fi
+
+  # Launch fuzzers safely in parallel
+  for i in $(seq 0 $((CORES - 1))); do
+    LOG_FILE="fuzz-${i}.log"
+    echo "🚀 Launching fuzzer core $i (log: $LOG_FILE)"
+    ./build/lpm-consumer-fuzz \
+      -close_fd_mask=3 \
+      -use_value_profile=1 \
+      -entropic=1 \
+      -reload=1 \
+      -merge_control_file="$MERGE_FILE" \
+      -max_len=512 \
+      -rss_limit_mb=4096 \
+      -artifact_prefix="${CORPUS_DIR}/" \
+      -print_final_stats=1 \
+      "$CORPUS_DIR" \
+      >"$LOG_FILE" 2>&1 &
+  done
+
+  echo "✅ All fuzzers launched. Logs: fuzz-*.log"
+
+# --- Fuzzing control ---------------------------------------------------
+
+kill-fuzz:
+  #!/usr/bin/env bash
+  set -euo pipefail
+
+  echo "🛑 Stopping all running fuzzers..."
+  if pgrep -f "./build/lpm-consumer-fuzz" >/dev/null 2>&1; then
+    pgrep -f "./build/lpm-consumer-fuzz" | xargs -r kill -TERM
+    echo "⏳ Waiting for fuzzers to exit..."
+    sleep 2
+    if pgrep -f "./build/lpm-consumer-fuzz" >/dev/null 2>&1; then
+      echo "⚠️  Some fuzzers still running — forcing kill..."
+      pgrep -f "./build/lpm-consumer-fuzz" | xargs -r kill -9
+    fi
+    echo "✅ All fuzzers stopped."
+  else
+    echo "ℹ️  No running fuzzers found."
+  fi
