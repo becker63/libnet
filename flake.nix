@@ -73,6 +73,9 @@
           enabled = true
         '';
 
+        # --- dynamically generate Prometheus targets for ports 8080–8143 ---
+        fuzzPorts = builtins.genList (i: "localhost:${toString (8080 + i)}") 64;
+
         prometheusConfig = pkgs.writeTextDir "etc/prometheus/prometheus.yml" ''
           global:
             scrape_interval: 500ms
@@ -81,19 +84,10 @@
           scrape_configs:
             - job_name: "lpm-consumer"
               static_configs:
-                - targets:
-                    - "localhost:8080"
-                    - "localhost:8081"
-                    - "localhost:8082"
-                    - "localhost:8083"
-                    - "localhost:8084"
-                    - "localhost:8085"
-                    - "localhost:8086"
-                    - "localhost:8087"
-                    - "localhost:8088"
+                - targets: ${builtins.toJSON fuzzPorts}
               relabel_configs:
                 - source_labels: [__address__]
-                  regex: '.*:(808[0-9]+)'
+                  regex: '.*:(80[0-9]+)'
                   target_label: core
                   replacement: '$1'
         '';
@@ -144,7 +138,6 @@
             export NIM_LSP=${pkgs.nimlsp}/bin/nimlsp
             unset CPATH CPLUS_INCLUDE_PATH LIBRARY_PATH
             echo "🔧 LLVM + libc++ + lld + Nim + libprotobuf-mutator environment ready"
-            #xonsh
           '';
         };
       in
