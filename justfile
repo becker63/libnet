@@ -1,13 +1,13 @@
 # --- Code generation ---------------------------------------------------
 
 gen-nftnl:
-    nim r -d:useFuthark -d:nodeclguards -d:futharkRebuild src/nftnl/generator.nim
+    nim r -d:useFuthark -d:nodeclguards -d:futharkRebuild harness/nftnl/generator.nim
 
 gen-linux:
-    nim r -d:useFuthark -d:nodeclguards -d:futharkRebuild src/linux/generator.nim
+    nim r -d:useFuthark -d:nodeclguards -d:futharkRebuild harness/linux/generator.nim
 
 gen-mnl:
-    nim r -d:useFuthark -d:nodeclguards -d:futharkRebuild src/mnl/generator.nim
+    nim r -d:useFuthark -d:ncmake --build buildodeclguards -d:futharkRebuild harness/mnl/generator.nim
 
 gen:
     just gen-linux
