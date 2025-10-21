@@ -4,8 +4,8 @@
   "title": "LibFuzzer Harness Metrics (Multi-Core + Aggregate)",
   "timezone": "browser",
   "schemaVersion": 38,
-  "version": 6,
-  "refresh": "500ms",
+  "version": 10,
+  "refresh": "2s",
   "time": { "from": "now-10m", "to": "now" },
   "templating": {
     "list": [
@@ -40,8 +40,7 @@
         "reduceOptions": { "calcs": ["last"] },
         "orientation": "horizontal",
         "colorMode": "value",
-        "graphMode": "none",
-        "justifyMode": "auto"
+        "graphMode": "none"
       }
     },
     {
@@ -55,8 +54,7 @@
         "reduceOptions": { "calcs": ["last"] },
         "orientation": "horizontal",
         "colorMode": "value",
-        "graphMode": "none",
-        "justifyMode": "auto"
+        "graphMode": "none"
       }
     },
     {
@@ -70,8 +68,7 @@
         "reduceOptions": { "calcs": ["last"] },
         "orientation": "horizontal",
         "colorMode": "value",
-        "graphMode": "none",
-        "justifyMode": "auto"
+        "graphMode": "none"
       }
     },
     {
@@ -85,8 +82,7 @@
         "reduceOptions": { "calcs": ["last"] },
         "orientation": "horizontal",
         "colorMode": "value",
-        "graphMode": "none",
-        "justifyMode": "auto"
+        "graphMode": "none"
       }
     },
     {
@@ -105,60 +101,215 @@
       "lines": true,
       "fill": 3,
       "linewidth": 2,
-      "yaxes": [{ "format": "short" }, { "format": "short" }],
-      "legend": { "show": true }
+      "legend": { "show": true },
+      "yaxes": [{ "format": "short" }, { "format": "short" }]
+    },
+
+    {
+      "type": "row",
+      "title": "Coverage Overview",
+      "id": 11,
+      "gridPos": { "x": 0, "y": 13, "w": 24, "h": 1 },
+      "collapsed": false
     },
     {
-      "type": "graph",
-      "title": "Average Corpus Growth (entries/sec)",
-      "id": 6,
-      "gridPos": { "x": 0, "y": 13, "w": 12, "h": 8 },
+      "type": "stat",
+      "title": "Overall Coverage %",
+      "id": 12,
+      "gridPos": { "x": 0, "y": 14, "w": 6, "h": 4 },
+      "targets": [
+        { "expr": "avg by (job) (fuzzer_coverage_percent)", "refId": "A" }
+      ],
+      "datasource": { "type": "prometheus", "uid": "prometheus" },
+      "options": {
+        "reduceOptions": { "calcs": ["last"] },
+        "fieldOptions": { "defaults": { "unit": "percentunit" } },
+        "colorMode": "value"
+      }
+    },
+    {
+      "type": "stat",
+      "title": "libnftnl Coverage %",
+      "id": 13,
+      "gridPos": { "x": 6, "y": 14, "w": 6, "h": 4 },
+      "targets": [
+        {
+          "expr": "avg by (job) (fuzzer_coverage_percent_libnftnl)",
+          "refId": "A"
+        }
+      ],
+      "datasource": { "type": "prometheus", "uid": "prometheus" },
+      "options": {
+        "reduceOptions": { "calcs": ["last"] },
+        "fieldOptions": { "defaults": { "unit": "percentunit" } },
+        "colorMode": "value"
+      }
+    },
+    {
+      "type": "stat",
+      "title": "libmnl Coverage %",
+      "id": 14,
+      "gridPos": { "x": 12, "y": 14, "w": 6, "h": 4 },
+      "targets": [
+        {
+          "expr": "avg by (job) (fuzzer_coverage_percent_libmnl)",
+          "refId": "A"
+        }
+      ],
+      "datasource": { "type": "prometheus", "uid": "prometheus" },
+      "options": {
+        "reduceOptions": { "calcs": ["last"] },
+        "fieldOptions": { "defaults": { "unit": "percentunit" } },
+        "colorMode": "value"
+      }
+    },
+    {
+      "type": "stat",
+      "title": "Lines Covered %",
+      "id": 17,
+      "gridPos": { "x": 18, "y": 14, "w": 6, "h": 4 },
+      "targets": [
+        { "expr": "avg by (job) (fuzzer_coverage_lines_percent)", "refId": "A" }
+      ],
+      "datasource": { "type": "prometheus", "uid": "prometheus" },
+      "options": {
+        "reduceOptions": { "calcs": ["last"] },
+        "fieldOptions": { "defaults": { "unit": "percentunit" } },
+        "colorMode": "value"
+      }
+    },
+    {
+      "type": "stat",
+      "title": "Last Coverage Update (s ago)",
+      "id": 20,
+      "gridPos": { "x": 0, "y": 18, "w": 6, "h": 4 },
       "datasource": { "type": "prometheus", "uid": "prometheus" },
       "targets": [
         {
-          "expr": "avg(rate(fuzzer_corpus_size[5m]))",
-          "legendFormat": "avg corpus growth",
+          "expr": "time() - max(fuzzer_coverage_percent) by (job)",
           "refId": "A"
+        }
+      ],
+      "options": {
+        "reduceOptions": { "calcs": ["last"] },
+        "orientation": "horizontal",
+        "colorMode": "value",
+        "graphMode": "none"
+      }
+    },
+    {
+      "type": "graph",
+      "title": "Coverage Trend (Overall & Per-Library)",
+      "id": 15,
+      "gridPos": { "x": 0, "y": 22, "w": 24, "h": 8 },
+      "targets": [
+        {
+          "expr": "avg by (job) (fuzzer_coverage_percent)",
+          "legendFormat": "overall",
+          "refId": "A"
+        },
+        {
+          "expr": "avg by (job) (fuzzer_coverage_percent_libnftnl)",
+          "legendFormat": "libnftnl",
+          "refId": "B"
+        },
+        {
+          "expr": "avg by (job) (fuzzer_coverage_percent_libmnl)",
+          "legendFormat": "libmnl",
+          "refId": "C"
         }
       ],
       "lines": true,
       "fill": 3,
       "linewidth": 2,
-      "yaxes": [{ "format": "short" }, { "format": "short" }],
+      "nullPointMode": "connected",
+      "yaxes": [
+        { "format": "percentunit", "min": 0, "max": 100 },
+        { "format": "short" }
+      ],
       "legend": { "show": true }
     },
     {
       "type": "graph",
-      "title": "Average Coverage Growth (edges/sec)",
-      "id": 7,
-      "gridPos": { "x": 12, "y": 13, "w": 12, "h": 8 },
-      "datasource": { "type": "prometheus", "uid": "prometheus" },
+      "title": "Coverage Growth Rate (Δ%/sec)",
+      "id": 16,
+      "gridPos": { "x": 0, "y": 30, "w": 24, "h": 8 },
       "targets": [
         {
-          "expr": "avg(rate(fuzzer_coverage_unique_edges[5m]))",
-          "legendFormat": "avg unique edges/sec",
+          "expr": "deriv(avg by (job) (fuzzer_coverage_percent_libnftnl[30s]))",
+          "legendFormat": "libnftnl Δ%/sec",
           "refId": "A"
+        },
+        {
+          "expr": "deriv(avg by (job) (fuzzer_coverage_percent_libmnl[30s]))",
+          "legendFormat": "libmnl Δ%/sec",
+          "refId": "B"
         }
       ],
       "lines": true,
       "fill": 3,
       "linewidth": 2,
-      "yaxes": [{ "format": "short" }, { "format": "short" }],
+      "legend": { "show": true },
+      "yaxes": [{ "format": "percentunit" }, { "format": "short" }]
+    },
+
+    {
+      "type": "row",
+      "title": "Coverage Detail (Lines / Regions / Functions / Branches)",
+      "id": 18,
+      "gridPos": { "x": 0, "y": 38, "w": 24, "h": 1 },
+      "collapsed": false
+    },
+    {
+      "type": "graph",
+      "title": "Detailed Coverage %",
+      "id": 19,
+      "gridPos": { "x": 0, "y": 39, "w": 24, "h": 8 },
+      "targets": [
+        {
+          "expr": "avg by (job) (fuzzer_coverage_lines_percent)",
+          "legendFormat": "lines",
+          "refId": "A"
+        },
+        {
+          "expr": "avg by (job) (fuzzer_coverage_regions_percent)",
+          "legendFormat": "regions",
+          "refId": "B"
+        },
+        {
+          "expr": "avg by (job) (fuzzer_coverage_functions_percent)",
+          "legendFormat": "functions",
+          "refId": "C"
+        },
+        {
+          "expr": "avg by (job) (fuzzer_coverage_branches_percent)",
+          "legendFormat": "branches",
+          "refId": "D"
+        }
+      ],
+      "lines": true,
+      "fill": 3,
+      "linewidth": 2,
+      "nullPointMode": "connected",
+      "yaxes": [
+        { "format": "percentunit", "min": 0, "max": 100 },
+        { "format": "short" }
+      ],
       "legend": { "show": true }
     },
+
     {
       "type": "row",
       "title": "Per-Core Breakdown",
       "id": 8,
-      "gridPos": { "x": 0, "y": 21, "w": 24, "h": 1 },
+      "gridPos": { "x": 0, "y": 47, "w": 24, "h": 1 },
       "collapsed": false
     },
     {
       "type": "graph",
       "title": "Execution Rate by Core",
       "id": 9,
-      "gridPos": { "x": 0, "y": 22, "w": 24, "h": 8 },
-      "datasource": { "type": "prometheus", "uid": "prometheus" },
+      "gridPos": { "x": 0, "y": 48, "w": 24, "h": 8 },
       "targets": [
         {
           "expr": "rate(fuzz_executions_total[5s])",
@@ -175,8 +326,7 @@
       "type": "graph",
       "title": "Corpus Size by Core",
       "id": 10,
-      "gridPos": { "x": 0, "y": 30, "w": 24, "h": 8 },
-      "datasource": { "type": "prometheus", "uid": "prometheus" },
+      "gridPos": { "x": 0, "y": 56, "w": 24, "h": 8 },
       "targets": [
         {
           "expr": "fuzzer_corpus_size",

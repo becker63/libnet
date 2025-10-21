@@ -1,6 +1,6 @@
 # mappings/build_top.nim
-import proto_raw as pbraw
-import nftnl/raii/basics
+import ../proto_raw as pbraw
+import ../nftnl/raii/basics
 import ./rule_chain_table
 import ./serialize
 import ./util

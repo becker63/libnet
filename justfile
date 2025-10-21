@@ -248,7 +248,18 @@ fuzz-all:
     exit 0
   fi
 
-  # Launch fuzzers safely in parallel
+  # ✅ Locate instrumented libs dynamically
+  LIBMNL=$(pkg-config --variable=libdir libmnl)/libmnl.so.0
+  LIBNFTNL=$(pkg-config --variable=libdir libnftnl)/libnftnl.so.11
+  echo "📦 Using instrumented libs:"
+  echo "   • libmnl → $LIBMNL"
+  echo "   • libnftnl → $LIBNFTNL"
+
+  # ✅ Ensure per-process coverage output
+  export LLVM_PROFILE_FILE="/tmp/fuzz-%p.profraw"
+  export LD_PRELOAD="$LIBMNL:$LIBNFTNL"
+
+  # ✅ Launch fuzzers safely in parallel with coverage
   for i in $(seq 0 $((CORES - 1))); do
     LOG_FILE="fuzz-${i}.log"
     echo "🚀 Launching fuzzer core $i (log: $LOG_FILE)"
@@ -267,6 +278,8 @@ fuzz-all:
   done
 
   echo "✅ All fuzzers launched. Logs: fuzz-*.log"
+  echo "📈 Prometheus metrics should now include real coverage percentages."
+
 
 # --- Fuzzing control ---------------------------------------------------
 
@@ -274,16 +287,70 @@ kill-fuzz:
   #!/usr/bin/env bash
   set -euo pipefail
 
-  echo "🛑 Stopping all running fuzzers..."
+  echo "🛑 Stopping all running fuzzers and sync daemons..."
+
+  # Kill any active fuzzing processes
   if pgrep -f "./build/lpm-consumer-fuzz" >/dev/null 2>&1; then
+    echo "⚙️  Killing fuzz harness instances..."
     pgrep -f "./build/lpm-consumer-fuzz" | xargs -r kill -TERM
-    echo "⏳ Waiting for fuzzers to exit..."
-    sleep 2
-    if pgrep -f "./build/lpm-consumer-fuzz" >/dev/null 2>&1; then
-      echo "⚠️  Some fuzzers still running — forcing kill..."
-      pgrep -f "./build/lpm-consumer-fuzz" | xargs -r kill -9
-    fi
-    echo "✅ All fuzzers stopped."
-  else
-    echo "ℹ️  No running fuzzers found."
   fi
+
+  # Kill any background corpus auto-sync daemons
+  if pgrep -f "just auto-sync-corpus" >/dev/null 2>&1; then
+    echo "⚙️  Killing auto-sync-corpus background daemons..."
+    pgrep -f "just auto-sync-corpus" | xargs -r kill -TERM
+  fi
+
+  # Also catch raw bash auto-sync loops, if launched manually
+  if pgrep -f "auto-sync-corpus" >/dev/null 2>&1; then
+    echo "⚙️  Killing any lingering auto-sync-corpus loops..."
+    pgrep -f "auto-sync-corpus" | xargs -r kill -TERM
+  fi
+
+  echo "⏳ Waiting for processes to exit..."
+  sleep 2
+
+  # Force-kill if anything still alive
+  if pgrep -f "./build/lpm-consumer-fuzz\|auto-sync-corpus" >/dev/null 2>&1; then
+    echo "⚠️  Some processes still running — forcing kill..."
+    pgrep -f "./build/lpm-consumer-fuzz\|auto-sync-corpus" | xargs -r kill -9
+  fi
+
+  echo "✅ All fuzzers and sync daemons stopped."
+
+
+# --- Coverage ----------------------------------------------------------
+
+coverage:
+  #!/usr/bin/env bash
+  set -euo pipefail
+
+  echo "📊 Collecting LLVM coverage data..."
+
+  # Merge all per-process .profraw files into one .profdata
+  if ls /tmp/fuzz-*.profraw >/dev/null 2>&1; then
+    echo "🧮 Merging raw coverage files..."
+    llvm-profdata merge -sparse /tmp/fuzz-*.profraw -o /tmp/merged.profdata
+  else
+    echo "⚠️ No .profraw files found in /tmp. Did the fuzzers run?"
+    exit 1
+  fi
+
+  echo "✅ Merged profile written to /tmp/merged.profdata"
+
+  # Export summary-only JSON
+  #echo "📦 Exporting coverage summary to cov.json"
+  #llvm-cov export ./build/lpm-consumer-fuzz \
+  #  -instr-profile=/tmp/merged.profdata \
+  #  -object $(pkg-config --variable=libdir libnftnl)/libnftnl.so.11 \
+  #  -object $(pkg-config --variable=libdir libmnl)/libmnl.so.0 \
+  #  -summary-only > cov.json
+
+  #echo "✅ Coverage summary written to cov.json"
+
+  # Human-readable summary
+  echo "📈 Printing top-level coverage report:"
+  llvm-cov report ./build/lpm-consumer-fuzz \
+    -instr-profile=/tmp/merged.profdata \
+    -object $(pkg-config --variable=libdir libnftnl)/libnftnl.so.11 \
+    -object $(pkg-config --variable=libdir libmnl)/libmnl.so.0

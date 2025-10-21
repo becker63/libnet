@@ -1,15 +1,20 @@
 cmake_minimum_required(VERSION 3.20)
 project(lpm-consumer LANGUAGES CXX)
 
-set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD 20)
+set(CMAKE_CXX_EXTENSIONS OFF)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
+# ---------------------------------------------------------------------------
+# Dependencies
+# ---------------------------------------------------------------------------
 find_package(Protobuf CONFIG REQUIRED)
 find_package(libprotobuf-mutator CONFIG REQUIRED)
+find_package(LLVM REQUIRED CONFIG)  # ✅ LLVM libraries for in-process coverage
 
-# ✅ Add prometheus-cpp (from Nix or system package)
-find_package(prometheus-cpp CONFIG REQUIRED)
+include_directories(${LLVM_INCLUDE_DIRS})
+add_definitions(${LLVM_DEFINITIONS})
 
 # ---------------------------------------------------------------------------
 # Protobuf generation
@@ -21,7 +26,7 @@ protobuf_generate_cpp(RAW_PROTO_SRCS RAW_PROTO_HDRS
 include_directories(${CMAKE_CURRENT_BINARY_DIR})
 
 # ---------------------------------------------------------------------------
-# Build Nim fuzz library (using --app:lib)
+# Nim fuzz+coverage library
 # ---------------------------------------------------------------------------
 set(NIM_LIB_PATH ${CMAKE_BINARY_DIR}/libnetfuzz${CMAKE_SHARED_LIBRARY_SUFFIX})
 
@@ -34,11 +39,10 @@ add_custom_command(
           --out:${NIM_LIB_PATH}
           harness/export_fuzz.nim
   WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
-  COMMENT "Building Nim fuzz library (release mode)"
+  COMMENT "🔹 Building unified Nim fuzz+coverage library"
 )
 
 add_custom_target(nimlib ALL DEPENDS ${NIM_LIB_PATH})
-
 add_library(libnetfuzz SHARED IMPORTED)
 set_target_properties(libnetfuzz PROPERTIES IMPORTED_LOCATION ${NIM_LIB_PATH})
 add_dependencies(libnetfuzz nimlib)
@@ -54,6 +58,7 @@ add_executable(lpm-consumer-fuzz
 
 target_include_directories(lpm-consumer-fuzz PRIVATE
   ${CMAKE_SOURCE_DIR}/harness
+  ${CMAKE_SOURCE_DIR}/mutator
 )
 
 target_link_libraries(lpm-consumer-fuzz PRIVATE
@@ -62,38 +67,67 @@ target_link_libraries(lpm-consumer-fuzz PRIVATE
   libprotobuf-mutator::protobuf-mutator-libfuzzer
   unwind
   libnetfuzz
-
-  # ✅ Prometheus C++ core libraries
-  prometheus-cpp::core
-  prometheus-cpp::pull
+  LLVMProfileData
+  LLVMSupport
 )
 
 # ---------------------------------------------------------------------------
-# Sanitizer + Coverage options (Clang / libFuzzer)
+# Clang coverage + sanitizers
 # ---------------------------------------------------------------------------
 if (CMAKE_CXX_COMPILER_ID MATCHES "Clang")
-  message(STATUS "Configuring Clang sanitizer coverage for libFuzzer build")
+  message(STATUS "🔧 Configuring Clang sanitizer + coverage for libFuzzer build")
 
-target_compile_options(lpm-consumer-fuzz PRIVATE
-  -fsanitize=fuzzer-no-link,address,undefined
-  -fno-omit-frame-pointer
-  -g
-  -O2
-)
+  target_compile_options(lpm-consumer-fuzz PRIVATE
+    -fsanitize=fuzzer-no-link,address,undefined
+    -fno-omit-frame-pointer
+    -fprofile-instr-generate
+    -fcoverage-mapping
+    -g
+    -O2
+  )
 
+  target_link_options(lpm-consumer-fuzz PRIVATE
+    -fsanitize=fuzzer,address,undefined
+    -fprofile-instr-generate
+    -fcoverage-mapping
+  )
 
-target_link_options(lpm-consumer-fuzz PRIVATE
-  -fsanitize=fuzzer,address,undefined
-)
+  # -------------------------------------------------------------------------
+  # ✅ Robust LLVM profile runtime detection (works on Nix / LLVM 21+)
+  # -------------------------------------------------------------------------
+  execute_process(
+    COMMAND ${CMAKE_CXX_COMPILER} -print-resource-dir
+    OUTPUT_VARIABLE CLANG_RESOURCE_DIR
+    OUTPUT_STRIP_TRAILING_WHITESPACE
+  )
 
+  set(CLANG_RT_DIR "${CLANG_RESOURCE_DIR}/lib/linux")
+  set(_arch "${CMAKE_SYSTEM_PROCESSOR}")
+
+  execute_process(
+    COMMAND ${CMAKE_CXX_COMPILER} -print-file-name=libclang_rt.profile-${_arch}.a
+    OUTPUT_VARIABLE CLANG_RT_PROFILE_ABS
+    OUTPUT_STRIP_TRAILING_WHITESPACE
+  )
+
+  if (EXISTS "${CLANG_RT_PROFILE_ABS}")
+    set(CLANG_RT_PROFILE "${CLANG_RT_PROFILE_ABS}")
+  else()
+    find_library(CLANG_RT_PROFILE
+      NAMES clang_rt.profile-${_arch} clang_rt.profile
+      HINTS "${CLANG_RT_DIR}"
+    )
+  endif()
+
+  if (CLANG_RT_PROFILE)
+    message(STATUS "✅ Using LLVM profile runtime: ${CLANG_RT_PROFILE}")
+    target_link_libraries(lpm-consumer-fuzz PRIVATE "${CLANG_RT_PROFILE}")
+  else()
+    message(STATUS "ℹ️ No explicit profile runtime linked; relying on Clang auto-link.")
+  endif()
 endif()
 
 # ---------------------------------------------------------------------------
-# Optional: Show helpful summary
+# Install
 # ---------------------------------------------------------------------------
-message(STATUS "")
-message(STATUS "🔧 Fuzz target: lpm-consumer-fuzz")
-message(STATUS "📈 Prometheus metrics: http://localhost:8080/metrics")
-message(STATUS "🧪 Run with:")
-message(STATUS "    ./build/lpm-consumer-fuzz corpus_dir -max_total_time=60 -jobs=$(nproc)")
-message(STATUS "")
+install(TARGETS lpm-consumer-fuzz DESTINATION bin)

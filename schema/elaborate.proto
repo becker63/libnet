@@ -24,8 +24,8 @@ enum ExprType {
 // Flattened expression message (covers all known nftnl expr types)
 // ---------------------------------------------------------------------------
 message Expr {
-  uint32 id = 1;     // Optional debugging or stable ID
-  ExprType type = 2; // Expression kind (see ExprType)
+  uint32 id = 1;   // Optional debugging or stable ID
+  uint32 type = 2; // Expression kind (raw numeric; corresponds to ExprType)
 
   // Generic numeric fields (registers, ops, etc.)
   uint32 sreg = 3;

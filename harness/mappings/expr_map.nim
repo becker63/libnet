@@ -1,8 +1,8 @@
 # mappings/expr_map.nim
-import proto_raw as pbraw
-import nftnl/raii/expresions
+import ../proto_raw as pbraw
+import ../nftnl/raii/expresions
 import
-  nftnl/attrs/expr/
+  ../nftnl/attrs/expr/
     [all, cmp, payload, meta, bitwise, immediate, counter, ct, limit, quota]
 import ./util
 
