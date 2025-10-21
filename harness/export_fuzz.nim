@@ -3,7 +3,6 @@ import ./proto_raw as pb
 import ./libnet
 import ./mappings
 import protobuf_serialization
-import ../mutator/coverage
 
 const
   LogPath = "/tmp/nim_fuzz.log"

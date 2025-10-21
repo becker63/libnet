@@ -183,7 +183,6 @@
               find "$CLANG_RT_ROOT" -maxdepth 2 -type f | head -n10
             fi
           '';
-cl
         };
       in
       {
