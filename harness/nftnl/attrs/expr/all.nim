@@ -5,6 +5,10 @@ import ../../raii/expresions
 proc getU32*(p: ptr struct_nftnl_expr, attr: uint16): uint32 =
   nftnl_expr_get_u32(p, attr)
 
+proc getU64*(p: ptr struct_nftnl_expr, attr: uint16): uint64 =
+  ## Retrieve a 64-bit unsigned attribute value.
+  nftnl_expr_get_u64(p, attr)
+
 proc getStr*(p: ptr struct_nftnl_expr, attr: uint16): string =
   $cast[cstring](nftnl_expr_get_str(p, attr))
 
@@ -19,6 +23,10 @@ proc getBlob*(p: ptr struct_nftnl_expr, attr: uint16): seq[uint8] =
 # --- Setters ---------------------------------------------------------------
 proc setU32*(p: ptr struct_nftnl_expr, attr: uint16, v: uint32) =
   nftnl_expr_set_u32(p, attr, v)
+
+proc setU64*(p: ptr struct_nftnl_expr, attr: uint16, v: uint64) =
+  ## Set a 64-bit unsigned attribute value.
+  nftnl_expr_set_u64(p, attr, v)
 
 proc setStr*(p: ptr struct_nftnl_expr, attr: uint16, v: string) =
   discard nftnl_expr_set_str(p, attr, cast[ptr uint8](v.cstring))

@@ -1,49 +1,104 @@
 syntax = "proto3";
 package nftnl;
 
-// All enums flattened to uint32 because protobuf_serialization
-// doesn’t properly support proto3 enums or oneof for our use.
-
-message ExprPayload {
-  uint32 dreg = 1; // NFT_REG_x
-  uint32 base = 2; // e.g. NFT_PAYLOAD_LL_HEADER
-  uint32 offset = 3;
-  uint32 len = 4;
+// ---------------------------------------------------------------------------
+// Expression kinds (mirroring nftnl expr_ops_* types)
+// ---------------------------------------------------------------------------
+enum ExprType {
+  EXPR_UNSPEC = 0;
+  EXPR_PAYLOAD = 1;
+  EXPR_CMP = 2;
+  EXPR_META = 3;
+  EXPR_BITWISE = 4;
+  EXPR_IMMEDIATE = 5;
+  EXPR_COUNTER = 6;
+  EXPR_CT = 7;
+  EXPR_LIMIT = 8;
+  EXPR_QUOTA = 9;
+  EXPR_NAT = 10;
+  EXPR_REDIR = 11;
+  EXPR_REJECT = 12;
 }
 
-message ExprCmp {
-  uint32 sreg = 1; // NFT_REG_x
-  uint32 op = 2;   // e.g. NFT_CMP_EQ
-  bytes data = 3;  // blob being compared
-}
-
-// Expr.kind emulated: type == 1 => payload; type == 2 => cmp
+// ---------------------------------------------------------------------------
+// Flattened expression message (covers all known nftnl expr types)
+// ---------------------------------------------------------------------------
 message Expr {
-  uint32 type = 1; // 1: payload, 2: cmp
-  ExprPayload payload = 2;
-  ExprCmp cmp = 3;
+  uint32 id = 1;     // Optional debugging or stable ID
+  ExprType type = 2; // Expression kind (see ExprType)
+
+  // Generic numeric fields (registers, ops, etc.)
+  uint32 sreg = 3;
+  uint32 dreg = 4;
+  uint32 op = 5;
+  uint32 base = 6;
+  uint32 key = 7;
+  uint32 offset = 8;
+  uint32 len = 9;
+
+  // Binary blobs (used by cmp, bitwise, etc.)
+  bytes data = 10;
+  bytes mask = 11;
+  bytes xor = 12;
+
+  // Optional string (metadata, interface names, etc.)
+  string str = 13;
+
+  // Attribute mask (bitwise indicator of which fields are active)
+  // Extended bits (beyond 10):
+  //   0: sreg
+  //   1: dreg
+  //   2: op
+  //   3: base
+  //   4: key
+  //   5: offset
+  //   6: len
+  //   7: data
+  //   8: mask
+  //   9: xor
+  //  10: str
+  //  11: csum_type
+  //  12: csum_offset
+  //  13: csum_flags
+  //  14: verdict
+  //  15: chain
+  //  16: chain_id
+  uint32 attr_mask = 14;
+
+  // Payload-specific checksum fields
+  uint32 csum_type = 15;
+  uint32 csum_offset = 16;
+  uint32 csum_flags = 17;
+
+  // Immediate / verdict-like expressions
+  uint32 verdict = 18;  // NF_ACCEPT, NF_DROP, NF_JUMP, etc.
+  string chain = 19;    // Optional jump chain name
+  uint32 chain_id = 20; // Optional chain ID
 }
 
+// ---------------------------------------------------------------------------
+// Rule → Chain → Table → Top-level hierarchy
+// ---------------------------------------------------------------------------
 message Rule {
-  uint32 family = 1; // AF_* (e.g. 2 for AF_INET)
+  uint32 family = 1;
   string table = 2;
   string chain = 3;
   repeated Expr exprs = 4;
 }
 
 message Chain {
-  uint32 family = 1; // AF_*
+  uint32 family = 1;
   string table = 2;
   string name = 3;
-  string type = 4; // "filter", etc
-  uint32 hook = 5; // NF_INET_* (0..4)
+  string type = 4;
+  uint32 hook = 5;
   sint32 prio = 6;
-  uint32 policy = 7; // NF_ACCEPT=1 / NF_DROP=0
+  uint32 policy = 7;
   repeated Rule rules = 8;
 }
 
 message Table {
-  uint32 family = 1; // AF_*
+  uint32 family = 1;
   string name = 2;
   repeated Chain chains = 3;
 }

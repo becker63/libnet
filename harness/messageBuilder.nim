@@ -9,6 +9,9 @@ type NlMsgHdr* = nftnl.struct_nlmsghdr
 
 const MNL_SOCKET_BUFFER_SIZE* = 8 * 1024
 
+# ---------------------------------------------------------------------
+# 🧱 Base Netlink message creation
+# ---------------------------------------------------------------------
 proc newNlMsg*(msgType: cint, family: cint, flags: cint, seq: uint32): ptr NlMsgHdr =
   ## Allocate a userland buffer and initialize a netlink message header
   let buf = cast[ptr uint8](alloc0(MNL_SOCKET_BUFFER_SIZE))
@@ -17,6 +20,9 @@ proc newNlMsg*(msgType: cint, family: cint, flags: cint, seq: uint32): ptr NlMsg
   if result.isNil:
     raise newException(OSError, "Failed to build nlmsghdr")
 
+# ---------------------------------------------------------------------
+# 🧱 Message builders for nftnl objects
+# ---------------------------------------------------------------------
 proc buildTableMsg*(nlh: ptr NlMsgHdr, t: Table) =
   nftnl.nftnl_table_nlmsg_build_payload(nlh, t.raw)
 
@@ -26,10 +32,11 @@ proc buildChainMsg*(nlh: ptr NlMsgHdr, c: Chain) =
 proc buildRuleMsg*(nlh: ptr NlMsgHdr, r: Rule) =
   nftnl.nftnl_rule_nlmsg_build_payload(nlh, r.raw)
 
-# --- addExpr overloads -------------------------------------------------------
-
+# ---------------------------------------------------------------------
+# 🧱 Expression management
+# ---------------------------------------------------------------------
 proc addExpr*(r: Rule, e: sink Expression) =
-  # Bail if either side isn't initialized
+  ## Add a generic expression to a rule. Transfers ownership to libnftnl.
   if r.raw.isNil or e.raw.isNil:
     return
   nftnl_rule_add_expr(r.raw, e.raw)
@@ -37,3 +44,25 @@ proc addExpr*(r: Rule, e: sink Expression) =
 
 proc addExpr*(r: Rule, e: sink CmpExpr) =
   addExpr(r, Expression(e))
+
+proc addExpr*(r: Rule, e: sink PayloadExpr) =
+  addExpr(r, Expression(e))
+
+proc addExpr*(r: Rule, e: sink MetaExpr) =
+  addExpr(r, Expression(e))
+
+proc addExpr*(r: Rule, e: sink BitwiseExpr) =
+  addExpr(r, Expression(e))
+
+# ---------------------------------------------------------------------
+# 🧱 Convenience constructor for rule messages
+# ---------------------------------------------------------------------
+template newRuleNlMsg*(seq: uint32): ptr NlMsgHdr =
+  ## Allocates and initializes a Netlink message for NFT_MSG_NEWRULE
+  ## using standard flags (CREATE | EXCL | ACK).
+  newNlMsg(
+    NFT_MSG_NEWRULE.cint,
+    linux.AF_INET.cint, # disambiguated here
+    (NLM_F_CREATE or NLM_F_EXCL or NLM_F_ACK).cint,
+    seq,
+  )

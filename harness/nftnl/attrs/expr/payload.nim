@@ -11,11 +11,17 @@ const
   idPayloadBase* = uint16(NFTNL_EXPR_PAYLOAD_BASE)
   idPayloadOffset* = uint16(NFTNL_EXPR_PAYLOAD_OFFSET)
   idPayloadLen* = uint16(NFTNL_EXPR_PAYLOAD_LEN)
+  # --- checksum-related fields (libnftnl >= 1.2.6) ---
+  idPayloadCsumType* = uint16(NFTNL_EXPR_PAYLOAD_CSUM_TYPE)
+  idPayloadCsumOffset* = uint16(NFTNL_EXPR_PAYLOAD_CSUM_OFFSET)
+  idPayloadFlags* = uint16(NFTNL_EXPR_PAYLOAD_FLAGS)
 
-# --- ergonomic field-like accessors ----------------------------------------
+# ---------------------------------------------------------------------------
+# Ergonomic field-like accessors
+# ---------------------------------------------------------------------------
 
 proc base*(e: PayloadExpr): uint32 =
-  ## Payload base (e.g., NFT_PAYLOAD_LL_HEADER)
+  ## Payload base (e.g., NFT_PAYLOAD_LL_HEADER, NFT_PAYLOAD_NETWORK_HEADER, etc.)
   getU32(toRaw(e), idPayloadBase)
 
 proc `base=`*(e: PayloadExpr, v: uint32) =
@@ -41,3 +47,28 @@ proc dreg*(e: PayloadExpr): uint32 =
 
 proc `dreg=`*(e: PayloadExpr, v: uint32) =
   setU32(toRaw(e), idPayloadDreg, v)
+
+# ---------------------------------------------------------------------------
+# Optional checksum-related fields
+# ---------------------------------------------------------------------------
+
+proc csumType*(e: PayloadExpr): uint32 =
+  ## Payload checksum type (e.g., NFT_PAYLOAD_CSUM_INET)
+  getU32(toRaw(e), idPayloadCsumType)
+
+proc `csumType=`*(e: PayloadExpr, v: uint32) =
+  setU32(toRaw(e), idPayloadCsumType, v)
+
+proc csumOffset*(e: PayloadExpr): uint32 =
+  ## Payload checksum offset in bytes.
+  getU32(toRaw(e), idPayloadCsumOffset)
+
+proc `csumOffset=`*(e: PayloadExpr, v: uint32) =
+  setU32(toRaw(e), idPayloadCsumOffset, v)
+
+proc flags*(e: PayloadExpr): uint32 =
+  ## Payload flags (e.g., NFT_PAYLOAD_L4CSUM_PSEUDOHDR, etc.)
+  getU32(toRaw(e), idPayloadFlags)
+
+proc `flags=`*(e: PayloadExpr, v: uint32) =
+  setU32(toRaw(e), idPayloadFlags, v)

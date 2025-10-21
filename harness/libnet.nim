@@ -15,9 +15,12 @@ export gen_nftnl, gen_linux
 # ──────────────────────────────────────────────────────────────
 import nftnl/raii/[basics, iterators, expresions]
 import nftnl/attrs/[table, chain, rule]
-import nftnl/attrs/expr/[cmp, payload]
+import nftnl/attrs/expr/[cmp, payload, meta, bitwise, immediate, counter]
 import messageBuilder
-export basics, iterators, expresions, table, chain, rule, cmp, payload, messageBuilder
+
+export
+  basics, iterators, expresions, table, chain, rule, cmp, payload, meta, bitwise,
+  immediate, counter, messageBuilder
 
 # ──────────────────────────────────────────────────────────────
 # High-level mapping helpers
