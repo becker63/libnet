@@ -1,7 +1,3 @@
-########################################
-# readers.nim
-########################################
-
 import os, strutils, tables, times, posix
 import metrics
 import json
@@ -20,8 +16,8 @@ declareGauge totalLinesHit, "Total lines actually executed"
 declareGauge fileCoveragePct, "Coverage % per file", ["file"]
 declareGauge coverageLastUpdate, "Unix timestamp of last coverage metrics refresh"
 
-proc updateCoverageMetrics*() =
-  let path = runCoverage()
+proc updateCoverageMetrics*(covDir: string) =
+  let path = runCoverage(covDir)
   let files = parseLcov(path)
 
   var totalLines = 0
@@ -115,7 +111,6 @@ proc streamLogFile(path: string) {.async, gcsafe.} =
     f.close()
 
   try:
-    # Just stat calls, doesnt read whole file
     let sz = getFileSize(path)
     let start =
       if sz > TailWindow:
@@ -123,7 +118,6 @@ proc streamLogFile(path: string) {.async, gcsafe.} =
       else:
         0
     if start > 0:
-      # The magic, skip to head of file and read only that
       discard lseek(getFileHandle(f), start, SEEK_SET)
   except CatchableError:
     discard
@@ -154,14 +148,14 @@ proc streamLogFile(path: string) {.async, gcsafe.} =
         await sleepAsync(0)
 
 ########################################
-# Async watcher spawner (static GC-safe state)
+# Async watcher spawner (now takes logDir)
 ########################################
 
-proc fuzzerWatcherLoop() {.async, gcsafe.} =
+proc fuzzerWatcherLoop(logDir: string) {.async, gcsafe.} =
   var watchers = initTable[string, bool]()
 
   while true:
-    for path in walkFiles("/tmp/fuzz*.log"):
+    for path in walkFiles(logDir / "fuzz*.log"):
       if not watchers.getOrDefault(path, false):
         watchers[path] = true
         echo "[watch] starting log watcher for ", path # ✅ DEBUG
@@ -170,12 +164,12 @@ proc fuzzerWatcherLoop() {.async, gcsafe.} =
     await sleepAsync(500)
 
 ########################################
-# Called by main
+# Called by main (now takes logDir, covDir)
 ########################################
 
-proc startMetricsLoops*() {.async.} =
-  asyncSpawn fuzzerWatcherLoop()
+proc startMetricsLoops*(logDir, covDir: string) {.async.} =
+  asyncSpawn fuzzerWatcherLoop(logDir)
 
   while true:
-    updateCoverageMetrics()
+    updateCoverageMetrics(covDir)
     await sleepAsync(500)
