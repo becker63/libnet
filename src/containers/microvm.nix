@@ -12,6 +12,7 @@ in
       fenv = inputs.cells.nix.lib.fuzzerEnv;
       fuzzer = inputs.cells.fuzzer.installables.default;
 
+      # Systemd env defs do not like export
       envLines =
         lib.concatStringsSep "\n" (
           map (e: "${e.name}=" + (if e ? eval then e.eval else e.value)) fenv.toolchain.env
@@ -35,6 +36,7 @@ in
       boot.initrd.systemd.enable = true;
 
       microvm.optimize.enable = true;
+      # Much faster to build due to parallel and no performance impact
       microvm.storeDiskType = "squashfs";
 
       microvm = {
@@ -69,13 +71,11 @@ in
 
       environment.etc."libnet-env".text = envLines;
 
-
-
       systemd.services.prepare-fuzz-dirs = {
         wantedBy = [ "multi-user.target" ];
-        before   = [ "fuzzer.service" ];
+        before = [ "fuzzer.service" ];
 
-        after    = [ "local-fs.target" ];
+        after = [ "local-fs.target" ];
         requires = [ "local-fs.target" ];
 
         serviceConfig = {
@@ -88,10 +88,6 @@ in
           ];
         };
       };
-
-
-
-
 
       # Only the fuzzer runs inside the VM
       systemd.services.fuzzer = {
@@ -108,8 +104,6 @@ in
           ExecStart = "${runFuzzerScript}";
         };
       };
-
-
 
       # Optional: set a password for debugging
       users.users.root.initialPassword = "root";

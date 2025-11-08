@@ -3,7 +3,9 @@ let
   pkgs = inputs.nixpkgs;
   fenv = inputs.cells.nix.lib.fuzzerEnv;
 
-  coverageScript = import ./coverage-gen.nix { inherit pkgs fenv; };
+  fuzzer = inputs.cells.fuzzer.installables.default;
+
+  coverageScript = import ./coverage-gen.nix { inherit pkgs fenv fuzzer; };
 
   nimDeps = [
     inputs.nim_metrics

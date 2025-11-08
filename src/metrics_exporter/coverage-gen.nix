@@ -1,56 +1,59 @@
-{ pkgs, fenv }:
-pkgs.writeShellScriptBin "coverage-report" ''
-  set -euo pipefail
+{
+  pkgs,
+  fenv,
+  fuzzer,
+}:
 
-  ${fenv.toolchain.shellEnvHook}
+pkgs.writeShellApplication {
+  name = "coverage-report";
+  runtimeInputs = [
+    fuzzer
+  ];
+  text = ''
+    set -euo pipefail
+    ${fenv.toolchain.shellEnvHook}
 
-  # Ensure /tmp exists and is writable
-  mkdir -p /tmp || true
-  chmod 1777 /tmp || true
+    WORKDIR="/mounted"
+    TRACE="$WORKDIR/coverage.info"
+    MERGED="$WORKDIR/merged.profdata"
+    MERGE_LOG="$WORKDIR/merge.log"
+    TARGET="$(command -v lpm-consumer-fuzz || true)"
 
-  TRACE="/tmp/coverage.info"
+    echo "[coverage-report] checking profraw files in $WORKDIR"
 
-  # --- Check required tools ---
-  if ! command -v "$PROF" >/dev/null; then
-    echo "[coverage-report] PROF binary missing: $PROF"
-    exit 0
-  fi
+    shopt -s nullglob
 
-  if ! command -v "$COV" >/dev/null; then
-    echo "[coverage-report] COV binary missing: $COV"
-    exit 0
-  fi
+    echo "→ merging profiles"
+    # capture stderr into merge.log
+    if ! "$PROF" merge -sparse $WORKDIR/fuzz-*.profraw -o "$MERGED" 2> "$MERGE_LOG"; then
+      echo "[coverage-report] merge failed!"
+      echo "====== merge stderr ======"
+      cat "$MERGE_LOG" || true
+      echo "====== profile list ======"
+      ls -lh $WORKDIR/fuzz-*.profraw || true
+      exit 1
+    fi
 
-  # --- Ensure we have any profiles ---
-  if ! ls /tmp/fuzz-*.profraw >/dev/null 2>&1; then
-    echo "[coverage-report] no profraw files, nothing to export."
-    exit 0
-  fi
+    echo "→ merge succeeded"
+    echo "====== merge stderr (even on success) ======"
+    cat "$MERGE_LOG" || true
 
-  echo "→ merging profiles"
-  if ! $PROF merge -sparse /tmp/fuzz-*.profraw -o /tmp/merged.profdata 2>/dev/null; then
-    echo "[coverage-report] merge failed"
-    exit 0
-  fi
-
-  echo "→ exporting LCOV tracefile"
-  if ! $COV export \
+    echo "→ exporting LCOV tracefile"
+    if ! "$COV" export \
       --format=lcov \
-      --instr-profile=/tmp/merged.profdata \
+      --instr-profile="$MERGED" \
       --object=${fenv.toolchain.libnftnlCov}/lib/libnftnl.so \
       --object=${fenv.toolchain.libmnlCov}/lib/libmnl.so \
-      "$(command -v lpm-consumer-fuzz)" \
+      "$TARGET" \
       > "$TRACE" 2>/dev/null; then
-    echo "[coverage-report] export failed"
-    exit 0
-  fi
+      echo "[coverage-report] export failed"
+      exit 1
+    fi
 
-  # Only print the path if the file actually exists
-  if [ -f "$TRACE" ]; then
-    echo "$TRACE"
-  else
-    echo "[coverage-report] done, but no trace generated"
-  fi
-
-  exit 0
-''
+    if [ -f "$TRACE" ]; then
+      echo "$TRACE"
+    else
+      echo "[coverage-report] no trace generated"
+    fi
+  '';
+}

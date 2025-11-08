@@ -14,27 +14,28 @@ let
     while true; do sleep 100000; done
   '';
 
-  alpine = n2c.pullImage {
-    imageName = "library/alpine";
-    imageDigest = "sha256:765942a4039992336de8dd5db680586e1a206607dd06170ff0a37267a9e01958";
-    sha256 = "sha256-IeHFkCpsDsBRR9yw5/D/Qx36hoCfkeoevJsF0uOv83M=";
+  debian = n2c.pullImage {
+    imageName = "library/debian";
+    imageDigest = "sha256:e0249870a90044494c01e74fbfc8b77ab14e6f47cece844d1e1737f7828a7e1e";
+    sha256 = "sha256-oKZNuxQ8YtHdrQSYfre1bbOJ7PuPDq1yCsZ/swgWZ4c=";
   };
 
   insidePkgs = [
     metricsExporter
     coverageGen
+    pkgs.bash
   ];
 
 in
 {
   metrics-exporter = mkOCI {
     name = "metrics-exporter";
-    entrypoint = debugEntrypoint;
+    entrypoint = metricsExporter;
 
     runtimeInputs = insidePkgs;
 
     options = {
-      fromImage = alpine;
+      fromImage = debian;
       copyToRoot = [
         (pkgs.buildEnv {
           name = "root";
@@ -45,8 +46,8 @@ in
     };
 
     config = {
-      ExposedPorts."8080/tcp" = { };
-      Env = [ "PATH=/bin:/nix/store/*/bin" ];
+      ExposedPorts."9677/tcp" = { };
+      #Env = [ "PATH=/bin:/nix/store/*/bin" ];
     };
   };
 }

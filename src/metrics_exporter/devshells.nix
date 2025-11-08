@@ -5,7 +5,7 @@ let
 
   fuzzer = inputs.cells.fuzzer.installables.default;
 
-  coverageScript = import ./coverage-gen.nix { inherit pkgs fenv; };
+  coverageScript = import ./coverage-gen.nix { inherit pkgs fenv fuzzer; };
 
 in
 {

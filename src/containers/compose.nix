@@ -10,7 +10,7 @@ in
 
     services.metrics-exporter.service = {
       image = metricsExporter.image.name;
-      ports = [ "8080:8080" ];
+      ports = [ "9677:9677" ];
       volumes = [
         {
           type = "bind";
@@ -21,6 +21,7 @@ in
           target = "/mounted";
         }
       ];
+      user = "0:0";
       restart = "always";
     };
   };

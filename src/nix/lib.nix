@@ -2,6 +2,7 @@
 
 let
   system = inputs.nixpkgs.stdenv.hostPlatform.system;
+  lib = inputs.nixpkgs.lib;
 
   pkgs = import inputs.nixpkgs {
     inherit system;
@@ -11,7 +12,7 @@ let
 
   # I like the way numtides devshell defines env
   shellEnvHookFunc =
-    env: builtins.concatMapStringsSep "\n" ({ name, value, ... }: ''export ${name}=${value}'') env;
+    env: lib.strings.concatMapStringsSep "\n" ({ name, value, ... }: ''export ${name}=${value}'') env;
 
   # fuzzer toolchain env
   fuzzerEnv = import ./fuzzerEnv.nix {

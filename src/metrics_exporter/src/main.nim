@@ -6,10 +6,10 @@ import readers
 
 proc main() =
   var host = "0.0.0.0"
-  var port: Port = Port(8080)
+  var port: Port = Port(9677)
 
-  var logDir = "/tmp"
-  var covDir = "/tmp"
+  var logDir = "/mounted/logs"
+  var covDir = "/mounted/"
 
   for kind, key, val in getopt():
     if kind in {cmdLongOption, cmdShortOption}:
