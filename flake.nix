@@ -4,6 +4,7 @@
   inputs = {
 
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
+    flake-parts.url = "github:hercules-ci/flake-parts";
 
     # Force root-level nixpkgs to dominate all others
     std.url = "github:divnix/std";
@@ -13,13 +14,21 @@
     std.inputs.devshell.url = "github:numtide/devshell";
     std.inputs.devshell.inputs.nixpkgs.follows = "nixpkgs";
 
+    flake-root.url = "github:srid/flake-root";
+    flake-root.inputs.nixpkgs.follows = "nixpkgs";
+
     std.inputs.microvm = {
       url = "github:microvm-nix/microvm.nix";
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
-    nix2container.url = "github:nlewo/nix2container";
-    nix2container.inputs.nixpkgs.follows = "nixpkgs";
+    n2c.url = "github:nlewo/nix2container";
+    n2c.inputs.nixpkgs.follows = "nixpkgs";
+
+    std.inputs.arion.url = "github:hercules-ci/arion";
+    std.inputs.n2c.url = "github:nlewo/nix2container";
+
+    process-compose-flake.url = "github:Platonic-Systems/process-compose-flake";
 
     libprotobuf-mutator = {
       url = "github:becker63/libprotobuf-mutator";
@@ -97,40 +106,57 @@
           (blockTypes.functions "lib")
           (blockTypes.microvms "microvm")
           (blockTypes.runnables "script")
+          (blockTypes.containers "containers")
+          (blockTypes.arion "compose")
         ];
       }
 
       # ✅ flake-parts root devshell, also using shared `systems`
       (
-        flake-parts.lib.mkFlake
-          {
-            inherit inputs;
-          }
-          {
-            inherit systems;
+        flake-parts.lib.mkFlake { inherit inputs; } {
 
-            perSystem =
-              { system, ... }:
-              let
-                pkgs = nixpkgs.legacyPackages.${system};
-              in
-              {
-                devShells.default = pkgs.mkShell {
-                  name = "libnet-root-std-shell";
-                  packages = [
-                    inputs.std.packages.${system}.std
-                  ];
-                  shellHook = ''
-                    echo "🧬 Launching libnet std environment for ${system}"
-                    echo "Type 'exit' to leave std"
+          inherit systems;
+          imports = [
+            inputs.process-compose-flake.flakeModule
+            inputs.flake-root.flakeModule
+          ];
 
-                    USER_SHELL=$(getent passwd "$USER" | cut -d: -f7)
-                    [ -n "$USER_SHELL" ] && export SHELL="$USER_SHELL"
+          perSystem =
+            {
+              system,
+              pkgs,
+              lib,
+              ...
+            }:
+            let
+              pkgs = nixpkgs.legacyPackages.${system};
 
-                    exec std
-                  '';
-                };
+              stdExe = lib.getExe inputs.std.packages.${system}.std;
+
+              processComposeSpec = import ./process-schedule.nix {
+                inherit lib stdExe pkgs;
               };
-          }
+            in
+            {
+              devShells.default = pkgs.mkShell {
+                name = "libnet-root-std-shell";
+                packages = [
+                  inputs.std.packages.${system}.std
+                ];
+                shellHook = ''
+                  echo "🧬 Launching libnet std environment for ${system}"
+                  echo "Type 'exit' to leave std"
+
+                  USER_SHELL=$(getent passwd "$USER" | cut -d: -f7)
+                  [ -n "$USER_SHELL" ] && export SHELL="$USER_SHELL"
+
+                  exec std
+                '';
+              };
+
+              process-compose.default = processComposeSpec;
+
+            };
+        }
       );
 }

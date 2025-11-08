@@ -14,7 +14,7 @@ in
     text = ''
       set -euo pipefail
 
-      LOG_DIR="./logs"
+      LOG_DIR="./mounted"
       SOCK="/tmp/virtiofsd-fuzz.sock"
 
       mkdir -p "$LOG_DIR"

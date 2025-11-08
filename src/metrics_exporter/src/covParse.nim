@@ -1,15 +1,27 @@
-import osproc, strutils, strscans
+import osproc, strutils, strscans, os
 import ./metricsTypes
 export metricsTypes
 
-proc runCoverage*(): string =
-  let output = execProcess("coverage-report", options = {poUsePath})
+const coverageExe = "/bin/coverage-report"
+
+proc runCoverage*(covDir: string): string =
+  if not fileExists(coverageExe):
+    raise newException(IOError, coverageExe & " not found inside container")
+
+  let output = execProcess(
+      "coverage-report",
+      options = {poUsePath},
+      workingDir = covDir
+    )
+
   let lines = output.splitLines()
   for i in countdown(lines.len - 1, 0):
     let s = lines[i].strip()
     if s.len > 0:
       return s
+
   raise newException(IOError, "coverage-report produced no usable path")
+
 
 proc parseLcov*(path: string): seq[FileCoverage] =
   var files: seq[FileCoverage] = @[]

@@ -1,4 +1,8 @@
-{ inputs, cell }:
+{
+  inputs,
+  cell,
+  shellEnvHookFunc,
+}:
 
 let
 
@@ -156,12 +160,11 @@ in
       # make pkg-config see protobuf + LPM + our cov libs
       {
         name = "PKG_CONFIG_PATH";
-        eval = "${lpm}/lib/pkgconfig:${libnftnlCovDrv}/lib/pkgconfig:${libmnlCovDrv}/lib/pkgconfig:\${PKG_CONFIG_PATH:-}";
+        value = "${lpm}/lib/pkgconfig:${libnftnlCovDrv}/lib/pkgconfig:${libmnlCovDrv}/lib/pkgconfig:\${PKG_CONFIG_PATH:-}";
       }
     ];
 
-    shellEnvHook = builtins.concatStringsSep "\n" (
-      map (e: if e ? eval then ''export ${e.name}=${e.eval}'' else ''export ${e.name}=${e.value}'') env
-    );
+    shellEnvHook = shellEnvHookFunc env;
+
   };
 }

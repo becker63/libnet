@@ -1,5 +1,25 @@
 {
   "nodes": {
+    "arion": {
+      "inputs": {
+        "flake-parts": "flake-parts_2",
+        "haskell-flake": "haskell-flake",
+        "nixpkgs": "nixpkgs_2"
+      },
+      "locked": {
+        "lastModified": 1759632323,
+        "narHash": "sha256-TzLTfXxhOkR/8oOoVEAYQWb81ADGHdKsQXGicC7kR+M=",
+        "owner": "hercules-ci",
+        "repo": "arion",
+        "rev": "24658a03be2d1a6e1e02c01524775d960a82309c",
+        "type": "github"
+      },
+      "original": {
+        "owner": "hercules-ci",
+        "repo": "arion",
+        "type": "github"
+      }
+    },
     "blank": {
       "locked": {
         "lastModified": 1625557891,
@@ -142,8 +162,46 @@
         "type": "github"
       },
       "original": {
-        "id": "flake-parts",
-        "type": "indirect"
+        "owner": "hercules-ci",
+        "repo": "flake-parts",
+        "type": "github"
+      }
+    },
+    "flake-parts_2": {
+      "inputs": {
+        "nixpkgs-lib": [
+          "std",
+          "arion",
+          "nixpkgs"
+        ]
+      },
+      "locked": {
+        "lastModified": 1759362264,
+        "narHash": "sha256-wfG0S7pltlYyZTM+qqlhJ7GMw2fTF4mLKCIVhLii/4M=",
+        "owner": "hercules-ci",
+        "repo": "flake-parts",
+        "rev": "758cf7296bee11f1706a574c77d072b8a7baa881",
+        "type": "github"
+      },
+      "original": {
+        "owner": "hercules-ci",
+        "repo": "flake-parts",
+        "type": "github"
+      }
+    },
+    "flake-root": {
+      "locked": {
+        "lastModified": 1723604017,
+        "narHash": "sha256-rBtQ8gg+Dn4Sx/s+pvjdq3CB2wQNzx9XGFq/JVGCB6k=",
+        "owner": "srid",
+        "repo": "flake-root",
+        "rev": "b759a56851e10cb13f6b8e5698af7b59c44be26e",
+        "type": "github"
+      },
+      "original": {
+        "owner": "srid",
+        "repo": "flake-root",
+        "type": "github"
       }
     },
     "flake-utils": {
@@ -196,6 +254,22 @@
         "owner": "google",
         "ref": "v1.15.0",
         "repo": "googletest",
+        "type": "github"
+      }
+    },
+    "haskell-flake": {
+      "locked": {
+        "lastModified": 1675296942,
+        "narHash": "sha256-u1X1sblozi5qYEcLp1hxcyo8FfDHnRUVX3dJ/tW19jY=",
+        "owner": "srid",
+        "repo": "haskell-flake",
+        "rev": "c2cafce9d57bfca41794dc3b99c593155006c71e",
+        "type": "github"
+      },
+      "original": {
+        "owner": "srid",
+        "ref": "0.1.0",
+        "repo": "haskell-flake",
         "type": "github"
       }
     },
@@ -337,23 +411,7 @@
         "type": "github"
       }
     },
-    "nim_metrics": {
-      "flake": false,
-      "locked": {
-        "lastModified": 1762157736,
-        "narHash": "sha256-9a7Qf2qun1KAQNH5wdbsbhsW3BTygq5ekj6aoZmfsHA=",
-        "owner": "status-im",
-        "repo": "nim-metrics",
-        "rev": "9b9afee96357ad82dabf4563cf292f89b50423df",
-        "type": "github"
-      },
-      "original": {
-        "owner": "status-im",
-        "repo": "nim-metrics",
-        "type": "github"
-      }
-    },
-    "nix2container": {
+    "n2c": {
       "inputs": {
         "nixpkgs": [
           "nixpkgs"
@@ -370,6 +428,40 @@
       "original": {
         "owner": "nlewo",
         "repo": "nix2container",
+        "type": "github"
+      }
+    },
+    "n2c_2": {
+      "inputs": {
+        "nixpkgs": "nixpkgs_3"
+      },
+      "locked": {
+        "lastModified": 1761716996,
+        "narHash": "sha256-vdOuy2pid2/DasUgb08lDOswdPJkN5qjXfBYItVy/R4=",
+        "owner": "nlewo",
+        "repo": "nix2container",
+        "rev": "e5496ab66e9de9e3f67dc06f692dfbc471b6316e",
+        "type": "github"
+      },
+      "original": {
+        "owner": "nlewo",
+        "repo": "nix2container",
+        "type": "github"
+      }
+    },
+    "nim_metrics": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1762157736,
+        "narHash": "sha256-9a7Qf2qun1KAQNH5wdbsbhsW3BTygq5ekj6aoZmfsHA=",
+        "owner": "status-im",
+        "repo": "nim-metrics",
+        "rev": "9b9afee96357ad82dabf4563cf292f89b50423df",
+        "type": "github"
+      },
+      "original": {
+        "owner": "status-im",
+        "repo": "nim-metrics",
         "type": "github"
       }
     },
@@ -401,6 +493,37 @@
       "original": {
         "owner": "nix-community",
         "repo": "nixpkgs.lib",
+        "type": "github"
+      }
+    },
+    "nixpkgs_2": {
+      "locked": {
+        "lastModified": 1759381078,
+        "narHash": "sha256-gTrEEp5gEspIcCOx9PD8kMaF1iEmfBcTbO0Jag2QhQs=",
+        "owner": "NixOS",
+        "repo": "nixpkgs",
+        "rev": "7df7ff7d8e00218376575f0acdcc5d66741351ee",
+        "type": "github"
+      },
+      "original": {
+        "owner": "NixOS",
+        "ref": "nixos-unstable",
+        "repo": "nixpkgs",
+        "type": "github"
+      }
+    },
+    "nixpkgs_3": {
+      "locked": {
+        "lastModified": 1748984911,
+        "narHash": "sha256-fih/mdPI8f1CR+FKMhcsyfFzbARoVDrlxwoa694XIkw=",
+        "owner": "NixOS",
+        "repo": "nixpkgs",
+        "rev": "3731ffed14674a8567af4b05575a87adf0b38030",
+        "type": "github"
+      },
+      "original": {
+        "owner": "NixOS",
+        "repo": "nixpkgs",
         "type": "github"
       }
     },
@@ -461,6 +584,21 @@
         "owner": "paisano-nix",
         "ref": "v0.5.0",
         "repo": "tui",
+        "type": "github"
+      }
+    },
+    "process-compose-flake": {
+      "locked": {
+        "lastModified": 1762286656,
+        "narHash": "sha256-17Ycf5v3zX+ZHgF/KqCW9Hd5PFFwkkfs5OhbXtff6YE=",
+        "owner": "Platonic-Systems",
+        "repo": "process-compose-flake",
+        "rev": "1664140f2f54380544c344d5a664b1e33c01d45a",
+        "type": "github"
+      },
+      "original": {
+        "owner": "Platonic-Systems",
+        "repo": "process-compose-flake",
         "type": "github"
       }
     },
@@ -535,11 +673,13 @@
         "chronos": "chronos",
         "faststreams": "faststreams",
         "flake-parts": "flake-parts",
+        "flake-root": "flake-root",
         "http-utils": "http-utils",
         "libprotobuf-mutator": "libprotobuf-mutator",
+        "n2c": "n2c",
         "nim_metrics": "nim_metrics",
-        "nix2container": "nix2container",
         "nixpkgs": "nixpkgs",
+        "process-compose-flake": "process-compose-flake",
         "protobuf_npeg": "protobuf_npeg",
         "protobuf_serialization": "protobuf_serialization",
         "results": "results",
@@ -583,10 +723,7 @@
     },
     "std": {
       "inputs": {
-        "arion": [
-          "std",
-          "blank"
-        ],
+        "arion": "arion",
         "blank": "blank",
         "devshell": "devshell",
         "dmerge": "dmerge",
@@ -598,10 +735,7 @@
           "blank"
         ],
         "microvm": "microvm",
-        "n2c": [
-          "std",
-          "blank"
-        ],
+        "n2c": "n2c_2",
         "nixago": [
           "std",
           "blank"

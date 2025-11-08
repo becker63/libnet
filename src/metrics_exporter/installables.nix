@@ -14,6 +14,8 @@ let
   ];
 in
 {
+  coverage-gen = coverageScript;
+
   default = pkgs.stdenv.mkDerivation {
     pname = "metrics_exporter";
     version = "0.1.0";
