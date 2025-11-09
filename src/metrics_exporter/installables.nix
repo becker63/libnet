@@ -42,6 +42,7 @@ in
       echo "🔹 Nim → build metrics_exporter"
       nim c \
         --cc:clang \
+        -d:metrics \
         --debuginfo --lineTrace:on --stackTrace:on --assertions:on \
         --mm:orc --threads:on \
         --out:build/metrics_exporter \
