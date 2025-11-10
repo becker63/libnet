@@ -53,6 +53,8 @@ declareGauge fuzzCorpusSize, "Fuzzer corpus size", ["fuzzer"]
 declareGauge fuzzCoveragePct, "Fuzzer coverage (cov)", ["fuzzer"]
 declareGauge fuzzFeatureCount, "Fuzzer features", ["fuzzer"]
 declareCounter fuzzIterationsTotal, "Fuzzer total iterations", ["fuzzer"]
+declareCounter fuzzCrashesTotal,   "Total sanitizer crashes", ["fuzzer"]
+declareCounter fuzzCrashesByType,  "Sanitizer crash count", ["fuzzer", "type"]
 
 const
   BufSize = 4096
@@ -66,22 +68,33 @@ const
 proc processFuzzLine(
     path, lbl, line: string, lastIter: var int
 ) {.gcsafe, raises: [].} =
-  if line.len == 0 or line[0] != '#':
+  if line.len == 0:
     return
-  if not line.contains("exec/s:"):
-    return
-
-  echo "[parse] ", lbl, ": ", line # ✅ DEBUG PRINT
 
   var m: FuzzerMetrics
 
   try:
     m = parseFuzzLogLine(line)
-    echo "[parsed] ", %*m # ✅ Pretty JSON-ish
   except ValueError:
-    echo "[parse-error] could not parse line: ", line
     return
 
+  # ✅ crash handling FIRST – crash lines often don’t contain exec/s
+  if m.crashed:
+    fuzzCrashesTotal.inc(1.float64, @[lbl])
+
+    if m.crashType.len > 0:
+      fuzzCrashesByType.inc(1.float64, @[lbl, m.crashType])
+    else:
+      fuzzCrashesByType.inc(1.float64, @[lbl, "unknown"])
+
+    # Let the caller keep consuming log, crashes don't break the loop
+    return
+
+  # Ignore non-metric lines
+  if not line.contains("exec/s:"):
+    return
+
+  # ✅ normal fast-path metrics
   if m.execPerSecond > 0:
     fuzzExecsPerSecond.set(m.execPerSecond.float64, @[lbl])
   if m.rssMegabytes > 0:
@@ -98,6 +111,7 @@ proc processFuzzLine(
     if delta > 0:
       fuzzIterationsTotal.inc(delta.float64, @[lbl])
     lastIter = m.iterations
+
 
 ########################################
 # Async log streamer

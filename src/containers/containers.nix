@@ -63,7 +63,7 @@ let
       - name: "Prometheus"
         type: "prometheus"
         access: "proxy"
-        url: "http://localhost:9090"
+        url: "http://prometheus:9090"
         isDefault: true
         uid: "prometheus"
         editable: false
@@ -173,6 +173,7 @@ in
       exec ${pkgs.prometheus}/bin/prometheus \
         --config.file=/etc/prometheus/prometheus.yml \
         --storage.tsdb.path=/prometheus-data \
+        --web.listen-address="0.0.0.0:9090" \
         --log.level=info
     '';
 

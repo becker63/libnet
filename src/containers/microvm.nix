@@ -4,6 +4,7 @@ let
   mkMicrovm = inputs.std.lib.ops.mkMicrovm;
   lib = inputs.nixpkgs.lib;
   runtime = inputs.cells.nix.lib.runtimeShared;
+  fuzzerEnv = inputs.cells.nix.lib.fuzzerEnv;
 
   # ==============================
   # 🔢 Resource calculation inputs
@@ -68,6 +69,9 @@ in
 
         mkdir -p "$CORPUS" "$LOGS"
         echo "⭐ Starting $CORES fuzz workers (auto-calculated)"
+
+        export LD_PRELOAD="${fuzzerEnv.toolchain.libmnlCov}/lib/libmnl.so.0:${fuzzerEnv.toolchain.libnftnlCov}/lib/libnftnl.so.11"
+
 
         for i in $(seq 0 $((CORES - 1))); do
           "${fuzzer}/bin/${runtime.fuzzerBinary}" \

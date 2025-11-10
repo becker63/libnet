@@ -1,1 +1,349 @@
-{}
+{
+  "title": "libnftnl/libmnl Fuzzing — Coverage & Fuzzer Health",
+  "timezone": "",
+  "schemaVersion": 38,
+  "version": 1,
+  "editable": true,
+  "style": "dark",
+  "tags": ["fuzzing", "nftnl", "mnl", "coverage"],
+  "time": { "from": "now-24h", "to": "now" },
+
+  "templating": {
+    "list": [
+      {
+        "name": "fuzzer",
+        "label": "Fuzzer",
+        "type": "query",
+        "datasource": { "type": "prometheus", "uid": "prometheus" },
+        "refresh": 1,
+        "query": "label_values(fuzzExecsPerSecond, fuzzer)",
+        "includeAll": true,
+        "multi": true,
+        "allValue": ".*",
+        "regex": ""
+      },
+      {
+        "name": "file",
+        "label": "File (regex)",
+        "type": "textbox",
+        "query": "",
+        "current": { "text": ".*", "value": ".*" }
+      }
+    ]
+  },
+
+  "panels": [
+    {
+      "type": "row",
+      "title": "Overview",
+      "gridPos": { "x": 0, "y": 0, "w": 24, "h": 1 }
+    },
+
+    {
+      "title": "Overall Coverage (%)",
+      "type": "stat",
+      "datasource": { "type": "prometheus", "uid": "prometheus" },
+      "gridPos": { "x": 0, "y": 1, "w": 6, "h": 4 },
+      "options": {
+        "reduceOptions": {
+          "calcs": ["lastNotNull"],
+          "fields": "",
+          "values": false
+        },
+        "orientation": "horizontal",
+        "colorMode": "value",
+        "graphMode": "none",
+        "justifyMode": "auto"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "unit": "percent",
+          "decimals": 1,
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              { "color": "red", "value": null },
+              { "color": "orange", "value": 1 },
+              { "color": "green", "value": 50 }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "targets": [
+        { "expr": "totalCoveragePct", "legendFormat": "coverage", "refId": "A" }
+      ]
+    },
+
+    {
+      "title": "Lines Hit / Total",
+      "type": "stat",
+      "datasource": { "type": "prometheus", "uid": "prometheus" },
+      "gridPos": { "x": 6, "y": 1, "w": 6, "h": 4 },
+      "options": {
+        "reduceOptions": {
+          "calcs": ["lastNotNull"],
+          "fields": "",
+          "values": false
+        },
+        "orientation": "horizontal",
+        "textMode": "value_and_name",
+        "colorMode": "none",
+        "graphMode": "none",
+        "justifyMode": "auto"
+      },
+      "fieldConfig": { "defaults": { "unit": "none" }, "overrides": [] },
+      "targets": [
+        { "expr": "totalLinesHit", "legendFormat": "hit", "refId": "A" },
+        { "expr": "totalLinesFound", "legendFormat": "total", "refId": "B" }
+      ]
+    },
+
+    {
+      "title": "Coverage Freshness",
+      "type": "stat",
+      "datasource": { "type": "prometheus", "uid": "prometheus" },
+      "gridPos": { "x": 12, "y": 1, "w": 5, "h": 4 },
+      "options": {
+        "reduceOptions": { "calcs": ["lastNotNull"] },
+        "textMode": "value",
+        "colorMode": "value",
+        "graphMode": "none",
+        "justifyMode": "auto"
+      },
+      "fieldConfig": {
+        "defaults": { "unit": "dateTimeAsIso" },
+        "overrides": []
+      },
+      "targets": [
+        {
+          "expr": "coverageLastUpdate * 1000",
+          "legendFormat": "last update",
+          "refId": "A"
+        }
+      ]
+    },
+
+    {
+      "title": "Coverage from Lines (sanity %)",
+      "type": "stat",
+      "datasource": { "type": "prometheus", "uid": "prometheus" },
+      "gridPos": { "x": 17, "y": 1, "w": 7, "h": 4 },
+      "options": { "reduceOptions": { "calcs": ["lastNotNull"] } },
+      "fieldConfig": {
+        "defaults": { "unit": "percent", "decimals": 1 },
+        "overrides": []
+      },
+      "targets": [
+        {
+          "expr": "100 * totalLinesHit / clamp_min(totalLinesFound, 1)",
+          "legendFormat": "derived coverage",
+          "refId": "A"
+        }
+      ]
+    },
+
+    {
+      "type": "row",
+      "title": "Fuzzer Performance",
+      "gridPos": { "x": 0, "y": 15, "w": 24, "h": 1 }
+    },
+
+    {
+      "title": "Exec/s per Fuzzer (with aggregate)",
+      "type": "timeseries",
+      "datasource": { "type": "prometheus", "uid": "prometheus" },
+      "gridPos": { "x": 0, "y": 16, "w": 16, "h": 8 },
+      "fieldConfig": { "defaults": { "unit": "ops" }, "overrides": [] },
+      "options": { "legend": { "displayMode": "table", "placement": "right" } },
+      "targets": [
+        {
+          "expr": "fuzzExecsPerSecond{fuzzer=~\"$fuzzer\"}",
+          "legendFormat": "{{fuzzer}}",
+          "refId": "A"
+        },
+        {
+          "expr": "sum(fuzzExecsPerSecond{fuzzer=~\"$fuzzer\"})",
+          "legendFormat": "SUM exec/s",
+          "refId": "B"
+        },
+        {
+          "expr": "rate(fuzzIterationsTotal{fuzzer=~\"$fuzzer\"}[1m])",
+          "legendFormat": "rate(iterations[1m])",
+          "refId": "C"
+        }
+      ]
+    },
+
+    {
+      "title": "RSS per Fuzzer (MB)",
+      "type": "timeseries",
+      "datasource": { "type": "prometheus", "uid": "prometheus" },
+      "gridPos": { "x": 16, "y": 16, "w": 8, "h": 8 },
+      "fieldConfig": {
+        "defaults": { "unit": "decbytes", "decimals": 0 },
+        "overrides": []
+      },
+      "targets": [
+        {
+          "expr": "fuzzRssMegabytes{fuzzer=~\"$fuzzer\"} * 1024 * 1024",
+          "legendFormat": "{{fuzzer}}",
+          "refId": "A"
+        }
+      ]
+    },
+
+    {
+      "type": "row",
+      "title": "Discovery / Corpus",
+      "gridPos": { "x": 0, "y": 24, "w": 24, "h": 1 }
+    },
+
+    {
+      "title": "Corpus Size (per fuzzer) + Predicted Trend",
+      "type": "timeseries",
+      "datasource": { "type": "prometheus", "uid": "prometheus" },
+      "gridPos": { "x": 0, "y": 25, "w": 16, "h": 9 },
+      "fieldConfig": { "defaults": { "unit": "short" }, "overrides": [] },
+      "options": { "legend": { "displayMode": "table", "placement": "right" } },
+      "targets": [
+        {
+          "expr": "fuzzCorpusSize{fuzzer=~\"$fuzzer\"}",
+          "legendFormat": "{{fuzzer}} corpus",
+          "refId": "A"
+        },
+        {
+          "expr": "sum(fuzzCorpusSize{fuzzer=~\"$fuzzer\"})",
+          "legendFormat": "SUM corpus",
+          "refId": "B"
+        },
+        {
+          "expr": "sum(predict_linear(fuzzCorpusSize{fuzzer=~\"$fuzzer\"}[1h], 3600))",
+          "legendFormat": "SUM corpus +1h (pred)",
+          "refId": "C"
+        }
+      ]
+    },
+
+    {
+      "title": "New Features per Minute (rate)",
+      "type": "timeseries",
+      "datasource": { "type": "prometheus", "uid": "prometheus" },
+      "gridPos": { "x": 16, "y": 25, "w": 8, "h": 9 },
+      "fieldConfig": { "defaults": { "unit": "ops" }, "overrides": [] },
+      "targets": [
+        {
+          "expr": "rate(fuzzFeatureCount{fuzzer=~\"$fuzzer\"}[5m])",
+          "legendFormat": "{{fuzzer}} features/min",
+          "refId": "A"
+        }
+      ]
+    },
+
+    {
+      "type": "row",
+      "title": "Crashes & Health",
+      "gridPos": { "x": 0, "y": 34, "w": 24, "h": 1 }
+    },
+
+    {
+      "title": "Total Crashes (cumulative)",
+      "type": "stat",
+      "datasource": { "type": "prometheus", "uid": "prometheus" },
+      "gridPos": { "x": 0, "y": 35, "w": 6, "h": 5 },
+      "fieldConfig": {
+        "defaults": { "unit": "short", "decimals": 0 },
+        "overrides": []
+      },
+      "options": { "reduceOptions": { "calcs": ["lastNotNull"] } },
+      "targets": [
+        {
+          "expr": "sum(fuzzCrashesTotal)",
+          "legendFormat": "crashes",
+          "refId": "A"
+        }
+      ]
+    },
+
+    {
+      "title": "Crashes by Type (last 1h)",
+      "type": "table",
+      "datasource": { "type": "prometheus", "uid": "prometheus" },
+      "gridPos": { "x": 6, "y": 35, "w": 10, "h": 9 },
+      "options": { "showHeader": true },
+      "targets": [
+        {
+          "expr": "sum by (type) (increase(fuzzCrashesByType[1h]))",
+          "legendFormat": "{{type}}",
+          "refId": "A"
+        }
+      ],
+      "fieldConfig": { "defaults": { "unit": "short" }, "overrides": [] }
+    },
+
+    {
+      "title": "Fuzzer Coverage & Corpus Snapshot",
+      "type": "table",
+      "datasource": { "type": "prometheus", "uid": "prometheus" },
+      "gridPos": { "x": 16, "y": 35, "w": 8, "h": 9 },
+      "options": { "showHeader": true },
+      "targets": [
+        {
+          "expr": "fuzzCoveragePct{fuzzer=~\"$fuzzer\"}",
+          "legendFormat": "cov {{fuzzer}}",
+          "refId": "A"
+        },
+        {
+          "expr": "fuzzCorpusSize{fuzzer=~\"$fuzzer\"}",
+          "legendFormat": "corpus {{fuzzer}}",
+          "refId": "B"
+        }
+      ],
+      "transformations": [{ "id": "seriesToColumns", "options": {} }],
+      "fieldConfig": { "defaults": { "unit": "short" }, "overrides": [] }
+    },
+
+    {
+      "type": "row",
+      "title": "Files Table (sortable)",
+      "gridPos": { "x": 0, "y": 44, "w": 24, "h": 1 }
+    },
+
+    {
+      "title": "Per-file Coverage (latest)",
+      "type": "table",
+      "datasource": { "type": "prometheus", "uid": "prometheus" },
+      "gridPos": { "x": 0, "y": 45, "w": 24, "h": 10 },
+      "options": {
+        "showHeader": true,
+        "footer": { "enablePagination": true, "reducer": ["lastNotNull"] }
+      },
+      "targets": [
+        {
+          "expr": "fileCoveragePct{file=~\"$file\"}",
+          "legendFormat": "{{file}}",
+          "refId": "A"
+        }
+      ],
+      "fieldConfig": {
+        "defaults": { "unit": "percent", "decimals": 1 },
+        "overrides": [
+          {
+            "matcher": { "id": "byName", "options": "Time" },
+            "properties": [{ "id": "custom.width", "value": 200 }]
+          }
+        ]
+      },
+      "transformations": [
+        { "id": "labelsToFields", "options": { "mode": "columns" } },
+        {
+          "id": "organize",
+          "options": { "indexByName": {}, "renameByName": {} }
+        }
+      ]
+    }
+  ],
+
+  "annotations": { "list": [] },
+  "links": []
+}

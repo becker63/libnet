@@ -1,6 +1,3 @@
-# metricsTypes.nim
-# Shared data structures for coverage and fuzzer metrics
-
 type
   ## Branch-level coverage detail (LCOV BRDA)
   BranchCoverage* = object
@@ -34,3 +31,7 @@ type
     coveragePercent*: int
     featuresFound*: int
     iterations*: int
+
+    # NEW ✅ crash info extracted from logs
+    crashed*: bool          # true if this line shows a crash
+    crashType*: string      # "ASAN", "UBSAN", "SIGSEGV", etc.
